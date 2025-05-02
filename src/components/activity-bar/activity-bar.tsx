@@ -3,10 +3,14 @@
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { ChevronLeft, ChevronRight } from "lucide-react"
+import { Separator } from "@/components/ui/separator"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { ActivityBarContext } from "./activity-bar-context"
+import { ActivityHeaderOptimized } from "./activity-header-optimized"
+import { ActivityGroup } from "./activity-group"
+import { ActivityItem } from "./activity-item"
 
 const activityBarVariants = cva("flex h-full bg-background border-r shadow-sm will-change-transform", {
   variants: {
@@ -32,6 +36,7 @@ export interface ActivityBarProps
   defaultActiveId?: string
   toggleable?: boolean
   onExpandedChange?: (expanded: boolean) => void
+  onActiveChange?: (activeId: string) => void
 }
 
 export function ActivityBar({
@@ -42,6 +47,7 @@ export function ActivityBar({
   defaultActiveId,
   toggleable = true,
   onExpandedChange,
+  onActiveChange,
   children,
   ...props
 }: ActivityBarProps) {
@@ -112,3 +118,14 @@ export function ActivityBar({
     </ActivityBarContext.Provider>
   )
 }
+
+// 复合组件模式
+export const ActivityBarRoot = ActivityBar
+export const ActivityBarHeader = ActivityHeaderOptimized
+export const ActivityBarGroup = ActivityGroup
+export const ActivityBarItem = ActivityItem
+export const ActivityBarSeparator = ({ className }: { className?: string }) => (
+  <div className="w-full px-2">
+    <Separator className={cn("my-1", className)} />
+  </div>
+)

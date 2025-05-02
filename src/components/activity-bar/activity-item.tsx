@@ -28,10 +28,11 @@ export interface ActivityItemProps
   icon: React.ReactNode
   label: string
   badge?: React.ReactNode
+  disabled?: boolean
   onClick?: () => void
 }
 
-export function ActivityItem({ className, id, icon, label, badge, active, onClick, ...props }: ActivityItemProps) {
+export function ActivityItem({ className, id, icon, label, badge, active, disabled = false, onClick, ...props }: ActivityItemProps) {
   const { activeId, setActiveId, expanded } = useActivityBar()
   const isActive = active !== undefined ? active : activeId === id
 
