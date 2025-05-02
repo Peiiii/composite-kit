@@ -74,7 +74,7 @@ export function ActivityItem({ className, id, icon, label, badge, active, onClic
           expanded ? "opacity-100 w-auto" : "opacity-0 w-0 overflow-hidden ml-0",
         )}
       >
-        <span className="text-sm font-medium truncate">{label}</span>
+        <span className="text-sm font-medium truncate min-w-0">{label}</span>
         {badge && <div className="ml-auto pl-2 flex-shrink-0">{badge}</div>}
       </div>
     </div>

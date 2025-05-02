@@ -78,8 +78,8 @@ export function ActivityBar({
       >
         <div className="flex flex-col h-full">
           <div className="flex-shrink-0">{React.Children.toArray(children)[0]}</div>
-          <div className="flex-1 overflow-y-auto scrollbar-hide">
-            {React.Children.toArray(children).slice(1, -1)}
+          <div className="flex-1 overflow-y-auto overflow-x-hidden scrollbar-hide min-w-0">
+            <div className="w-full">{React.Children.toArray(children).slice(1, -1)}</div>
           </div>
           <div className="flex-shrink-0">{React.Children.toArray(children).at(-1)}</div>
         </div>
