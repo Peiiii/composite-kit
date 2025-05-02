@@ -236,8 +236,8 @@ function App() {
                 </div>
               </section>
             </div>
-          </div>
-        </main>
+        </div>
+      </main>
       </div>
     </div>
   )

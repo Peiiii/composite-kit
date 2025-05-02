@@ -1,13 +1,14 @@
 "use client"
 
-import { ChevronLeft, ChevronRight } from "lucide-react"
 import * as React from "react"
+import { ChevronLeft, ChevronRight } from "lucide-react"
 
-import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
-import type { VariantProps } from "class-variance-authority"
-import { activityBarVariants } from "./activity-bar"
+import { Button } from "@/components/ui/button"
 import { ActivityBarContext } from "./activity-bar-context"
+import type { ActivityBarProps } from "./activity-bar"
+import { activityBarVariants } from "./activity-bar"
+import { VariantProps } from "class-variance-authority"
 
 export function ActivityBarComponent({
   className,
@@ -20,7 +21,7 @@ export function ActivityBarComponent({
   onActiveChange,
   children,
   ...props
-}: ActivityBarComponentProps) {
+}: ActivityBarProps) {
   const [isExpanded, setIsExpanded] = React.useState(defaultExpanded)
   const [activeId, setActiveId] = React.useState<string | undefined>(defaultActiveId)
 
