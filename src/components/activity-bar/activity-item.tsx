@@ -4,6 +4,7 @@ import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 
 import { cn } from "@/lib/utils"
+import { Badge } from "@/components/ui/badge"
 import { useActivityBar } from "./activity-bar-context"
 
 const activityItemVariants = cva(
@@ -41,6 +42,17 @@ export function ActivityItem({ className, id, icon, label, badge, active, disabl
     onClick?.()
   }, [id, onClick, setActiveId])
 
+  const renderBadge = React.useCallback(() => {
+    if (!badge) return null
+    if (React.isValidElement(badge)) {
+      const element = badge as React.ReactElement<{ className?: string }>
+      return React.cloneElement(element, {
+        className: cn(defaultBadgeClassName, element.props.className),
+      })
+    }
+    return <Badge className={defaultBadgeClassName}>{badge}</Badge>
+  }, [badge])
+
   return (
     <div
       className={cn(
@@ -76,8 +88,18 @@ export function ActivityItem({ className, id, icon, label, badge, active, disabl
         )}
       >
         <span className="text-sm font-medium truncate min-w-0">{label}</span>
-        {badge && <div className="ml-auto pl-2 flex-shrink-0">{badge}</div>}
+        {badge && <div className="ml-auto pl-2 flex-shrink-0">{renderBadge()}</div>}
       </div>
     </div>
   )
+}export interface ActivityBarItemProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  icon: React.ReactNode
+  label: string
+  badge?: string | number
+  active?: boolean
+  disabled?: boolean
 }
+// 添加默认的 badge 样式
+
+export const defaultBadgeClassName = "h-5 px-1.5 text-xs font-medium"
+

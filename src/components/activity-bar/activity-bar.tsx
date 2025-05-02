@@ -1,42 +1,34 @@
 "use client"
 
-import { cva, type VariantProps } from "class-variance-authority"
 import { Separator } from "@/components/ui/separator"
 import { cn } from "@/lib/utils"
+import { cva } from "class-variance-authority"
 
 import { ActivityBarComponent } from "./activity-bar-component"
-import { ActivityHeaderOptimized } from "./activity-header-optimized"
 import { ActivityGroup } from "./activity-group"
+import { ActivityHeaderOptimized } from "./activity-header-optimized"
 import { ActivityItem } from "./activity-item"
 
 // 样式定义
-export const activityBarVariants = cva("flex h-full bg-background border-r shadow-sm will-change-transform", {
-  variants: {
-    position: {
-      left: "left-0 border-r",
-      right: "right-0 border-l",
+export const activityBarVariants = cva(
+  "flex flex-col h-full w-[var(--activity-bar-width)] bg-background border-r transition-all duration-200 ease-in-out",
+  {
+    variants: {
+      position: {
+        left: "border-r",
+        right: "border-l",
+      },
+      expanded: {
+        true: "w-[var(--activity-bar-expanded-width)]",
+        false: "w-[var(--activity-bar-collapsed-width)]",
+      },
     },
-    expanded: {
-      true: "w-[240px]",
-      false: "w-16", // 保持一致的宽度
+    defaultVariants: {
+      position: "left",
+      expanded: false,
     },
   },
-  defaultVariants: {
-    position: "left",
-    expanded: false,
-  },
-})
-
-// 类型定义
-export interface ActivityBarProps
-  extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof activityBarVariants> {
-  defaultExpanded?: boolean
-  defaultActiveId?: string
-  toggleable?: boolean
-  onExpandedChange?: (expanded: boolean) => void
-  onActiveChange?: (activeId: string) => void
-}
+)
 
 // 复合组件命名空间
 export const ActivityBar = {
