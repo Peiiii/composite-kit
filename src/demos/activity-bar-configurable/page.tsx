@@ -68,7 +68,7 @@ export default function ActivityBarConfigurable() {
   }, [])
 
   return (
-    <div className="flex h-screen w-full overflow-hidden bg-background">
+    <div className="flex h-full w-full overflow-hidden bg-background">
       <ConfigurableActivityBar
         config={activityBarConfig}
         expanded={expanded}

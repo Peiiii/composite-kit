@@ -5,9 +5,16 @@ function App() {
     <div className="min-h-screen bg-background">
       <main className="container mx-auto py-8">
         <h1 className="text-4xl font-bold mb-8">组件库演示</h1>
-        <div className="space-y-8">
-          {/* 组件展示区域 */}
-          <ActivityBarConfigurable />
+        <div className="space-y-12">
+          {/* Activity Bar Demo */}
+          <section className="rounded-lg border bg-card shadow-sm">
+            <div className="p-6 border-b">
+              <h2 className="text-2xl font-semibold">Activity Bar</h2>
+            </div>
+            <div className="h-[600px]">
+              <ActivityBarConfigurable />
+            </div>
+          </section>
         </div>
       </main>
     </div>
