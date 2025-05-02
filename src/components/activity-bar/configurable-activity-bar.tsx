@@ -121,13 +121,19 @@ export function ConfigurableActivityBar({
               />
             ))}
           </ActivityGroup>
-          {groupIndex < config.groups.length - 1 && <Separator className="mx-2 my-1" />}
+          {groupIndex < config.groups.length - 1 && (
+            <div className="w-full px-2">
+              <Separator className="my-1" />
+            </div>
+          )}
         </React.Fragment>
       ))}
 
       {config.footer && (
         <div className="mt-auto">
-          <Separator className="mx-2 my-1" />
+          <div className="w-full px-2">
+            <Separator className="my-1" />
+          </div>
           <ActivityGroup title={config.footer.title}>
             {config.footer.items.map((item) => (
               <ActivityItem
