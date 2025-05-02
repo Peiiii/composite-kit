@@ -4,7 +4,7 @@ import * as React from "react"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 
-import { ActivityBar } from "./activity-bar"
+import { ActivityBarComponent } from "./activity-bar-component"
 import { ActivityItem } from "./activity-item"
 import { ActivityGroup } from "./activity-group"
 import { ActivityHeaderOptimized } from "./activity-header-optimized"
@@ -93,7 +93,7 @@ export function ConfigurableActivityBar({
   }
 
   return (
-    <ActivityBar
+    <ActivityBarComponent
       expanded={isExpanded}
       onExpandedChange={handleExpandedChange}
       className={className}
@@ -150,6 +150,6 @@ export function ConfigurableActivityBar({
           </ActivityGroup>
         </div>
       )}
-    </ActivityBar>
+    </ActivityBarComponent>
   )
 }

@@ -17,13 +17,7 @@ import {
 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
-import {
-  ActivityBarRoot,
-  ActivityBarHeader,
-  ActivityBarGroup,
-  ActivityBarItem,
-  ActivityBarSeparator,
-} from "@/components/activity-bar"
+import { ActivityBar } from "@/components/activity-bar"
 
 export default function ActivityBarComposite() {
   const [expanded, setExpanded] = React.useState(true)
@@ -39,44 +33,44 @@ export default function ActivityBarComposite() {
 
   return (
     <div className="flex h-full w-full overflow-hidden bg-background">
-      <ActivityBarRoot
+      <ActivityBar.Root
         expanded={expanded}
         defaultActiveId={activeSection}
         onExpandedChange={handleExpandedChange}
         onActiveChange={handleActiveChange}
         className="flex-shrink-0"
       >
-        <ActivityBarHeader
+        <ActivityBar.Header
           icon={<LayoutDashboard />}
           title="工作空间"
           showSearch={true}
         />
 
-        <ActivityBarGroup title="导航">
-          <ActivityBarItem id="home" icon={<Home />} label="首页" />
-          <ActivityBarItem id="users" icon={<Users />} label="用户" />
-          <ActivityBarItem id="messages" icon={<Mail />} label="消息" badge={3} />
-          <ActivityBarItem id="calendar" icon={<Calendar />} label="日历" />
-        </ActivityBarGroup>
+        <ActivityBar.Group title="导航">
+          <ActivityBar.Item id="home" icon={<Home />} label="首页" />
+          <ActivityBar.Item id="users" icon={<Users />} label="用户" />
+          <ActivityBar.Item id="messages" icon={<Mail />} label="消息" badge={3} />
+          <ActivityBar.Item id="calendar" icon={<Calendar />} label="日历" />
+        </ActivityBar.Group>
 
-        <ActivityBarSeparator />
+        <ActivityBar.Separator />
 
-        <ActivityBarGroup title="开发">
-          <ActivityBarItem id="code" icon={<Code />} label="代码" />
-          <ActivityBarItem id="database" icon={<Database />} label="数据库" />
-          <ActivityBarItem id="cloud" icon={<Cloud />} label="云服务" />
-          <ActivityBarItem id="server" icon={<Server />} label="服务器" disabled />
-        </ActivityBarGroup>
+        <ActivityBar.Group title="开发">
+          <ActivityBar.Item id="code" icon={<Code />} label="代码" />
+          <ActivityBar.Item id="database" icon={<Database />} label="数据库" />
+          <ActivityBar.Item id="cloud" icon={<Cloud />} label="云服务" />
+          <ActivityBar.Item id="server" icon={<Server />} label="服务器" disabled />
+        </ActivityBar.Group>
 
         <div className="mt-auto">
-          <ActivityBarSeparator />
-          <ActivityBarGroup>
-            <ActivityBarItem id="settings" icon={<Settings />} label="设置" />
-            <ActivityBarItem id="security" icon={<Shield />} label="安全" />
-            <ActivityBarItem id="help" icon={<HelpCircle />} label="帮助" />
-          </ActivityBarGroup>
+          <ActivityBar.Separator />
+          <ActivityBar.Group>
+            <ActivityBar.Item id="settings" icon={<Settings />} label="设置" />
+            <ActivityBar.Item id="security" icon={<Shield />} label="安全" />
+            <ActivityBar.Item id="help" icon={<HelpCircle />} label="帮助" />
+          </ActivityBar.Group>
         </div>
-      </ActivityBarRoot>
+      </ActivityBar.Root>
 
       <div className="flex-1 overflow-auto border-l p-6">
         <div className="mb-6 flex items-center justify-between">
@@ -89,11 +83,11 @@ export default function ActivityBarComposite() {
           <p>这个示例展示了如何使用复合组件模式构建 ActivityBar，提供了更灵活和直观的 API。</p>
           <p className="mt-4">主要组件：</p>
           <ul className="list-disc pl-5 mt-2 space-y-1">
-            <li>ActivityBarRoot - 根容器</li>
-            <li>ActivityBarHeader - 头部区域</li>
-            <li>ActivityBarGroup - 分组容器</li>
-            <li>ActivityBarItem - 活动项</li>
-            <li>ActivityBarSeparator - 分隔线</li>
+            <li>ActivityBar.Root - 根容器</li>
+            <li>ActivityBar.Header - 头部区域</li>
+            <li>ActivityBar.Group - 分组容器</li>
+            <li>ActivityBar.Item - 活动项</li>
+            <li>ActivityBar.Separator - 分隔线</li>
           </ul>
           <p className="mt-4">优点：</p>
           <ul className="list-disc pl-5 mt-2 space-y-1">
