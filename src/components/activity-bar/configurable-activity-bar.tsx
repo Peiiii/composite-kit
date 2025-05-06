@@ -2,12 +2,7 @@
 
 import * as React from "react"
 import { Badge } from "@/components/ui/badge"
-import { Separator } from "@/components/ui/separator"
-
-import { ActivityBarComponent } from "./activity-bar-component"
-import { ActivityItem } from "./activity-item"
-import { ActivityGroup } from "./activity-group"
-import { ActivityHeaderOptimized } from "./activity-header-optimized"
+import { ActivityBar } from "./activity-bar-namespace"
 
 // 定义活动项配置类型
 export interface ActivityItemConfig {
@@ -93,23 +88,23 @@ export function ConfigurableActivityBar({
   }
 
   return (
-    <ActivityBarComponent
+    <ActivityBar.Root
       expanded={isExpanded}
       onExpandedChange={handleExpandedChange}
       className={className}
       defaultActiveId={activeId}
     >
-      <ActivityHeaderOptimized
+      <ActivityBar.Header
         icon={config.header.icon}
         title={config.header.title}
         showSearch={config.header.showSearch}
       />
 
-      {config.groups.map((group, groupIndex) => (
-        <React.Fragment key={groupIndex}>
-          <ActivityGroup title={group.title}>
+      <ActivityBar.GroupList>
+        {config.groups.map((group, groupIndex) => (
+          <ActivityBar.Group key={groupIndex} title={group.title}>
             {group.items.map((item) => (
-              <ActivityItem
+              <ActivityBar.Item
                 key={item.id}
                 id={item.id}
                 icon={item.icon}
@@ -120,23 +115,16 @@ export function ConfigurableActivityBar({
                 className={item.disabled ? "opacity-50 pointer-events-none" : ""}
               />
             ))}
-          </ActivityGroup>
-          {groupIndex < config.groups.length - 1 && (
-            <div className="w-full px-2">
-              <Separator className="my-1" />
-            </div>
-          )}
-        </React.Fragment>
-      ))}
+          </ActivityBar.Group>
+        ))}
+      </ActivityBar.GroupList>
 
       {config.footer && (
-        <div className="mt-auto">
-          <div className="w-full px-2">
-            <Separator className="my-1" />
-          </div>
-          <ActivityGroup title={config.footer.title}>
+        <ActivityBar.Footer>
+          <ActivityBar.Separator />
+          <ActivityBar.Group title={config.footer.title}>
             {config.footer.items.map((item) => (
-              <ActivityItem
+              <ActivityBar.Item
                 key={item.id}
                 id={item.id}
                 icon={item.icon}
@@ -147,9 +135,9 @@ export function ConfigurableActivityBar({
                 className={item.disabled ? "opacity-50 pointer-events-none" : ""}
               />
             ))}
-          </ActivityGroup>
-        </div>
+          </ActivityBar.Group>
+        </ActivityBar.Footer>
       )}
-    </ActivityBarComponent>
+    </ActivityBar.Root>
   )
 }

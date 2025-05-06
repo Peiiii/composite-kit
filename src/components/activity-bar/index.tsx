@@ -1,4 +1,3 @@
-export * from "./activity-bar"
 export * from "./activity-bar-component"
 export * from "./activity-item"
 export * from "./activity-group"

@@ -46,30 +46,29 @@ export default function ActivityBarComposite() {
           showSearch={true}
         />
 
-        <ActivityBar.Group title="导航">
-          <ActivityBar.Item id="home" icon={<Home />} label="首页" />
-          <ActivityBar.Item id="users" icon={<Users />} label="用户" />
-          <ActivityBar.Item id="messages" icon={<Mail />} label="消息" badge={3} />
-          <ActivityBar.Item id="calendar" icon={<Calendar />} label="日历" />
-        </ActivityBar.Group>
+        <ActivityBar.GroupList>
+          <ActivityBar.Group title="导航">
+            <ActivityBar.Item id="home" icon={<Home />} label="首页" />
+            <ActivityBar.Item id="users" icon={<Users />} label="用户" />
+            <ActivityBar.Item id="messages" icon={<Mail />} label="消息" badge={3} />
+            <ActivityBar.Item id="calendar" icon={<Calendar />} label="日历" />
+          </ActivityBar.Group>
+          <ActivityBar.Group title="开发">
+            <ActivityBar.Item id="code" icon={<Code />} label="代码" />
+            <ActivityBar.Item id="database" icon={<Database />} label="数据库" />
+            <ActivityBar.Item id="cloud" icon={<Cloud />} label="云服务" />
+            <ActivityBar.Item id="server" icon={<Server />} label="服务器" disabled />
+          </ActivityBar.Group>
+        </ActivityBar.GroupList>
 
-        <ActivityBar.Separator />
-
-        <ActivityBar.Group title="开发">
-          <ActivityBar.Item id="code" icon={<Code />} label="代码" />
-          <ActivityBar.Item id="database" icon={<Database />} label="数据库" />
-          <ActivityBar.Item id="cloud" icon={<Cloud />} label="云服务" />
-          <ActivityBar.Item id="server" icon={<Server />} label="服务器" disabled />
-        </ActivityBar.Group>
-
-        <div className="mt-auto">
+        <ActivityBar.Footer>
           <ActivityBar.Separator />
           <ActivityBar.Group>
             <ActivityBar.Item id="settings" icon={<Settings />} label="设置" />
             <ActivityBar.Item id="security" icon={<Shield />} label="安全" />
             <ActivityBar.Item id="help" icon={<HelpCircle />} label="帮助" />
           </ActivityBar.Group>
-        </div>
+        </ActivityBar.Footer>
       </ActivityBar.Root>
 
       <div className="flex-1 overflow-auto border-l p-6">

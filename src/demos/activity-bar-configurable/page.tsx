@@ -19,42 +19,6 @@ import {
 import { Button } from "@/components/ui/button"
 import { ConfigurableActivityBar, type ActivityBarConfig } from "@/components/activity-bar/configurable-activity-bar"
 
-// 定义完整配置
-const activityBarConfig: ActivityBarConfig = {
-  header: {
-    icon: <LayoutDashboard />,
-    title: "工作空间",
-    showSearch: true,
-  },
-  groups: [
-    {
-      title: "导航",
-      items: [
-        { id: "home", icon: <Home />, label: "首页" },
-        { id: "users", icon: <Users />, label: "用户" },
-        { id: "messages", icon: <Mail />, label: "消息", badge: 3 },
-        { id: "calendar", icon: <Calendar />, label: "日历" },
-      ],
-    },
-    {
-      title: "开发",
-      items: [
-        { id: "code", icon: <Code />, label: "代码" },
-        { id: "database", icon: <Database />, label: "数据库" },
-        { id: "cloud", icon: <Cloud />, label: "云服务" },
-        { id: "server", icon: <Server />, label: "服务器", disabled: true },
-      ],
-    },
-  ],
-  footer: {
-    items: [
-      { id: "settings", icon: <Settings />, label: "设置" },
-      { id: "security", icon: <Shield />, label: "安全" },
-      { id: "help", icon: <HelpCircle />, label: "帮助" },
-    ],
-  },
-}
-
 export default function ActivityBarConfigurable() {
   const [expanded, setExpanded] = React.useState(true)
   const [activeSection, setActiveSection] = React.useState("home")
@@ -67,10 +31,45 @@ export default function ActivityBarConfigurable() {
     setActiveSection(activeId)
   }, [])
 
+  const config: ActivityBarConfig = {
+    header: {
+      icon: <LayoutDashboard />,
+      title: "工作空间",
+      showSearch: true,
+    },
+    groups: [
+      {
+        title: "导航",
+        items: [
+          { id: "home", icon: <Home />, label: "首页" },
+          { id: "users", icon: <Users />, label: "用户" },
+          { id: "messages", icon: <Mail />, label: "消息", badge: 3 },
+          { id: "calendar", icon: <Calendar />, label: "日历" },
+        ],
+      },
+      {
+        title: "开发",
+        items: [
+          { id: "code", icon: <Code />, label: "代码" },
+          { id: "database", icon: <Database />, label: "数据库" },
+          { id: "cloud", icon: <Cloud />, label: "云服务" },
+          { id: "server", icon: <Server />, label: "服务器", disabled: true },
+        ],
+      },
+    ],
+    footer: {
+      items: [
+        { id: "settings", icon: <Settings />, label: "设置" },
+        { id: "security", icon: <Shield />, label: "安全" },
+        { id: "help", icon: <HelpCircle />, label: "帮助" },
+      ],
+    },
+  }
+
   return (
     <div className="flex h-full w-full overflow-hidden bg-background">
       <ConfigurableActivityBar
-        config={activityBarConfig}
+        config={config}
         expanded={expanded}
         defaultActiveId={activeSection}
         onExpandedChange={handleExpandedChange}
@@ -85,21 +84,21 @@ export default function ActivityBarConfigurable() {
         </div>
 
         <div className="rounded-lg border p-6">
-          <h2 className="text-xl font-semibold mb-4">完全配置化组件</h2>
-          <p>这个示例展示了如何使用完全配置化的 ActivityBar 组件，只需提供一个配置对象即可创建完整的活动栏。</p>
-          <p className="mt-4">配置对象包含：</p>
+          <h2 className="text-xl font-semibold mb-4">配置式组件模式</h2>
+          <p>这个示例展示了如何使用配置式组件模式构建 ActivityBar，提供了更简洁和声明式的 API。</p>
+          <p className="mt-4">主要特点：</p>
           <ul className="list-disc pl-5 mt-2 space-y-1">
-            <li>头部配置（图标、标题、是否显示搜索框）</li>
-            <li>分组配置（标题、项目列表）</li>
-            <li>底部配置（通常用于设置、帮助等）</li>
-            <li>每个项目的配置（ID、图标、标签、徽章、禁用状态等）</li>
+            <li>通过配置对象定义整个 ActivityBar 的结构</li>
+            <li>支持动态配置和运行时更新</li>
+            <li>更容易进行数据驱动的渲染</li>
+            <li>更好的状态管理和控制</li>
           </ul>
-          <p className="mt-4">优点：</p>
+          <p className="mt-4">适用场景：</p>
           <ul className="list-disc pl-5 mt-2 space-y-1">
-            <li>简化使用方式，只需提供配置对象</li>
-            <li>统一处理徽章、分隔符等元素</li>
-            <li>支持禁用状态和其他高级功能</li>
-            <li>更容易从 API 或配置文件生成菜单</li>
+            <li>需要动态生成 ActivityBar 结构</li>
+            <li>需要从后端获取配置数据</li>
+            <li>需要频繁更新 ActivityBar 内容</li>
+            <li>需要更细粒度的状态控制</li>
           </ul>
         </div>
       </div>
