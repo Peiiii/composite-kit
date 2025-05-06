@@ -11,11 +11,13 @@
     "dist"
   ],
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
+    "dev": "vite --config vite.config.site.ts",
+    "build:lib": "tsc -b && vite build --config vite.config.lib.ts",
+    "build:site": "vite build --config vite.config.site.ts",
+    "build": "npm run build:lib && npm run build:site",
     "lint": "eslint .",
-    "preview": "vite preview",
-    "prepublishOnly": "npm run build"
+    "preview": "vite preview --config vite.config.site.ts",
+    "prepublishOnly": "npm run build:lib"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.0.1",
