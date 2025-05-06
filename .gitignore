@@ -8,7 +8,6 @@ coverage
 .nyc_output
 
 # Production
-dist
 dist-site
 dist/types
 
