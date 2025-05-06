@@ -1,0 +1,28 @@
+# 开发文件
+.git
+.github
+.vscode
+node_modules
+src
+public
+*.log
+
+# 配置文件
+.eslintrc.cjs
+.gitignore
+.npmrc
+.prettierrc
+tsconfig.json
+vite.config.ts
+
+# 文档和示例
+README.md
+CHANGELOG.md
+demos
+docs
+
+# 测试文件
+__tests__
+*.test.*
+*.spec.*
+coverage 
