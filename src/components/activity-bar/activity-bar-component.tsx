@@ -6,9 +6,41 @@ import { ChevronLeft, ChevronRight } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { ActivityBarContext } from "./activity-bar-context"
-import type { ActivityBarProps } from "./activity-bar"
-import { activityBarVariants } from "./activity-bar"
-import { VariantProps } from "class-variance-authority"
+import { cva, type VariantProps } from "class-variance-authority"
+
+// 样式定义
+export const activityBarVariants = cva(
+  "flex flex-col h-full bg-background border-r transition-[width] duration-200 ease-in-out",
+  {
+    variants: {
+      position: {
+        left: "border-r",
+        right: "border-l",
+      },
+      expanded: {
+        true: "w-[240px]",
+        false: "w-16",
+      },
+    },
+    defaultVariants: {
+      position: "left",
+      expanded: false,
+    },
+  },
+)
+
+// 类型定义
+export interface ActivityBarProps
+  extends React.HTMLAttributes<HTMLDivElement>,
+    VariantProps<typeof activityBarVariants> {
+  defaultExpanded?: boolean
+  defaultActiveId?: string
+  toggleable?: boolean
+  onExpandedChange?: (expanded: boolean) => void
+  onActiveChange?: (activeId: string) => void
+}
+
+export interface ActivityBarComponentProps extends ActivityBarProps {}
 
 export function ActivityBarComponent({
   className,
@@ -21,7 +53,7 @@ export function ActivityBarComponent({
   onActiveChange,
   children,
   ...props
-}: ActivityBarProps) {
+}: ActivityBarComponentProps) {
   const [isExpanded, setIsExpanded] = React.useState(defaultExpanded)
   const [activeId, setActiveId] = React.useState<string | undefined>(defaultActiveId)
 
@@ -88,14 +120,5 @@ export function ActivityBarComponent({
       </div>
     </ActivityBarContext.Provider>
   )
-}
-
-export interface ActivityBarComponentProps
-  extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof activityBarVariants> {
-  defaultExpanded?: boolean
-  defaultActiveId?: string
-  toggleable?: boolean
-  onExpandedChange?: (expanded: boolean) => void
-  onActiveChange?: (activeId: string) => void
 }
  
