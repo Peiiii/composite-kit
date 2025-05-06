@@ -1,7 +1,7 @@
 {
   "name": "composite-kit",
   "private": false,
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "A flexible React component library focusing on composite and configurable patterns",
   "type": "module",
   "main": "dist/index.js",
@@ -20,7 +20,7 @@
     "lint": "eslint .",
     "preview": "vite preview --config vite.config.site.ts",
     "prepublishOnly": "npm run build:lib",
-    "version": "npm run build:lib && git add -A dist",
+    "version": "npm run build:lib",
     "postversion": "git push && git push --tags",
     "deploy:web": "pnpm build && ossutil cp -r -u dist-site oss://composite-ui -c ./.ossutilconfig.local"
   },

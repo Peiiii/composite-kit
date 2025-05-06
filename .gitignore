@@ -9,7 +9,6 @@ coverage
 
 # Production
 dist-site
-dist
 dist/types
 
 # Build
