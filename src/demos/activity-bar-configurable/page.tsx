@@ -32,39 +32,39 @@ export default function ActivityBarConfigurable() {
   }, [])
 
   const config: ActivityBarConfig = {
-    header: {
-      icon: <LayoutDashboard />,
-      title: "工作空间",
-      showSearch: true,
-    },
-    groups: [
-      {
-        title: "导航",
-        items: [
-          { id: "home", icon: <Home />, label: "首页" },
-          { id: "users", icon: <Users />, label: "用户" },
-          { id: "messages", icon: <Mail />, label: "消息", badge: 3 },
-          { id: "calendar", icon: <Calendar />, label: "日历" },
-        ],
-      },
-      {
-        title: "开发",
-        items: [
-          { id: "code", icon: <Code />, label: "代码" },
-          { id: "database", icon: <Database />, label: "数据库" },
-          { id: "cloud", icon: <Cloud />, label: "云服务" },
-          { id: "server", icon: <Server />, label: "服务器", disabled: true },
-        ],
-      },
-    ],
-    footer: {
+  header: {
+    icon: <LayoutDashboard />,
+    title: "工作空间",
+    showSearch: true,
+  },
+  groups: [
+    {
+      title: "导航",
       items: [
-        { id: "settings", icon: <Settings />, label: "设置" },
-        { id: "security", icon: <Shield />, label: "安全" },
-        { id: "help", icon: <HelpCircle />, label: "帮助" },
+        { id: "home", icon: <Home />, label: "首页" },
+        { id: "users", icon: <Users />, label: "用户" },
+        { id: "messages", icon: <Mail />, label: "消息", badge: 3 },
+        { id: "calendar", icon: <Calendar />, label: "日历" },
       ],
     },
-  }
+    {
+      title: "开发",
+      items: [
+        { id: "code", icon: <Code />, label: "代码" },
+        { id: "database", icon: <Database />, label: "数据库" },
+        { id: "cloud", icon: <Cloud />, label: "云服务" },
+        { id: "server", icon: <Server />, label: "服务器", disabled: true },
+      ],
+    },
+  ],
+  footer: {
+    items: [
+      { id: "settings", icon: <Settings />, label: "设置" },
+      { id: "security", icon: <Shield />, label: "安全" },
+      { id: "help", icon: <HelpCircle />, label: "帮助" },
+    ],
+  },
+}
 
   return (
     <div className="flex h-full w-full overflow-hidden bg-background">

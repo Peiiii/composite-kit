@@ -101,7 +101,7 @@ export function ConfigurableActivityBar({
       />
 
       <ActivityBar.GroupList>
-        {config.groups.map((group, groupIndex) => (
+      {config.groups.map((group, groupIndex) => (
           <ActivityBar.Group key={groupIndex} title={group.title}>
             {group.items.map((item) => (
               <ActivityBar.Item
@@ -116,7 +116,7 @@ export function ConfigurableActivityBar({
               />
             ))}
           </ActivityBar.Group>
-        ))}
+      ))}
       </ActivityBar.GroupList>
 
       {config.footer && (
