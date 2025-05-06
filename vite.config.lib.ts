@@ -28,6 +28,9 @@ export default mergeConfig(baseConfig, defineConfig({
           react: "React",
           "react-dom": "ReactDOM",
         },
+        assetFileNames: (assetInfo) => {
+          return assetInfo.name === 'style.css' ? 'index.css' : assetInfo.name || 'unknown'
+        },
       },
     },
     sourcemap: true,
