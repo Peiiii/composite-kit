@@ -1,8 +1,8 @@
+"use client"
+
 import { ConfigurableDemoGallery, type DemoConfig } from "@/components/demo-gallery"
-import ActivityBarComposite from "./demos/activity-bar-composite/page"
-import ActivityBarConfigurable from "./demos/activity-bar-configurable/page"
-import DemoGalleryComposite from "./demos/demo-gallery-composite/page"
-import DemoGalleryConfigurable from "./demos/demo-gallery-configurable/page"
+import ActivityBarComposite from "../activity-bar-composite/page"
+import ActivityBarConfigurable from "../activity-bar-configurable/page"
 
 // 所有 demo 的配置
 const demos: DemoConfig[] = [
@@ -22,25 +22,9 @@ const demos: DemoConfig[] = [
     category: "布局组件",
     tags: ["activity-bar", "复合组件"],
   },
-  {
-    id: "demo-gallery-configurable",
-    title: "Demo Gallery (配置模式)",
-    component: <DemoGalleryConfigurable />,
-    description: "使用配置对象的方式构建 Demo Gallery",
-    category: "布局组件",
-    tags: ["demo-gallery", "配置模式"],
-  },
-  {
-    id: "demo-gallery-composite",
-    title: "Demo Gallery (复合组件模式)",
-    component: <DemoGalleryComposite />,
-    description: "使用复合组件模式构建 Demo Gallery",
-    category: "布局组件",
-    tags: ["demo-gallery", "复合组件"],
-  },
 ]
 
-function App() {
+export default function DemoGalleryConfigurable() {
   return (
     <ConfigurableDemoGallery
       demos={demos}
@@ -55,6 +39,4 @@ function App() {
       contentHeight="h-[600px]"
     />
   )
-}
-
-export default App
+} 
