@@ -1,54 +1,58 @@
-# React + TypeScript + Vite
+# Composite UI
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+一个专注于复合组件和配置驱动模式的 React 组件库。
 
-Currently, two official plugins are available:
+## 特性
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- 🧩 复合组件模式：像乐高积木一样组合使用组件
+- ⚙️ 配置驱动模式：通过配置对象快速构建界面
+- 🎨 高度可定制：支持主题定制和样式覆盖
+- 📦 类型安全：完整的 TypeScript 支持
+- 📚 交互式文档：通过 Demo Gallery 展示组件用法
 
-## Expanding the ESLint configuration
+## 快速开始
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+```bash
+# 安装
+npm install composite-ui
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+# 使用
+import { ConfigurableDemoGallery } from 'composite-ui'
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 组件
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### 布局组件
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+- `ActivityBar`：侧边活动栏组件
+  - 支持复合组件模式
+  - 支持配置驱动模式
+  - 支持展开/折叠
+  - 支持分组和徽章
+
+- `DemoGallery`：组件展示组件
+  - 支持复合组件模式
+  - 支持配置驱动模式
+  - 支持搜索和分类
+  - 支持标签和描述
+
+## 开发
+
+```bash
+# 安装依赖
+npm install
+
+# 启动开发服务器
+npm run dev
+
+# 构建
+npm run build
 ```
+
+## 贡献
+
+欢迎提交 Pull Request 和 Issue！
+
+## 许可证
+
+MIT

@@ -1,7 +1,8 @@
 {
-  "name": "component-library",
+  "name": "composite-ui",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
+  "description": "A flexible React component library focusing on composite and configurable patterns",
   "type": "module",
   "scripts": {
     "dev": "vite",
