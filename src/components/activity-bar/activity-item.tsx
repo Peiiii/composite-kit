@@ -38,9 +38,10 @@ export function ActivityItem({ className, id, icon, label, badge, active, disabl
   const isActive = active !== undefined ? active : activeId === id
 
   const handleClick = React.useCallback(() => {
+    if (disabled) return
     setActiveId(id)
     onClick?.()
-  }, [id, onClick, setActiveId])
+  }, [id, onClick, setActiveId, disabled])
 
   const renderBadge = React.useCallback(() => {
     if (!badge) return null
@@ -59,13 +60,16 @@ export function ActivityItem({ className, id, icon, label, badge, active, disabl
         activityItemVariants({ active: isActive }),
         expanded ? "px-3 py-2 mx-2" : "p-2 mx-3",
         "group",
+        disabled && "opacity-50 pointer-events-none",
         className,
       )}
       onClick={handleClick}
       role="button"
-      tabIndex={0}
+      tabIndex={disabled ? -1 : 0}
+      aria-disabled={disabled}
       aria-selected={isActive ? true : undefined}
       onKeyDown={(e) => {
+        if (disabled) return
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault()
           handleClick()
@@ -92,14 +96,15 @@ export function ActivityItem({ className, id, icon, label, badge, active, disabl
       </div>
     </div>
   )
-}export interface ActivityBarItemProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+}
+
+export interface ActivityBarItemProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   icon: React.ReactNode
   label: string
   badge?: string | number
   active?: boolean
   disabled?: boolean
 }
-// 添加默认的 badge 样式
 
 export const defaultBadgeClassName = "h-5 px-1.5 text-xs font-medium"
 

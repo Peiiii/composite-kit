@@ -1,12 +1,12 @@
 "use client"
 
-import * as React from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
+import * as React from "react"
 
-import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import { ActivityBarContext } from "./activity-bar-context"
+import { cn } from "@/lib/utils"
 import { cva, type VariantProps } from "class-variance-authority"
+import { ActivityBarContext } from "./activity-bar-context"
 
 // 样式定义
 export const activityBarVariants = cva(
