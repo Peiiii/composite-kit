@@ -8,7 +8,9 @@
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "LICENSE",
+    "README.md"
   ],
   "scripts": {
     "dev": "vite --config vite.config.site.ts",
@@ -17,8 +19,32 @@
     "build": "npm run build:lib && npm run build:site",
     "lint": "eslint .",
     "preview": "vite preview --config vite.config.site.ts",
-    "prepublishOnly": "npm run build:lib"
+    "prepublishOnly": "npm run build:lib",
+    "preversion": "npm run lint",
+    "version": "npm run build:lib && git add -A dist",
+    "postversion": "git push && git push --tags"
   },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/peiiii/composite-kit.git"
+  },
+  "keywords": [
+    "react",
+    "components",
+    "composite",
+    "configurable",
+    "ui",
+    "kit"
+  ],
+  "author": "peiiii",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/peiiii/composite-kit/issues"
+  },
+  "homepage": "https://github.com/peiiii/composite-kit#readme",
   "dependencies": {
     "@hookform/resolvers": "^5.0.1",
     "@radix-ui/react-dialog": "^1.1.11",

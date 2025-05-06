@@ -1,40 +1,53 @@
 # Composite Kit
 
-一个专注于复合组件和配置驱动模式的 React 组件库。
+一个专注于组合和可配置模式的 React 组件库。
 
 ## 特性
 
-- 🧩 复合组件模式：像乐高积木一样组合使用组件
-- ⚙️ 配置驱动模式：通过配置对象快速构建界面
-- 🎨 高度可定制：支持主题定制和样式覆盖
-- 📦 类型安全：完整的 TypeScript 支持
-- 📚 交互式文档：通过 Demo Gallery 展示组件用法
+- 🎯 基于组合模式设计
+- ⚡️ 高度可配置
+- 🎨 支持主题定制
+- 📦 零运行时依赖
+- 🚀 基于 Vite 构建
+- 📝 完整的 TypeScript 支持
 
-## 快速开始
+## 安装
 
 ```bash
-# 安装
 npm install composite-kit
-
-# 使用
-import { ConfigurableDemoGallery } from 'composite-kit'
+# 或
+yarn add composite-kit
+# 或
+pnpm add composite-kit
 ```
 
-## 组件
+## 使用
 
-### 布局组件
+```tsx
+import { ConfigurableActivityBar } from 'composite-kit'
 
-- `ActivityBar`：侧边活动栏组件
-  - 支持复合组件模式
-  - 支持配置驱动模式
-  - 支持展开/折叠
-  - 支持分组和徽章
+function App() {
+  const config = {
+    header: {
+      icon: <HomeIcon />,
+      title: "主页"
+    },
+    groups: [
+      {
+        items: [
+          {
+            id: "home",
+            icon: <HomeIcon />,
+            label: "首页"
+          }
+        ]
+      }
+    ]
+  }
 
-- `DemoGallery`：组件展示组件
-  - 支持复合组件模式
-  - 支持配置驱动模式
-  - 支持搜索和分类
-  - 支持标签和描述
+  return <ConfigurableActivityBar config={config} />
+}
+```
 
 ## 开发
 
@@ -45,14 +58,13 @@ npm install
 # 启动开发服务器
 npm run dev
 
-# 构建
-npm run build
+# 构建库
+npm run build:lib
+
+# 构建文档网站
+npm run build:site
 ```
-
-## 贡献
-
-欢迎提交 Pull Request 和 Issue！
 
 ## 许可证
 
-MIT
+MIT © [Composite Kit](LICENSE)
