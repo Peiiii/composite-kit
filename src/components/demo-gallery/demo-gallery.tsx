@@ -3,6 +3,7 @@
 import * as React from "react"
 import { ChevronLeft, ChevronRight, Search, Home } from "lucide-react"
 import { useSearchParams, useNavigate } from "react-router-dom"
+import { cn } from "@/lib/utils"
 
 // 定义 demo 配置类型
 export interface DemoConfig {
@@ -28,6 +29,7 @@ export function DemoGallery({ demos, defaultDemoId, className }: DemoGalleryProp
   const [searchQuery, setSearchQuery] = React.useState("")
   const [selectedCategory, setSelectedCategory] = React.useState<string | null>(null)
   const [isLoading, setIsLoading] = React.useState(false)
+  const [showExpandButton, setShowExpandButton] = React.useState(false)
 
   const currentDemo = demos.find((demo) => demo.id === selectedDemo)
 
@@ -85,57 +87,50 @@ export function DemoGallery({ demos, defaultDemoId, className }: DemoGalleryProp
 
   return (
     <div className={className}>
-      <div className="flex h-screen">
+      <div className="flex h-screen relative">
         {/* 侧边栏导航 */}
         <div
-          className={`
-            flex flex-col
-            bg-card border-r
-            transition-all duration-200 ease-in-out
-            ${sidebarExpanded ? "w-64" : "w-16"}
-          `}
+          className={cn(
+            "flex flex-col bg-card border-r transition-all duration-200 ease-in-out",
+            "absolute left-0 top-0 bottom-0 z-20",
+            sidebarExpanded ? "w-64 opacity-100 translate-x-0" : "w-64 opacity-0 -translate-x-full"
+          )}
         >
           <div className="p-4 border-b flex items-center justify-between">
-            <h1 className={`font-bold ${sidebarExpanded ? "text-xl" : "text-sm"}`}>
-              {sidebarExpanded ? "组件库演示" : "演示"}
-            </h1>
+            <h1 className="font-bold text-xl">组件库演示</h1>
             <button
-              onClick={() => setSidebarExpanded(!sidebarExpanded)}
+              onClick={() => setSidebarExpanded(false)}
               className="p-1 hover:bg-accent rounded-md"
             >
-              {sidebarExpanded ? <ChevronLeft size={16} /> : <ChevronRight size={16} />}
+              <ChevronLeft size={16} />
             </button>
           </div>
 
-          {sidebarExpanded && (
-            <div className="p-2 border-b">
-              <div className="relative">
-                <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-                <input
-                  type="text"
-                  placeholder="搜索 demo..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-8 pr-2 py-1.5 rounded-md bg-muted/50 text-sm"
-                />
-              </div>
+          <div className="p-2 border-b">
+            <div className="relative">
+              <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+              <input
+                type="text"
+                placeholder="搜索 demo..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-8 pr-2 py-1.5 rounded-md bg-muted/50 text-sm"
+              />
             </div>
-          )}
+          </div>
 
-          {sidebarExpanded && (
-            <div className="p-2 border-b">
-              <select
-                value={selectedCategory || ""}
-                onChange={(e) => setSelectedCategory(e.target.value || null)}
-                className="w-full px-2 py-1.5 rounded-md bg-muted/50 text-sm"
-              >
-                <option value="">所有分类</option>
-                {categories.map(category => (
-                  <option key={category} value={category}>{category}</option>
-                ))}
-              </select>
-            </div>
-          )}
+          <div className="p-2 border-b">
+            <select
+              value={selectedCategory || ""}
+              onChange={(e) => setSelectedCategory(e.target.value || null)}
+              className="w-full px-2 py-1.5 rounded-md bg-muted/50 text-sm"
+            >
+              <option value="">所有分类</option>
+              {categories.map(category => (
+                <option key={category} value={category}>{category}</option>
+              ))}
+            </select>
+          </div>
 
           <nav className="flex-1 overflow-y-auto p-2">
             <ul className="space-y-1">
@@ -143,22 +138,20 @@ export function DemoGallery({ demos, defaultDemoId, className }: DemoGalleryProp
                 <li key={demo.id}>
                   <button
                     onClick={() => handleDemoSelect(demo.id)}
-                    className={`
-                      w-full text-left px-3 py-2 rounded-md
-                      transition-colors duration-200
-                      ${selectedDemo === demo.id
+                    className={cn(
+                      "w-full text-left px-3 py-2 rounded-md transition-colors duration-200",
+                      selectedDemo === demo.id
                         ? "bg-accent text-accent-foreground"
                         : "hover:bg-muted/50"
-                      }
-                    `}
+                    )}
                   >
                     <div className="font-medium">{demo.title}</div>
-                    {sidebarExpanded && demo.description && (
+                    {demo.description && (
                       <div className="text-sm text-muted-foreground mt-1">
                         {demo.description}
                       </div>
                     )}
-                    {sidebarExpanded && demo.tags && (
+                    {demo.tags && (
                       <div className="flex flex-wrap gap-1 mt-2">
                         {demo.tags.map(tag => (
                           <span
@@ -177,8 +170,31 @@ export function DemoGallery({ demos, defaultDemoId, className }: DemoGalleryProp
           </nav>
         </div>
 
+        {/* 展开按钮 */}
+        {!sidebarExpanded && (
+          <div
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-20"
+            onMouseEnter={() => setShowExpandButton(true)}
+            onMouseLeave={() => setShowExpandButton(false)}
+          >
+            <button
+              onClick={() => setSidebarExpanded(true)}
+              className={cn(
+                "p-2 rounded-r-md bg-card border border-l-0 shadow-md",
+                "transition-all duration-200",
+                showExpandButton ? "translate-x-0" : "-translate-x-2"
+              )}
+            >
+              <ChevronRight size={16} />
+            </button>
+          </div>
+        )}
+
         {/* 主内容区域 */}
-        <main className="flex-1 overflow-auto">
+        <main className={cn(
+          "flex-1 overflow-auto transition-all duration-200",
+          sidebarExpanded ? "ml-64" : "ml-0"
+        )}>
           <div className="container mx-auto py-8 px-4">
             <div className="space-y-12">
               <section className="rounded-lg border bg-card shadow-sm">
