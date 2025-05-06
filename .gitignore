@@ -10,6 +10,7 @@ coverage
 # Production
 dist
 dist-site
+dist/types
 
 # Build
 *.tsbuildinfo
