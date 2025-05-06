@@ -1,4 +1,4 @@
-# Composite UI
+# Composite Kit
 
 一个专注于复合组件和配置驱动模式的 React 组件库。
 
@@ -14,10 +14,10 @@
 
 ```bash
 # 安装
-npm install composite-ui
+npm install composite-kit
 
 # 使用
-import { ConfigurableDemoGallery } from 'composite-ui'
+import { ConfigurableDemoGallery } from 'composite-kit'
 ```
 
 ## 组件
