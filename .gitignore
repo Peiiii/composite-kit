@@ -26,6 +26,7 @@ vite.config.*.js
 .env.test.local
 .env.production.local
 .npmrc
+*.local
 
 # Logs
 npm-debug.log*

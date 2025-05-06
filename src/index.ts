@@ -1,3 +1,6 @@
+// 导出样式
+import './index.css'
+
 // 导出所有组件
 export * from "./components/activity-bar"
 export * from "./components/demo-gallery"
