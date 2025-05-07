@@ -5,9 +5,18 @@ import ActivityBarConfigurable from "./demos/activity-bar-configurable/page"
 import DemoGalleryComposite from "./demos/demo-gallery-composite/page"
 import DemoGalleryConfigurable from "./demos/demo-gallery-configurable/page"
 import { DemoGalleryCustomComposite } from "./demos/demo-gallery-composite/custom-composite"
+import ThemeSwitcherDemo from "./demos/theme-switcher"
 
 // 所有 demo 的配置
 const demos = [
+  {
+    id: "theme-switcher",
+    title: "主题切换器",
+    component: <ThemeSwitcherDemo />,
+    description: "展示如何使用主题切换器在不同主题之间切换",
+    category: "主题系统",
+    tags: ["theme", "主题切换", "material-design"],
+  },
   {
     id: "activity-bar-configurable",
     title: "Activity Bar (配置模式)",
@@ -54,7 +63,7 @@ const App = React.memo(function App() {
   return (
     <DemoGallery.Root
       demos={demos}
-      defaultDemoId="activity-bar-configurable"
+      defaultDemoId="theme-switcher"
       className="h-screen bg-background"
     >
       <DemoGallery.Sidebar
