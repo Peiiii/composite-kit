@@ -1,0 +1,34 @@
+.theme-wechat {
+  --background: #ededed;
+  --foreground: #000000;
+  --card: #ffffff;
+  --card-foreground: #000000;
+  --popover: #ffffff;
+  --popover-foreground: #000000;
+  --primary: #07c160;
+  --primary-foreground: #ffffff;
+  --secondary: #f7f7f7;
+  --secondary-foreground: #000000;
+  --muted: #f7f7f7;
+  --muted-foreground: #999999;
+  --accent: #07c160;
+  --accent-foreground: #ffffff;
+  --destructive: #fa5151;
+  --destructive-foreground: #ffffff;
+  --border: #e5e5e5;
+  --input: #f7f7f7;
+  --ring: #07c160;
+  --chart-1: #07c160;
+  --chart-2: #10aeff;
+  --chart-3: #ffbe00;
+  --chart-4: #fa5151;
+  --chart-5: #9c9c9c;
+  --sidebar: #f7f7f7;
+  --sidebar-foreground: #000000;
+  --sidebar-primary: #07c160;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #07c160;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: #e5e5e5;
+  --sidebar-ring: #07c160;
+} 

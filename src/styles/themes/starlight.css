@@ -1,0 +1,34 @@
+.theme-starlight {
+  --background: #0f172a;
+  --foreground: #e2e8f0;
+  --card: #1e293b;
+  --card-foreground: #e2e8f0;
+  --popover: #1e293b;
+  --popover-foreground: #e2e8f0;
+  --primary: #818cf8;
+  --primary-foreground: #0f172a;
+  --secondary: #1e293b;
+  --secondary-foreground: #e2e8f0;
+  --muted: #1e293b;
+  --muted-foreground: #94a3b8;
+  --accent: #c084fc;
+  --accent-foreground: #0f172a;
+  --destructive: #ef4444;
+  --destructive-foreground: #e2e8f0;
+  --border: #334155;
+  --input: #1e293b;
+  --ring: #818cf8;
+  --chart-1: #818cf8;
+  --chart-2: #c084fc;
+  --chart-3: #f472b6;
+  --chart-4: #34d399;
+  --chart-5: #fbbf24;
+  --sidebar: #1e293b;
+  --sidebar-foreground: #e2e8f0;
+  --sidebar-primary: #818cf8;
+  --sidebar-primary-foreground: #0f172a;
+  --sidebar-accent: #c084fc;
+  --sidebar-accent-foreground: #0f172a;
+  --sidebar-border: #334155;
+  --sidebar-ring: #818cf8;
+} 

@@ -1,0 +1,34 @@
+.theme-sakura {
+  --background: #fff5f5;
+  --foreground: #4a4a4a;
+  --card: #fff0f0;
+  --card-foreground: #4a4a4a;
+  --popover: #fff0f0;
+  --popover-foreground: #4a4a4a;
+  --primary: #ffb7c5;
+  --primary-foreground: #4a4a4a;
+  --secondary: #fff0f0;
+  --secondary-foreground: #4a4a4a;
+  --muted: #fff0f0;
+  --muted-foreground: #ffb7c5;
+  --accent: #ffd1dc;
+  --accent-foreground: #4a4a4a;
+  --destructive: #ff6b6b;
+  --destructive-foreground: #fff5f5;
+  --border: #ffe4e4;
+  --input: #fff0f0;
+  --ring: #ffb7c5;
+  --chart-1: #ffb7c5;
+  --chart-2: #ffd1dc;
+  --chart-3: #ffc0cb;
+  --chart-4: #ffb6c1;
+  --chart-5: #ffc0cb;
+  --sidebar: #fff0f0;
+  --sidebar-foreground: #4a4a4a;
+  --sidebar-primary: #ffb7c5;
+  --sidebar-primary-foreground: #4a4a4a;
+  --sidebar-accent: #ffd1dc;
+  --sidebar-accent-foreground: #4a4a4a;
+  --sidebar-border: #ffe4e4;
+  --sidebar-ring: #ffb7c5;
+} 

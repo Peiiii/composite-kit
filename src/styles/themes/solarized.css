@@ -1,0 +1,34 @@
+.theme-solarized {
+  --background: #002b36;
+  --foreground: #93a1a1;
+  --card: #073642;
+  --card-foreground: #93a1a1;
+  --popover: #073642;
+  --popover-foreground: #93a1a1;
+  --primary: #268bd2;
+  --primary-foreground: #fdf6e3;
+  --secondary: #073642;
+  --secondary-foreground: #93a1a1;
+  --muted: #073642;
+  --muted-foreground: #657b83;
+  --accent: #859900;
+  --accent-foreground: #fdf6e3;
+  --destructive: #dc322f;
+  --destructive-foreground: #fdf6e3;
+  --border: #073642;
+  --input: #073642;
+  --ring: #268bd2;
+  --chart-1: #268bd2;
+  --chart-2: #859900;
+  --chart-3: #b58900;
+  --chart-4: #cb4b16;
+  --chart-5: #6c71c4;
+  --sidebar: #073642;
+  --sidebar-foreground: #93a1a1;
+  --sidebar-primary: #268bd2;
+  --sidebar-primary-foreground: #fdf6e3;
+  --sidebar-accent: #859900;
+  --sidebar-accent-foreground: #fdf6e3;
+  --sidebar-border: #073642;
+  --sidebar-ring: #268bd2;
+} 

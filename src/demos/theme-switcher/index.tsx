@@ -1,5 +1,5 @@
-import { ConfigurableActivityBar } from "@/components/activity-bar/configurable-activity-bar"
-import { ThemeProvider, ThemeSwitcher } from "@/components/theme"
+import { ConfigurableActivityBar } from "@/components/activity-bar/configurable-activity-bar";
+import { ThemeProvider, ThemeSwitcher } from "@/components/theme";
 
 // 示例配置
 const config = {
@@ -49,16 +49,13 @@ const config = {
       ],
     },
   ],
-}
+};
 
 export default function ThemeSwitcherDemo() {
   return (
     <ThemeProvider defaultTheme="material">
       <div className="flex min-h-0 w-full h-full">
-        <ConfigurableActivityBar
-          config={config}
-          className="h-full"
-        />
+        <ConfigurableActivityBar config={config} className="h-full" />
         <div className="flex-1 overflow-auto h-full">
           <div className="p-8">
             <div className="max-w-2xl mx-auto">
@@ -66,9 +63,39 @@ export default function ThemeSwitcherDemo() {
               <div className="space-y-8">
                 <div>
                   <h2 className="text-xl font-semibold mb-4">主题切换</h2>
-                  <ThemeSwitcher 
-                    className="w-64" 
-                    themes={['material', 'light', 'dark', 'nord', 'dracula']} 
+                  <ThemeSwitcher
+                    className="w-64"
+                    themes={[
+                      "material",
+                      "light",
+                      "dark",
+                      "nord",
+                      "dracula",
+                      "one-dark",
+                      "tokyo-night",
+                      "catppuccin",
+                      "wechat",
+                      "telegram",
+                      "github",
+                      "twitter",
+                      "discord",
+                      "notion",
+                      "monokai-pro",
+                      "gruvbox",
+                      "solarized",
+                      "aurora",
+                      "forest",
+                      "ocean",
+                      "starlight",
+                      "desert",
+                      "neon",
+                      "ink-wash",
+                      "sakura",
+                      "moonlight",
+                      "bamboo",
+                      "landscape",
+                      "autumn"
+                    ]}
                   />
                 </div>
                 <div>
@@ -106,5 +133,5 @@ export default function ThemeSwitcherDemo() {
         </div>
       </div>
     </ThemeProvider>
-  )
-} 
+  );
+}

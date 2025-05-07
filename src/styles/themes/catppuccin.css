@@ -1,0 +1,34 @@
+.theme-catppuccin {
+  --background: #1e1e2e;
+  --foreground: #cdd6f4;
+  --card: #313244;
+  --card-foreground: #cdd6f4;
+  --popover: #313244;
+  --popover-foreground: #cdd6f4;
+  --primary: #89b4fa;
+  --primary-foreground: #1e1e2e;
+  --secondary: #45475a;
+  --secondary-foreground: #cdd6f4;
+  --muted: #45475a;
+  --muted-foreground: #a6adc8;
+  --accent: #cba6f7;
+  --accent-foreground: #1e1e2e;
+  --destructive: #f38ba8;
+  --destructive-foreground: #cdd6f4;
+  --border: #45475a;
+  --input: #45475a;
+  --ring: #89b4fa;
+  --chart-1: #89b4fa;
+  --chart-2: #cba6f7;
+  --chart-3: #a6e3a1;
+  --chart-4: #fab387;
+  --chart-5: #89dceb;
+  --sidebar: #313244;
+  --sidebar-foreground: #cdd6f4;
+  --sidebar-primary: #89b4fa;
+  --sidebar-primary-foreground: #1e1e2e;
+  --sidebar-accent: #cba6f7;
+  --sidebar-accent-foreground: #1e1e2e;
+  --sidebar-border: #45475a;
+  --sidebar-ring: #89b4fa;
+} 

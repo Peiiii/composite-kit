@@ -1,0 +1,34 @@
+.theme-forest {
+  --background: #1a2f1a;
+  --foreground: #e8f5e9;
+  --card: #2d4a2d;
+  --card-foreground: #e8f5e9;
+  --popover: #2d4a2d;
+  --popover-foreground: #e8f5e9;
+  --primary: #4caf50;
+  --primary-foreground: #e8f5e9;
+  --secondary: #2d4a2d;
+  --secondary-foreground: #e8f5e9;
+  --muted: #2d4a2d;
+  --muted-foreground: #a5d6a7;
+  --accent: #8bc34a;
+  --accent-foreground: #1a2f1a;
+  --destructive: #f44336;
+  --destructive-foreground: #e8f5e9;
+  --border: #3d6b3d;
+  --input: #2d4a2d;
+  --ring: #4caf50;
+  --chart-1: #4caf50;
+  --chart-2: #8bc34a;
+  --chart-3: #cddc39;
+  --chart-4: #ffc107;
+  --chart-5: #ff9800;
+  --sidebar: #2d4a2d;
+  --sidebar-foreground: #e8f5e9;
+  --sidebar-primary: #4caf50;
+  --sidebar-primary-foreground: #e8f5e9;
+  --sidebar-accent: #8bc34a;
+  --sidebar-accent-foreground: #1a2f1a;
+  --sidebar-border: #3d6b3d;
+  --sidebar-ring: #4caf50;
+} 

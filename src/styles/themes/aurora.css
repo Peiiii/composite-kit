@@ -1,0 +1,34 @@
+.theme-aurora {
+  --background: #0a0f1c;
+  --foreground: #e0f7ff;
+  --card: #111827;
+  --card-foreground: #e0f7ff;
+  --popover: #111827;
+  --popover-foreground: #e0f7ff;
+  --primary: #00e5ff;
+  --primary-foreground: #0a0f1c;
+  --secondary: #1a1f2e;
+  --secondary-foreground: #e0f7ff;
+  --muted: #1a1f2e;
+  --muted-foreground: #7dd3fc;
+  --accent: #7c3aed;
+  --accent-foreground: #e0f7ff;
+  --destructive: #ef4444;
+  --destructive-foreground: #e0f7ff;
+  --border: #1e293b;
+  --input: #1a1f2e;
+  --ring: #00e5ff;
+  --chart-1: #00e5ff;
+  --chart-2: #7c3aed;
+  --chart-3: #f472b6;
+  --chart-4: #34d399;
+  --chart-5: #fbbf24;
+  --sidebar: #111827;
+  --sidebar-foreground: #e0f7ff;
+  --sidebar-primary: #00e5ff;
+  --sidebar-primary-foreground: #0a0f1c;
+  --sidebar-accent: #7c3aed;
+  --sidebar-accent-foreground: #e0f7ff;
+  --sidebar-border: #1e293b;
+  --sidebar-ring: #00e5ff;
+} 

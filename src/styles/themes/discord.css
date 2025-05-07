@@ -1,0 +1,34 @@
+.theme-discord {
+  --background: #36393f;
+  --foreground: #dcddde;
+  --card: #2f3136;
+  --card-foreground: #dcddde;
+  --popover: #2f3136;
+  --popover-foreground: #dcddde;
+  --primary: #5865f2;
+  --primary-foreground: #ffffff;
+  --secondary: #2f3136;
+  --secondary-foreground: #dcddde;
+  --muted: #2f3136;
+  --muted-foreground: #72767d;
+  --accent: #5865f2;
+  --accent-foreground: #ffffff;
+  --destructive: #ed4245;
+  --destructive-foreground: #ffffff;
+  --border: #202225;
+  --input: #40444b;
+  --ring: #5865f2;
+  --chart-1: #5865f2;
+  --chart-2: #57f287;
+  --chart-3: #faa61a;
+  --chart-4: #eb459e;
+  --chart-5: #ed4245;
+  --sidebar: #2f3136;
+  --sidebar-foreground: #dcddde;
+  --sidebar-primary: #5865f2;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #5865f2;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: #202225;
+  --sidebar-ring: #5865f2;
+} 

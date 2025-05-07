@@ -1,0 +1,34 @@
+.theme-telegram {
+  --background: #17212b;
+  --foreground: #ffffff;
+  --card: #242f3d;
+  --card-foreground: #ffffff;
+  --popover: #242f3d;
+  --popover-foreground: #ffffff;
+  --primary: #2b5278;
+  --primary-foreground: #ffffff;
+  --secondary: #242f3d;
+  --secondary-foreground: #ffffff;
+  --muted: #242f3d;
+  --muted-foreground: #7d8b99;
+  --accent: #2b5278;
+  --accent-foreground: #ffffff;
+  --destructive: #ff3b30;
+  --destructive-foreground: #ffffff;
+  --border: #242f3d;
+  --input: #242f3d;
+  --ring: #2b5278;
+  --chart-1: #2b5278;
+  --chart-2: #3a6ea5;
+  --chart-3: #4c8ed9;
+  --chart-4: #64b5f6;
+  --chart-5: #90caf9;
+  --sidebar: #242f3d;
+  --sidebar-foreground: #ffffff;
+  --sidebar-primary: #2b5278;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #2b5278;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: #242f3d;
+  --sidebar-ring: #2b5278;
+} 

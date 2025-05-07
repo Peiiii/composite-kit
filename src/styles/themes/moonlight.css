@@ -1,0 +1,34 @@
+.theme-moonlight {
+  --background: #1a1b26;
+  --foreground: #e2e8f0;
+  --card: #24283b;
+  --card-foreground: #e2e8f0;
+  --popover: #24283b;
+  --popover-foreground: #e2e8f0;
+  --primary: #c0caf5;
+  --primary-foreground: #1a1b26;
+  --secondary: #24283b;
+  --secondary-foreground: #e2e8f0;
+  --muted: #24283b;
+  --muted-foreground: #9aa5ce;
+  --accent: #7aa2f7;
+  --accent-foreground: #1a1b26;
+  --destructive: #f7768e;
+  --destructive-foreground: #e2e8f0;
+  --border: #414868;
+  --input: #24283b;
+  --ring: #c0caf5;
+  --chart-1: #c0caf5;
+  --chart-2: #7aa2f7;
+  --chart-3: #bb9af7;
+  --chart-4: #7dcfff;
+  --chart-5: #89ddff;
+  --sidebar: #24283b;
+  --sidebar-foreground: #e2e8f0;
+  --sidebar-primary: #c0caf5;
+  --sidebar-primary-foreground: #1a1b26;
+  --sidebar-accent: #7aa2f7;
+  --sidebar-accent-foreground: #1a1b26;
+  --sidebar-border: #414868;
+  --sidebar-ring: #c0caf5;
+} 

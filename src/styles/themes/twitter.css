@@ -1,0 +1,34 @@
+.theme-twitter {
+  --background: #000000;
+  --foreground: #ffffff;
+  --card: #16181c;
+  --card-foreground: #ffffff;
+  --popover: #16181c;
+  --popover-foreground: #ffffff;
+  --primary: #1d9bf0;
+  --primary-foreground: #ffffff;
+  --secondary: #16181c;
+  --secondary-foreground: #ffffff;
+  --muted: #16181c;
+  --muted-foreground: #71767b;
+  --accent: #1d9bf0;
+  --accent-foreground: #ffffff;
+  --destructive: #f4212e;
+  --destructive-foreground: #ffffff;
+  --border: #2f3336;
+  --input: #16181c;
+  --ring: #1d9bf0;
+  --chart-1: #1d9bf0;
+  --chart-2: #00ba7c;
+  --chart-3: #f4212e;
+  --chart-4: #7856ff;
+  --chart-5: #ffd400;
+  --sidebar: #16181c;
+  --sidebar-foreground: #ffffff;
+  --sidebar-primary: #1d9bf0;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #1d9bf0;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: #2f3336;
+  --sidebar-ring: #1d9bf0;
+} 

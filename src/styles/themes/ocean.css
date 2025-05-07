@@ -1,0 +1,34 @@
+.theme-ocean {
+  --background: #001e3c;
+  --foreground: #e3f2fd;
+  --card: #0a1929;
+  --card-foreground: #e3f2fd;
+  --popover: #0a1929;
+  --popover-foreground: #e3f2fd;
+  --primary: #2196f3;
+  --primary-foreground: #e3f2fd;
+  --secondary: #0a1929;
+  --secondary-foreground: #e3f2fd;
+  --muted: #0a1929;
+  --muted-foreground: #90caf9;
+  --accent: #00bcd4;
+  --accent-foreground: #001e3c;
+  --destructive: #f44336;
+  --destructive-foreground: #e3f2fd;
+  --border: #1e3a5f;
+  --input: #0a1929;
+  --ring: #2196f3;
+  --chart-1: #2196f3;
+  --chart-2: #00bcd4;
+  --chart-3: #03a9f4;
+  --chart-4: #4fc3f7;
+  --chart-5: #81d4fa;
+  --sidebar: #0a1929;
+  --sidebar-foreground: #e3f2fd;
+  --sidebar-primary: #2196f3;
+  --sidebar-primary-foreground: #e3f2fd;
+  --sidebar-accent: #00bcd4;
+  --sidebar-accent-foreground: #001e3c;
+  --sidebar-border: #1e3a5f;
+  --sidebar-ring: #2196f3;
+} 

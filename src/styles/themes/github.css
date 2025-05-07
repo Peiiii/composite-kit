@@ -1,0 +1,34 @@
+.theme-github {
+  --background: #ffffff;
+  --foreground: #24292f;
+  --card: #ffffff;
+  --card-foreground: #24292f;
+  --popover: #ffffff;
+  --popover-foreground: #24292f;
+  --primary: #0969da;
+  --primary-foreground: #ffffff;
+  --secondary: #f6f8fa;
+  --secondary-foreground: #24292f;
+  --muted: #f6f8fa;
+  --muted-foreground: #57606a;
+  --accent: #0969da;
+  --accent-foreground: #ffffff;
+  --destructive: #cf222e;
+  --destructive-foreground: #ffffff;
+  --border: #d0d7de;
+  --input: #f6f8fa;
+  --ring: #0969da;
+  --chart-1: #0969da;
+  --chart-2: #2188ff;
+  --chart-3: #54aeff;
+  --chart-4: #79b8ff;
+  --chart-5: #9ecbff;
+  --sidebar: #f6f8fa;
+  --sidebar-foreground: #24292f;
+  --sidebar-primary: #0969da;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #0969da;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: #d0d7de;
+  --sidebar-ring: #0969da;
+} 

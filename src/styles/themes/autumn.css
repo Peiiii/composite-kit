@@ -1,0 +1,34 @@
+.theme-autumn {
+  --background: #fff8e7;
+  --foreground: #4a3c2c;
+  --card: #fff0d4;
+  --card-foreground: #4a3c2c;
+  --popover: #fff0d4;
+  --popover-foreground: #4a3c2c;
+  --primary: #d4a017;
+  --primary-foreground: #fff8e7;
+  --secondary: #fff0d4;
+  --secondary-foreground: #4a3c2c;
+  --muted: #fff0d4;
+  --muted-foreground: #b38b17;
+  --accent: #e67e22;
+  --accent-foreground: #fff8e7;
+  --destructive: #c0392b;
+  --destructive-foreground: #fff8e7;
+  --border: #ffe0b2;
+  --input: #fff0d4;
+  --ring: #d4a017;
+  --chart-1: #d4a017;
+  --chart-2: #e67e22;
+  --chart-3: #f39c12;
+  --chart-4: #f1c40f;
+  --chart-5: #f9e79f;
+  --sidebar: #fff0d4;
+  --sidebar-foreground: #4a3c2c;
+  --sidebar-primary: #d4a017;
+  --sidebar-primary-foreground: #fff8e7;
+  --sidebar-accent: #e67e22;
+  --sidebar-accent-foreground: #fff8e7;
+  --sidebar-border: #ffe0b2;
+  --sidebar-ring: #d4a017;
+} 

@@ -1,0 +1,34 @@
+.theme-monokai-pro {
+  --background: #2d2a2e;
+  --foreground: #fce566;
+  --card: #363537;
+  --card-foreground: #fce566;
+  --popover: #363537;
+  --popover-foreground: #fce566;
+  --primary: #ff6188;
+  --primary-foreground: #2d2a2e;
+  --secondary: #363537;
+  --secondary-foreground: #fce566;
+  --muted: #363537;
+  --muted-foreground: #a59f85;
+  --accent: #a9dc76;
+  --accent-foreground: #2d2a2e;
+  --destructive: #ff6188;
+  --destructive-foreground: #2d2a2e;
+  --border: #403e41;
+  --input: #363537;
+  --ring: #ff6188;
+  --chart-1: #ff6188;
+  --chart-2: #a9dc76;
+  --chart-3: #ffd866;
+  --chart-4: #fc9867;
+  --chart-5: #ab9df2;
+  --sidebar: #363537;
+  --sidebar-foreground: #fce566;
+  --sidebar-primary: #ff6188;
+  --sidebar-primary-foreground: #2d2a2e;
+  --sidebar-accent: #a9dc76;
+  --sidebar-accent-foreground: #2d2a2e;
+  --sidebar-border: #403e41;
+  --sidebar-ring: #ff6188;
+} 

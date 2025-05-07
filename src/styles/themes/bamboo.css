@@ -1,0 +1,34 @@
+.theme-bamboo {
+  --background: #f0f7f0;
+  --foreground: #2c3e2c;
+  --card: #e8f3e8;
+  --card-foreground: #2c3e2c;
+  --popover: #e8f3e8;
+  --popover-foreground: #2c3e2c;
+  --primary: #4a7c4a;
+  --primary-foreground: #f0f7f0;
+  --secondary: #e8f3e8;
+  --secondary-foreground: #2c3e2c;
+  --muted: #e8f3e8;
+  --muted-foreground: #5a8c5a;
+  --accent: #7cb17c;
+  --accent-foreground: #2c3e2c;
+  --destructive: #e53935;
+  --destructive-foreground: #f0f7f0;
+  --border: #c8e6c8;
+  --input: #e8f3e8;
+  --ring: #4a7c4a;
+  --chart-1: #4a7c4a;
+  --chart-2: #7cb17c;
+  --chart-3: #9ccc9c;
+  --chart-4: #b2dfb2;
+  --chart-5: #c8e6c8;
+  --sidebar: #e8f3e8;
+  --sidebar-foreground: #2c3e2c;
+  --sidebar-primary: #4a7c4a;
+  --sidebar-primary-foreground: #f0f7f0;
+  --sidebar-accent: #7cb17c;
+  --sidebar-accent-foreground: #2c3e2c;
+  --sidebar-border: #c8e6c8;
+  --sidebar-ring: #4a7c4a;
+} 
