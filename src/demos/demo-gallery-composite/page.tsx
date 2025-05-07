@@ -24,12 +24,13 @@ const demos: DemoConfig[] = [
     },
 ]
 
+// 使用默认 Content 组件的示例
 export default function DemoGalleryComposite() {
     return (
         <DemoGallery.Root
             demos={demos}
             defaultDemoId="activity-bar-configurable"
-            className="min-h-screen bg-background"
+            className="h-full bg-background"
         >
             <DemoGallery.Sidebar
                 title="组件库演示"

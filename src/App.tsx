@@ -1,12 +1,13 @@
 import * as React from "react"
-import { ConfigurableDemoGallery, type DemoConfig } from "@/components/demo-gallery"
+import { DemoGallery } from "@/components/demo-gallery"
 import ActivityBarComposite from "./demos/activity-bar-composite/page"
 import ActivityBarConfigurable from "./demos/activity-bar-configurable/page"
 import DemoGalleryComposite from "./demos/demo-gallery-composite/page"
 import DemoGalleryConfigurable from "./demos/demo-gallery-configurable/page"
+import { DemoGalleryCustomComposite } from "./demos/demo-gallery-composite/custom-composite"
 
 // 所有 demo 的配置
-const demos: DemoConfig[] = [
+const demos = [
   {
     id: "activity-bar-configurable",
     title: "Activity Bar (配置模式)",
@@ -39,22 +40,38 @@ const demos: DemoConfig[] = [
     category: "布局组件",
     tags: ["demo-gallery", "复合组件"],
   },
+  {
+    id: "demo-gallery-custom-composite",
+    title: "Demo Gallery (自定义组合模式)",
+    component: <DemoGalleryCustomComposite />,
+    description: "使用自定义组合模式构建 Demo Gallery，展示如何使用基础组件进行组合",
+    category: "布局组件",
+    tags: ["demo-gallery", "自定义组合"],
+  },
 ]
 
 const App = React.memo(function App() {
   return (
-    <ConfigurableDemoGallery
+    <DemoGallery.Root
       demos={demos}
       defaultDemoId="activity-bar-configurable"
-      className="min-h-screen bg-background"
-      title="组件库演示"
-      showSearch={true}
-      showCategoryFilter={true}
-      showTags={true}
-      showDescription={true}
-      sidebarWidth="w-64"
-      contentHeight="h-[600px]"
-    />
+      className="h-screen bg-background"
+    >
+      <DemoGallery.Sidebar
+        title="组件库演示"
+        showSearch={true}
+        showCategoryFilter={true}
+        showTags={true}
+        showDescription={true}
+        sidebarWidth="w-64"
+      />
+      <DemoGallery.ExpandButton />
+      <DemoGallery.Content
+        showTags={true}
+        showDescription={true}
+        contentHeight="h-[600px]"
+      />
+    </DemoGallery.Root>
   )
 })
 

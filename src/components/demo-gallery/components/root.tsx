@@ -109,8 +109,8 @@ export const DemoGalleryRoot = React.memo(function DemoGalleryRoot({
       <UIDataContext.Provider value={uiData}>
         <FilterContext.Provider value={filterState}>
           <DemoGalleryContext.Provider value={legacyValue}>
-            <div className={className}>
-              <div className="flex h-screen relative">
+            <div className={`overflow-hidden ${className}`}>
+              <div className="flex h-full relative overflow-hidden">
                 {children}
               </div>
             </div>

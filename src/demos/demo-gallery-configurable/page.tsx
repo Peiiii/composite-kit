@@ -29,7 +29,7 @@ export default function DemoGalleryConfigurable() {
     <ConfigurableDemoGallery
       demos={demos}
       defaultDemoId="activity-bar-configurable"
-      className="min-h-screen bg-background"
+      className="h-full bg-background"
       title="组件库演示"
       showSearch={true}
       showCategoryFilter={true}
