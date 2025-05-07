@@ -22,7 +22,8 @@
     "prepublishOnly": "npm run build:lib",
     "version": "npm run build:lib",
     "postversion": "git push && git push --tags",
-    "deploy:web": "pnpm build && ossutil cp -r -u dist-site oss://composite-ui -c ./.ossutilconfig.local"
+    "deploy:web": "pnpm build && ossutil cp -r -u dist-site oss://composite-ui -c ./.ossutilconfig.local",
+    "test:app": "cd examples/test-app-npm && pnpm install && pnpm add composite-kit@latest && pnpm run dev"
   },
   "publishConfig": {
     "access": "public"

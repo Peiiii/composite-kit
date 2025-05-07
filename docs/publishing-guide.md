@@ -110,12 +110,21 @@ pnpm run dev
 
 3. Verify in a real project:
 ```bash
+# 方法一：使用快捷命令
+pnpm run test:app
+
+# 方法二：手动执行步骤
 cd examples/test-app-npm
 pnpm install
 pnpm add composite-kit@latest
 pnpm run dev
 ```
-- 打开浏览器访问本地地址，手动验证页面功能和样式是否正常。
+- 打开浏览器访问本地地址（通常是 http://localhost:5173 或 http://localhost:5174）
+- 手动验证以下内容：
+  - 组件功能是否正常
+  - 样式是否正确加载
+  - 交互是否流畅
+  - 控制台是否有错误信息
 
 ### 4. Publishing
 
