@@ -8,6 +8,7 @@ import DemoGalleryComposite from "./demos/demo-gallery-composite/page"
 import DemoGalleryConfigurable from "./demos/demo-gallery-configurable/page"
 import { DemoGalleryCustomComposite } from "./demos/demo-gallery-composite/custom-composite"
 import ThemeSwitcherDemo from "./demos/theme-switcher"
+import MobileNavComposite from "./demos/mobile-nav-composite/page"
 
 // 所有 demo 的配置
 const demos = [
@@ -34,6 +35,14 @@ const demos = [
     description: "使用复合组件模式构建 Activity Bar",
     category: "布局组件",
     tags: ["activity-bar", "复合组件"],
+  },
+  {
+    id: "mobile-nav-composite",
+    title: "移动端导航 (复合组件模式)",
+    component: <MobileNavComposite />,
+    description: "使用复合组件模式构建移动端导航",
+    category: "布局组件",
+    tags: ["mobile-nav", "复合组件", "响应式"],
   },
   {
     id: "demo-gallery-configurable",

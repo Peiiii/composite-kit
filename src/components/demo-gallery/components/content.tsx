@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { cn } from "@/lib/utils"
-import { ChevronRight, Home } from "lucide-react"
+import { ChevronRight, Home, ChevronDown, ChevronUp } from "lucide-react"
 import { useDemoState, useUIData, useFilter } from "../context"
 import { DemoConfig } from "../demo-gallery"
 
@@ -102,28 +102,59 @@ export const DemoHeader = React.memo(function DemoHeader({
   selectedCategory,
   onCategoryReset
 }: DemoHeaderProps) {
+  const [isCollapsed, setIsCollapsed] = React.useState(false)
+
   return (
-    <div className="p-6 border-b">
-      <Breadcrumb
-        selectedCategory={selectedCategory}
-        onCategoryReset={onCategoryReset}
-      />
-      <h2 className="text-2xl font-semibold">{currentDemo?.title}</h2>
-      {showDescription && currentDemo?.description && (
-        <p className="text-muted-foreground mt-2">{currentDemo.description}</p>
-      )}
-      {showTags && currentDemo?.tags && (
-        <div className="flex flex-wrap gap-2 mt-4">
-          {currentDemo.tags.map((tag: string) => (
-            <span
-              key={tag}
-              className="px-2 py-1 text-sm rounded-full bg-muted/50"
-            >
-              {tag}
-            </span>
-          ))}
+    <div className={cn(
+      "border-b transition-all duration-300 ease-in-out",
+      isCollapsed ? "px-4 py-3" : "p-6"
+    )}>
+      <div className="flex items-center justify-between gap-4">
+        <div className="flex-1 min-w-0">
+          <Breadcrumb
+            selectedCategory={selectedCategory}
+            onCategoryReset={onCategoryReset}
+            className={cn(
+              "transition-all duration-300",
+              isCollapsed ? "hidden" : "block"
+            )}
+          />
+          <h2 className={cn(
+            "font-semibold truncate",
+            isCollapsed ? "text-lg" : "text-2xl"
+          )}>{currentDemo?.title}</h2>
+          <div className={cn(
+            "transition-all duration-300 overflow-hidden",
+            isCollapsed ? "h-0 opacity-0" : "h-auto opacity-100"
+          )}>
+            {showDescription && currentDemo?.description && (
+              <p className="text-muted-foreground mt-2">{currentDemo.description}</p>
+            )}
+            {showTags && currentDemo?.tags && (
+              <div className="flex flex-wrap gap-2 mt-4">
+                {currentDemo.tags.map((tag: string) => (
+                  <span
+                    key={tag}
+                    className="px-2 py-1 text-sm rounded-full bg-muted/50"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
-      )}
+        <button
+          onClick={() => setIsCollapsed(!isCollapsed)}
+          className="flex-shrink-0 p-2 hover:bg-muted/50 rounded-md transition-colors"
+        >
+          {isCollapsed ? (
+            <ChevronDown className="h-4 w-4" />
+          ) : (
+            <ChevronUp className="h-4 w-4" />
+          )}
+        </button>
+      </div>
     </div>
   )
 })
@@ -153,14 +184,19 @@ export const DemoContent = React.memo(function DemoContent({
 interface BreadcrumbProps {
   selectedCategory: string | null
   onCategoryReset: () => void
+  className?: string
 }
 
 const Breadcrumb = React.memo(function Breadcrumb({
   selectedCategory,
-  onCategoryReset
+  onCategoryReset,
+  className
 }: BreadcrumbProps) {
   return (
-    <div className="flex items-center text-sm text-muted-foreground mb-4">
+    <div className={cn(
+      "flex items-center text-sm text-muted-foreground mb-4",
+      className
+    )}>
       <button
         onClick={onCategoryReset}
         className="flex items-center hover:text-foreground"
