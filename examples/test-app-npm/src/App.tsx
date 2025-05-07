@@ -1,6 +1,7 @@
 import * as React from 'react'
-import { ConfigurableActivityBar } from 'composite-kit'
+import { ConfigurableActivityBar, ThemeProvider, ThemeSwitcher } from 'composite-kit'
 import { Home, Settings, User, FileText, HelpCircle } from 'lucide-react'
+import type { Theme } from "composite-kit"
 
 // Tailwind CSS 示例组件
 const TailwindExamples = () => (
@@ -66,6 +67,38 @@ const TailwindExamples = () => (
   </div>
 )
 
+const themes: Theme[] = [
+  "light",
+  "dark",
+  "material",
+  "nord",
+  "dracula",
+  "one-dark",
+  "tokyo-night",
+  "catppuccin",
+  "wechat",
+  "telegram",
+  "github",
+  "twitter",
+  "discord",
+  "notion",
+  "monokai-pro",
+  "gruvbox",
+  "solarized",
+  "aurora",
+  "forest",
+  "ocean",
+  "starlight",
+  "desert",
+  "neon",
+  "ink-wash",
+  "sakura",
+  "moonlight",
+  "bamboo",
+  "landscape",
+  "autumn"
+]
+
 function App() {
   const config = {
     header: {
@@ -118,21 +151,81 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="flex h-screen">
-        <ConfigurableActivityBar 
-          config={config}
-          defaultExpanded={true}
-          onActiveChange={(id) => console.log('Active item:', id)}
-        />
-        <div className="flex-1 p-8">
-          <div className="max-w-4xl mx-auto">
-            <h1 className="text-3xl font-bold text-gray-900 mb-8">Tailwind CSS 样式测试</h1>
-            <TailwindExamples />
+    <ThemeProvider defaultTheme="material">
+      <div className="min-h-screen p-8">
+        <div className="max-w-4xl mx-auto space-y-8">
+          <div className="flex items-center justify-between">
+            <h1 className="text-3xl font-bold">主题切换器演示</h1>
+            <ThemeSwitcher themes={themes} />
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div className="p-4 rounded-lg bg-primary text-primary-foreground">
+              主色调
+            </div>
+            <div className="p-4 rounded-lg bg-secondary text-secondary-foreground">
+              次要色调
+            </div>
+            <div className="p-4 rounded-lg bg-accent text-accent-foreground">
+              强调色
+            </div>
+            <div className="p-4 rounded-lg bg-muted text-muted-foreground">
+              中性色
+            </div>
+            <div className="p-4 rounded-lg bg-destructive text-destructive-foreground">
+              错误色
+            </div>
+            <div className="p-4 rounded-lg bg-background text-foreground border">
+              背景色
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <h2 className="text-2xl font-semibold">文本示例</h2>
+            <div className="space-y-2">
+              <h1 className="text-4xl font-bold">标题 1</h1>
+              <h2 className="text-3xl font-semibold">标题 2</h2>
+              <h3 className="text-2xl font-medium">标题 3</h3>
+              <p className="text-base">正文文本</p>
+              <p className="text-sm text-muted-foreground">次要文本</p>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <h2 className="text-2xl font-semibold">按钮示例</h2>
+            <div className="flex gap-4">
+              <button className="px-4 py-2 rounded bg-primary text-primary-foreground">
+                主要按钮
+              </button>
+              <button className="px-4 py-2 rounded bg-secondary text-secondary-foreground">
+                次要按钮
+              </button>
+              <button className="px-4 py-2 rounded bg-accent text-accent-foreground">
+                强调按钮
+              </button>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <h2 className="text-2xl font-semibold">卡片示例</h2>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="p-6 rounded-lg bg-card text-card-foreground shadow">
+                <h3 className="text-xl font-semibold mb-2">卡片标题</h3>
+                <p className="text-muted-foreground">
+                  这是一个卡片示例，展示了主题中的卡片样式。
+                </p>
+              </div>
+              <div className="p-6 rounded-lg bg-popover text-popover-foreground shadow">
+                <h3 className="text-xl font-semibold mb-2">弹出框标题</h3>
+                <p className="text-muted-foreground">
+                  这是一个弹出框示例，展示了主题中的弹出框样式。
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </ThemeProvider>
   )
 }
 
