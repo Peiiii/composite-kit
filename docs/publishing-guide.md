@@ -110,10 +110,12 @@ pnpm run dev
 
 3. Verify in a real project:
 ```bash
-cd ../your-real-project
-pnpm add ../composite-kit
-# Test the package functionality
+cd examples/test-app-npm
+pnpm install
+pnpm add composite-kit@latest
+pnpm run dev
 ```
+- 打开浏览器访问本地地址，手动验证页面功能和样式是否正常。
 
 ### 4. Publishing
 
