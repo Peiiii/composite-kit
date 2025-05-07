@@ -8,6 +8,7 @@ import { ActivityGroup } from "./activity-group"
 import { ActivityHeaderOptimized } from "./activity-header-optimized"
 import { ActivityItem } from "./activity-item"
 import { ActivityGroupList } from "./activity-group-list"
+import { ActivityBarToggleButton } from "./activity-bar-toggle-button"
 
 // 复合组件命名空间
 export const ActivityBar = {
@@ -26,4 +27,8 @@ export const ActivityBar = {
     </div>
   ),
   GroupList: ActivityGroupList,
-} 
+  ToggleButton: ActivityBarToggleButton,
+}
+
+export type { ActivityBarProps } from "./activity-bar-component"
+export type { ActivityBarToggleButtonProps } from "./activity-bar-toggle-button" 

@@ -1,12 +1,11 @@
 "use client"
 
-import { ChevronLeft, ChevronRight } from "lucide-react"
 import * as React from "react"
 
-import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { cva, type VariantProps } from "class-variance-authority"
 import { ActivityBarContext } from "./activity-bar-context"
+import { ActivityBarToggleButton } from "./activity-bar-toggle-button"
 
 // 样式定义
 export const activityBarVariants = cva(
@@ -58,7 +57,7 @@ export function ActivityBarComponent({
   const [activeId, setActiveId] = React.useState<string | undefined>(defaultActiveId)
 
   // Allow controlled expansion state
-  const expanded = controlledExpanded !== undefined ? controlledExpanded : isExpanded
+  const expanded = controlledExpanded ?? isExpanded
 
   const toggleExpanded = React.useCallback(() => {
     const newExpanded = !expanded
@@ -93,29 +92,11 @@ export function ActivityBarComponent({
           <div className="flex-shrink-0">{React.Children.toArray(children).at(-1)}</div>
         </div>
         {toggleable && (
-          <Button
-            variant="ghost"
-            size="icon"
-            className={cn(
-              "absolute top-4 h-6 w-6",
-              position === "left" ? "right-[-12px]" : "left-[-12px]",
-              "rounded-full border bg-background shadow-sm z-10 hover:bg-accent hover:text-accent-foreground transition-all duration-200",
-            )}
+          <ActivityBarToggleButton
+            position={position as "left" | "right"}
+            expanded={expanded ?? false}
             onClick={toggleExpanded}
-            aria-label={expanded ? "Collapse sidebar" : "Expand sidebar"}
-          >
-            {position === "left" ? (
-              expanded ? (
-                <ChevronLeft className="h-3 w-3 transition-transform duration-200" />
-              ) : (
-                <ChevronRight className="h-3 w-3 transition-transform duration-200" />
-              )
-            ) : expanded ? (
-              <ChevronRight className="h-3 w-3 transition-transform duration-200" />
-            ) : (
-              <ChevronLeft className="h-3 w-3 transition-transform duration-200" />
-            )}
-          </Button>
+          />
         )}
       </div>
     </ActivityBarContext.Provider>

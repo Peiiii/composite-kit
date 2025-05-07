@@ -1,5 +1,7 @@
 import * as React from "react"
 import { DemoGallery } from "@/components/demo-gallery"
+import { ActivityBar } from "@/components/activity-bar"
+import { Home, BookOpen, Settings, HelpCircle } from "lucide-react"
 import ActivityBarComposite from "./demos/activity-bar-composite/page"
 import ActivityBarConfigurable from "./demos/activity-bar-configurable/page"
 import DemoGalleryComposite from "./demos/demo-gallery-composite/page"
@@ -60,27 +62,63 @@ const demos = [
 ]
 
 const App = React.memo(function App() {
+  const [expanded, setExpanded] = React.useState(true)
+  const [activeSection, setActiveSection] = React.useState("home")
+
   return (
-    <DemoGallery.Root
-      demos={demos}
-      defaultDemoId="theme-switcher"
-      className="h-screen bg-background"
-    >
-      <DemoGallery.Sidebar
-        title="组件库演示"
-        showSearch={true}
-        showCategoryFilter={true}
-        showTags={true}
-        showDescription={true}
-        sidebarWidth="w-64"
-      />
-      <DemoGallery.ExpandButton />
-      <DemoGallery.Content
-        showTags={true}
-        showDescription={true}
-        contentHeight="h-[600px]"
-      />
-    </DemoGallery.Root>
+    <div className="flex h-screen bg-background">
+      <ActivityBar.Root
+        expanded={expanded}
+        defaultActiveId={activeSection}
+        onExpandedChange={setExpanded}
+        onActiveChange={setActiveSection}
+        className="flex-shrink-0"
+      >
+        <ActivityBar.Header
+          icon={<BookOpen />}
+          title="组件库"
+          showSearch={true}
+        />
+
+        <ActivityBar.GroupList>
+          <ActivityBar.Group title="导航">
+            <ActivityBar.Item id="home" icon={<Home />} label="首页" />
+            <ActivityBar.Item id="demos" icon={<BookOpen />} label="组件演示" />
+          </ActivityBar.Group>
+        </ActivityBar.GroupList>
+
+        <ActivityBar.Footer>
+          <ActivityBar.Separator />
+          <ActivityBar.Group>
+            <ActivityBar.Item id="settings" icon={<Settings />} label="设置" />
+            <ActivityBar.Item id="help" icon={<HelpCircle />} label="帮助" />
+          </ActivityBar.Group>
+        </ActivityBar.Footer>
+      </ActivityBar.Root>
+
+      <div className="flex-1 overflow-hidden">
+        <DemoGallery.Root
+          demos={demos}
+          defaultDemoId="theme-switcher"
+          className="h-full"
+        >
+          <DemoGallery.Sidebar
+            title="组件库演示"
+            showSearch={true}
+            showCategoryFilter={true}
+            showTags={true}
+            showDescription={true}
+            sidebarWidth="w-64"
+          />
+          <DemoGallery.ExpandButton />
+          <DemoGallery.Content
+            showTags={true}
+            showDescription={true}
+            contentHeight="h-[600px]"
+          />
+        </DemoGallery.Root>
+      </div>
+    </div>
   )
 })
 
