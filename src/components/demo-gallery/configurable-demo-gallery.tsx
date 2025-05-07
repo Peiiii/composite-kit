@@ -1,5 +1,6 @@
 "use client"
 
+import * as React from "react"
 import { DemoGallery, type DemoConfig } from "./demo-gallery"
 
 // 定义配置类型
@@ -22,7 +23,7 @@ export interface ConfigurableDemoGalleryProps {
   onSearch?: (query: string) => void
 }
 
-export function ConfigurableDemoGallery({
+export const ConfigurableDemoGallery = React.memo(function ConfigurableDemoGallery({
   demos,
   defaultDemoId,
   className,
@@ -65,4 +66,4 @@ export function ConfigurableDemoGallery({
       />
     </DemoGallery.Root>
   )
-} 
+}) 

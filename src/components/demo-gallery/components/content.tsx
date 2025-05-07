@@ -1,29 +1,30 @@
 "use client"
 
+import * as React from "react"
 import { cn } from "@/lib/utils"
 import { ChevronRight, Home } from "lucide-react"
-import { useDemoGallery } from "../context"
+import { useDemoState, useUIData, useFilter } from "../context"
 
-interface DemoGalleryContentProps {
+export interface DemoGalleryContentProps {
   className?: string
   showTags?: boolean
   showDescription?: boolean
   contentHeight?: string
 }
 
-export function DemoGalleryContent({ 
+export const DemoGalleryContent = React.memo(function DemoGalleryContent({ 
   className,
   showTags = true,
   showDescription = true,
   contentHeight = "h-[600px]"
 }: DemoGalleryContentProps) {
-  const { 
-    sidebarExpanded, 
-    currentDemo, 
-    isLoading,
-    selectedCategory,
-    setSelectedCategory 
-  } = useDemoGallery()
+  const { currentDemo } = useDemoState()
+  const { sidebarExpanded, isLoading } = useUIData()
+  const { selectedCategory, setSelectedCategory } = useFilter()
+
+  const handleCategoryReset = React.useCallback(() => {
+    setSelectedCategory(null)
+  }, [setSelectedCategory])
 
   return (
     <main className={cn(
@@ -35,21 +36,10 @@ export function DemoGalleryContent({
         <div className="space-y-12">
           <section className="rounded-lg border bg-card shadow-sm">
             <div className="p-6 border-b">
-              <div className="flex items-center text-sm text-muted-foreground mb-4">
-                <button
-                  onClick={() => setSelectedCategory(null)}
-                  className="flex items-center hover:text-foreground"
-                >
-                  <Home className="h-4 w-4 mr-1" />
-                  所有分类
-                </button>
-                {selectedCategory && (
-                  <>
-                    <ChevronRight className="h-4 w-4 mx-2" />
-                    <span className="text-foreground">{selectedCategory}</span>
-                  </>
-                )}
-              </div>
+              <Breadcrumb
+                selectedCategory={selectedCategory}
+                onCategoryReset={handleCategoryReset}
+              />
 
               <h2 className="text-2xl font-semibold">{currentDemo?.title}</h2>
               {showDescription && currentDemo?.description && (
@@ -70,9 +60,7 @@ export function DemoGalleryContent({
             </div>
             <div className={cn("relative", contentHeight)}>
               {isLoading ? (
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-                </div>
+                <LoadingSpinner />
               ) : (
                 currentDemo?.component
               )}
@@ -82,4 +70,40 @@ export function DemoGalleryContent({
       </div>
     </main>
   )
+})
+
+interface BreadcrumbProps {
+  selectedCategory: string | null
+  onCategoryReset: () => void
 }
+
+const Breadcrumb = React.memo(function Breadcrumb({
+  selectedCategory,
+  onCategoryReset
+}: BreadcrumbProps) {
+  return (
+    <div className="flex items-center text-sm text-muted-foreground mb-4">
+      <button
+        onClick={onCategoryReset}
+        className="flex items-center hover:text-foreground"
+      >
+        <Home className="h-4 w-4 mr-1" />
+        所有分类
+      </button>
+      {selectedCategory && (
+        <>
+          <ChevronRight className="h-4 w-4 mx-2" />
+          <span className="text-foreground">{selectedCategory}</span>
+        </>
+      )}
+    </div>
+  )
+})
+
+const LoadingSpinner = React.memo(function LoadingSpinner() {
+  return (
+    <div className="absolute inset-0 flex items-center justify-center">
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+    </div>
+  )
+})

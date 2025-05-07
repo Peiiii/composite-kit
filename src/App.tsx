@@ -1,3 +1,4 @@
+import * as React from "react"
 import { ConfigurableDemoGallery, type DemoConfig } from "@/components/demo-gallery"
 import ActivityBarComposite from "./demos/activity-bar-composite/page"
 import ActivityBarConfigurable from "./demos/activity-bar-configurable/page"
@@ -40,7 +41,7 @@ const demos: DemoConfig[] = [
   },
 ]
 
-function App() {
+const App = React.memo(function App() {
   return (
     <ConfigurableDemoGallery
       demos={demos}
@@ -55,6 +56,6 @@ function App() {
       contentHeight="h-[600px]"
     />
   )
-}
+})
 
 export default App

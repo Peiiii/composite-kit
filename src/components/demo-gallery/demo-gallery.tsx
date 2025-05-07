@@ -16,7 +16,12 @@ export interface DemoConfig {
   tags?: string[]
 }
 
-// 导出复合组件
+// 导出类型定义
+export type { DemoGalleryRootProps } from "./components/root"
+export type { DemoGallerySidebarProps } from "./components/sidebar"
+export type { DemoGalleryContentProps } from "./components/content"
+
+// 导出组件
 export const DemoGallery = {
   Root: DemoGalleryRoot,
   Sidebar: DemoGallerySidebar,

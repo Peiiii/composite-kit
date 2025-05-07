@@ -1,10 +1,11 @@
 "use client"
 
+import * as React from "react"
 import { cn } from "@/lib/utils"
 import { ChevronLeft, Search } from "lucide-react"
-import { useDemoGallery } from "../context"
+import { useDemoState, useUIData, useFilter } from "../context"
 
-interface DemoGallerySidebarProps {
+export interface DemoGallerySidebarProps {
   className?: string
   title?: string
   showSearch?: boolean
@@ -17,7 +18,7 @@ interface DemoGallerySidebarProps {
   onSearch?: (query: string) => void
 }
 
-export function DemoGallerySidebar({ 
+export const DemoGallerySidebar = React.memo(function DemoGallerySidebar({ 
   className,
   title = "组件库演示",
   showSearch = true,
@@ -29,33 +30,35 @@ export function DemoGallerySidebar({
   onCategoryChange,
   onSearch,
 }: DemoGallerySidebarProps) {
-  const {
-    sidebarExpanded,
-    setSidebarExpanded,
-    searchQuery,
-    setSearchQuery,
-    selectedCategory,
-    setSelectedCategory,
-    categories,
-    filteredDemos,
-    selectedDemo,
-    setSelectedDemo
-  } = useDemoGallery()
+  const { selectedDemo, setSelectedDemo } = useDemoState()
+  const { sidebarExpanded, setSidebarExpanded } = useUIData()
+  const { 
+    searchQuery, 
+    setSearchQuery, 
+    selectedCategory, 
+    setSelectedCategory, 
+    categories, 
+    filteredDemos 
+  } = useFilter()
 
-  const handleSearch = (value: string) => {
+  const handleSearch = React.useCallback((value: string) => {
     setSearchQuery(value)
     onSearch?.(value)
-  }
+  }, [setSearchQuery, onSearch])
 
-  const handleCategoryChange = (value: string | null) => {
+  const handleCategoryChange = React.useCallback((value: string | null) => {
     setSelectedCategory(value)
     onCategoryChange?.(value)
-  }
+  }, [setSelectedCategory, onCategoryChange])
 
-  const handleDemoSelect = (demoId: string) => {
+  const handleDemoSelect = React.useCallback((demoId: string) => {
     setSelectedDemo(demoId)
     onDemoSelect?.(demoId)
-  }
+  }, [setSelectedDemo, onDemoSelect])
+
+  const handleSidebarToggle = React.useCallback(() => {
+    setSidebarExpanded(false)
+  }, [setSidebarExpanded])
 
   return (
     <div
@@ -69,7 +72,7 @@ export function DemoGallerySidebar({
       <div className="p-4 border-b flex items-center justify-between">
         <h1 className="font-bold text-xl">{title}</h1>
         <button
-          onClick={() => setSidebarExpanded(false)}
+          onClick={handleSidebarToggle}
           className="p-1 hover:bg-accent rounded-md"
         >
           <ChevronLeft size={16} />
@@ -109,39 +112,71 @@ export function DemoGallerySidebar({
       <nav className="flex-1 overflow-y-auto p-2">
         <ul className="space-y-1">
           {filteredDemos.map((demo) => (
-            <li key={demo.id}>
-              <button
-                onClick={() => handleDemoSelect(demo.id)}
-                className={cn(
-                  "w-full text-left px-3 py-2 rounded-md transition-colors duration-200",
-                  selectedDemo === demo.id
-                    ? "bg-accent text-accent-foreground"
-                    : "hover:bg-muted/50"
-                )}
-              >
-                <div className="font-medium">{demo.title}</div>
-                {showDescription && demo.description && (
-                  <div className="text-sm text-muted-foreground mt-1">
-                    {demo.description}
-                  </div>
-                )}
-                {showTags && demo.tags && (
-                  <div className="flex flex-wrap gap-1 mt-2">
-                    {demo.tags.map(tag => (
-                      <span
-                        key={tag}
-                        className="px-1.5 py-0.5 text-xs rounded-full bg-muted/50"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                )}
-              </button>
-            </li>
+            <DemoItem
+              key={demo.id}
+              demo={demo}
+              isSelected={selectedDemo === demo.id}
+              showDescription={showDescription}
+              showTags={showTags}
+              onSelect={handleDemoSelect}
+            />
           ))}
         </ul>
       </nav>
     </div>
   )
-} 
+})
+
+interface DemoItemProps {
+  demo: {
+    id: string
+    title: string
+    description?: string
+    tags?: string[]
+  }
+  isSelected: boolean
+  showDescription: boolean
+  showTags: boolean
+  onSelect: (id: string) => void
+}
+
+const DemoItem = React.memo(function DemoItem({
+  demo,
+  isSelected,
+  showDescription,
+  showTags,
+  onSelect
+}: DemoItemProps) {
+  return (
+    <li>
+      <button
+        onClick={() => onSelect(demo.id)}
+        className={cn(
+          "w-full text-left px-3 py-2 rounded-md transition-colors duration-200",
+          isSelected
+            ? "bg-accent text-accent-foreground"
+            : "hover:bg-muted/50"
+        )}
+      >
+        <div className="font-medium">{demo.title}</div>
+        {showDescription && demo.description && (
+          <div className="text-sm text-muted-foreground mt-1">
+            {demo.description}
+          </div>
+        )}
+        {showTags && demo.tags && (
+          <div className="flex flex-wrap gap-1 mt-2">
+            {demo.tags.map(tag => (
+              <span
+                key={tag}
+                className="px-1.5 py-0.5 text-xs rounded-full bg-muted/50"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+        )}
+      </button>
+    </li>
+  )
+}) 
