@@ -15,6 +15,7 @@ export default mergeConfig(baseConfig, defineConfig({
     }),
   ],
   build: {
+    minify: false,
     lib: {
       entry: resolve(__dirname, "src/index.ts"),
       name: "CompositeKit",
