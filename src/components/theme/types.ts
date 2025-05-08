@@ -34,4 +34,5 @@ export interface ThemeSwitcherProps {
   className?: string;
   themes?: Theme[];
   onThemeChange?: (theme: Theme) => void;
+  children?: React.ReactNode;
 }
