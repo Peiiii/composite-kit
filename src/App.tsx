@@ -1,5 +1,5 @@
 import * as React from "react"
-import { DemoGallery } from "@/components/demo-gallery"
+import { DemoGallery, DemoCardContainer } from "@/components/demo-gallery"
 import { ActivityBar } from "@/components/activity-bar"
 import { Home, BookOpen, Settings, HelpCircle } from "lucide-react"
 import ActivityBarComposite from "./demos/activity-bar-composite/page"
@@ -120,10 +120,14 @@ const App = React.memo(function App() {
         sidebarWidth="w-64"
       />
       <DemoGallery.ExpandButton />
-      <DemoGallery.Content
-        showTags={true}
-        showDescription={true}
-      />
+      <DemoGallery.Content>
+        <DemoCardContainer 
+          showTags={true} 
+          showDescription={true}
+          scrollable={true}
+          scrollDirection="both"
+        />
+      </DemoGallery.Content>
     </DemoGallery.Root>
       </div>
     </div>

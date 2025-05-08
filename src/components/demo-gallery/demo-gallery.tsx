@@ -1,15 +1,11 @@
 "use client"
 
 import * as React from "react"
+import { DemoGalleryContent } from "./components/content"
+import { DemoCard } from "./components/demo-card"
+import { DemoGalleryExpandButton } from "./components/expand-button"
 import { DemoGalleryRoot } from "./components/root"
 import { DemoGallerySidebar } from "./components/sidebar"
-import { DemoGalleryExpandButton } from "./components/expand-button"
-import { 
-  DemoGalleryContent,
-  DemoCard,
-  DemoHeader,
-  DemoContent
-} from "./components/content"
 
 // 定义 demo 配置类型
 export interface DemoConfig {
@@ -22,14 +18,13 @@ export interface DemoConfig {
 }
 
 // 导出类型定义
+export type { DemoGalleryContentProps } from "./components/content"
+export type {
+  DemoCardBodyProps,
+  DemoCardFooterProps, DemoCardHeaderProps, DemoCardRootProps
+} from "./components/demo-card"
 export type { DemoGalleryRootProps } from "./components/root"
 export type { DemoGallerySidebarProps } from "./components/sidebar"
-export type { 
-  DemoGalleryContentProps,
-  DemoCardProps,
-  DemoHeaderProps,
-  DemoContentProps
-} from "./components/content"
 
 // 导出组件
 export const DemoGallery = {
@@ -37,7 +32,6 @@ export const DemoGallery = {
   Sidebar: DemoGallerySidebar,
   ExpandButton: DemoGalleryExpandButton,
   Content: DemoGalleryContent,
-  DemoCard: DemoCard,
-  DemoHeader: DemoHeader,
-  DemoContent: DemoContent
-} 
+}
+
+export { DemoCard }

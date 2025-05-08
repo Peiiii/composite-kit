@@ -40,7 +40,7 @@ export default function MobileNavCompositeDemo() {
   <MobileNav.Indicator />
 </MobileNav.Root>`}
                 </pre>
-              </div>
+                  </div>
               <Separator />
               <div>
                 <h3 className="font-medium mb-2">自定义样式</h3>
@@ -55,9 +55,9 @@ export default function MobileNavCompositeDemo() {
 </MobileNav.Root>`}
                 </pre>
               </div>
-            </div>
+                </div>
           </Card>
-        </div>
+                  </div>
 
         <div className="flex justify-center min-w-[480px]">
           <Card className="p-6 w-full max-w-lg">
@@ -75,7 +75,7 @@ export default function MobileNavCompositeDemo() {
                 <div className="mt-4">
                   <NavPreview variant="instagram" showScaleControl />
                 </div>
-              </TabsContent>
+          </TabsContent>
 
               <TabsContent value="twitter" className="mt-0">
                 <div className="mt-4">
@@ -87,19 +87,19 @@ export default function MobileNavCompositeDemo() {
                 <div className="mt-4">
                   <NavPreview variant="tiktok" showScaleControl />
                 </div>
-              </TabsContent>
+          </TabsContent>
 
-              <TabsContent value="spotify" className="mt-0">
+          <TabsContent value="spotify" className="mt-0">
                 <div className="mt-4">
                   <NavPreview variant="spotify" showScaleControl />
                 </div>
-              </TabsContent>
+          </TabsContent>
 
               <TabsContent value="wechat" className="mt-0">
                 <div className="mt-4">
                   <NavPreview variant="wechat" showScaleControl />
                 </div>
-              </TabsContent>
+          </TabsContent>
             </Tabs>
           </Card>
         </div>
