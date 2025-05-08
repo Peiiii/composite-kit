@@ -120,13 +120,15 @@ export function MobileNavComponent({
   const expanded = isExpanded
 
   const toggleExpanded = React.useCallback(() => {
+    if (!toggleable) return
     const newExpanded = !expanded
     setIsExpanded(newExpanded)
     onExpandedChange?.(newExpanded)
-  }, [expanded, onExpandedChange])
+  }, [expanded, onExpandedChange, toggleable])
 
   const handleDragEnd = React.useCallback(
-    (event: any, info: { offset: { y: number } }) => {
+    (_: any, info: { offset: { y: number } }) => {
+      if (!dragToExpand) return
       const threshold = 50
       const shouldExpand = position === "bottom" 
         ? info.offset.y < -threshold 
@@ -137,7 +139,15 @@ export function MobileNavComponent({
       }
       setDragY(0)
     },
-    [expanded, position, toggleExpanded]
+    [expanded, position, toggleExpanded, dragToExpand]
+  )
+
+  const handleDrag = React.useCallback(
+    (_: any, info: { offset: { y: number } }) => {
+      if (!dragToExpand) return
+      setDragY(info.offset.y)
+    },
+    [dragToExpand]
   )
 
   const contextValue = React.useMemo(
@@ -166,6 +176,7 @@ export function MobileNavComponent({
         drag={dragToExpand ? "y" : false}
         dragConstraints={{ top: 0, bottom: 0 }}
         dragElastic={0.2}
+        onDrag={handleDrag}
         onDragEnd={handleDragEnd}
         animate={{ y: dragY }}
         className={cn(

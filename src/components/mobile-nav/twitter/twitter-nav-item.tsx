@@ -1,15 +1,16 @@
 "use client"
 
-import * as React from "react"
 import { cn } from "@/lib/utils"
-import { motion } from "framer-motion"
+import { motion, HTMLMotionProps } from "framer-motion"
+import * as React from "react"
 
-export interface TwitterNavItemProps extends React.HTMLAttributes<HTMLButtonElement> {
+export interface TwitterNavItemProps extends Omit<HTMLMotionProps<"button">, "onClick"> {
   id: string
   icon: React.ReactNode
   label: string
   active?: boolean
   badge?: number
+  onClick?: () => void
 }
 
 export function TwitterNavItem({
@@ -19,6 +20,7 @@ export function TwitterNavItem({
   label,
   active,
   badge,
+  onClick,
   ...props
 }: TwitterNavItemProps) {
   return (
@@ -29,6 +31,7 @@ export function TwitterNavItem({
         className
       )}
       whileTap={{ scale: 0.95 }}
+      onClick={onClick}
       {...props}
     >
       <div className="relative">
@@ -42,8 +45,12 @@ export function TwitterNavItem({
       <span className="text-xs">{label}</span>
       {active && (
         <motion.div
-          className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-1 bg-blue-500 rounded-full"
+          className="absolute bottom-0 left-1/2 -translate-x-1/2 w-6 h-0.5 bg-blue-500 rounded-full"
           layoutId="twitter-nav-indicator"
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          exit={{ scale: 0 }}
+          transition={{ duration: 0.2 }}
         />
       )}
     </motion.button>

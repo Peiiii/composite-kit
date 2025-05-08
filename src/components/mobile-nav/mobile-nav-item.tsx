@@ -1,10 +1,10 @@
 "use client"
 
-import * as React from "react"
 import { cn } from "@/lib/utils"
-import { cva, type VariantProps } from "class-variance-authority"
+import { cva } from "class-variance-authority"
+import { HTMLMotionProps, motion } from "framer-motion"
+import * as React from "react"
 import { MobileNavContext } from "./mobile-nav-context"
-import { motion, HTMLMotionProps } from "framer-motion"
 
 // 样式定义
 export const mobileNavItemVariants = cva(

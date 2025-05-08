@@ -1,9 +1,9 @@
 "use client"
 
-import * as React from "react"
 import { cn } from "@/lib/utils"
+import { Bell, Home, Mail, Search } from "lucide-react"
+import * as React from "react"
 import { TwitterNavItem } from "./twitter-nav-item"
-import { Home, Search, Bell, Mail, User } from "lucide-react"
 
 export interface TwitterNavItemConfig {
   id: string
