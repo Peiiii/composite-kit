@@ -10,7 +10,7 @@ We follow the [Conventional Commits](https://www.conventionalcommits.org/) speci
 
 ## Note
 
-- Before each commit, always run `git status` to confirm the files and changes you are about to commit.
+- Before git add, always run `git status` to confirm the files and changes you are about to commit.
 
 ### Format
 
