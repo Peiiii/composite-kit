@@ -3,6 +3,7 @@
 import { DemoGallery, type DemoConfig } from "@/components/demo-gallery"
 import ActivityBarComposite from "../activity-bar-composite/page"
 import ActivityBarConfigurable from "../activity-bar-configurable/page"
+import { DemoCardContainer } from "@/components/demo-gallery/components/demo-card-container"
 
 // 所有 demo 的配置
 const demos: DemoConfig[] = [
@@ -41,11 +42,17 @@ export default function DemoGalleryComposite() {
                 sidebarWidth="w-64"
             />
             <DemoGallery.ExpandButton />
-            <DemoGallery.Content
-                showTags
-                showDescription
-                contentHeight="h-[600px]"
-            />
+            <DemoGallery.Content>
+                <DemoCardContainer
+                    showTags={true}
+                    showDescription={true}
+                    bodyProps={{
+                        contentHeight: "h-[600px]",
+                        scrollable: true,
+                        scrollDirection: "both"
+                    }}
+                />
+            </DemoGallery.Content>
         </DemoGallery.Root>
     )
 } 

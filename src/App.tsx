@@ -1,14 +1,14 @@
-import * as React from "react"
-import { DemoGallery, DemoCardContainer } from "@/components/demo-gallery"
-import { ActivityBar } from "@/components/activity-bar"
-import { Home, BookOpen, Settings, HelpCircle } from "lucide-react"
-import ActivityBarComposite from "./demos/activity-bar-composite/page"
-import ActivityBarConfigurable from "./demos/activity-bar-configurable/page"
-import DemoGalleryComposite from "./demos/demo-gallery-composite/page"
-import DemoGalleryConfigurable from "./demos/demo-gallery-configurable/page"
-import { DemoGalleryCustomComposite } from "./demos/demo-gallery-composite/custom-composite"
-import ThemeSwitcherDemo from "./demos/theme-switcher"
-import MobileNavComposite from "./demos/mobile-nav-composite/page"
+import * as React from "react";
+import { DemoGallery, DemoCardContainer } from "@/components/demo-gallery";
+import { ActivityBar } from "@/components/activity-bar";
+import { Home, BookOpen, Settings, HelpCircle } from "lucide-react";
+import ActivityBarComposite from "./demos/activity-bar-composite/page";
+import ActivityBarConfigurable from "./demos/activity-bar-configurable/page";
+import DemoGalleryComposite from "./demos/demo-gallery-composite/page";
+import DemoGalleryConfigurable from "./demos/demo-gallery-configurable/page";
+import { DemoGalleryCustomComposite } from "./demos/demo-gallery-composite/custom-composite";
+import ThemeSwitcherDemo from "./demos/theme-switcher";
+import MobileNavComposite from "./demos/mobile-nav-composite/page";
 
 // 所有 demo 的配置
 const demos = [
@@ -64,15 +64,16 @@ const demos = [
     id: "demo-gallery-custom-composite",
     title: "Demo Gallery (自定义组合模式)",
     component: <DemoGalleryCustomComposite />,
-    description: "使用自定义组合模式构建 Demo Gallery，展示如何使用基础组件进行组合",
+    description:
+      "使用自定义组合模式构建 Demo Gallery，展示如何使用基础组件进行组合",
     category: "布局组件",
     tags: ["demo-gallery", "自定义组合"],
   },
-]
+];
 
 const App = React.memo(function App() {
-  const [expanded, setExpanded] = React.useState(true)
-  const [activeSection, setActiveSection] = React.useState("home")
+  const [expanded, setExpanded] = React.useState(true);
+  const [activeSection, setActiveSection] = React.useState("home");
 
   return (
     <div className="flex h-screen bg-background">
@@ -106,32 +107,35 @@ const App = React.memo(function App() {
       </ActivityBar.Root>
 
       <div className="flex-1 overflow-hidden">
-    <DemoGallery.Root
-      demos={demos}
-      defaultDemoId="theme-switcher"
+        <DemoGallery.Root
+          demos={demos}
+          defaultDemoId="theme-switcher"
           className="h-full"
-    >
-      <DemoGallery.Sidebar
-        title="组件库演示"
-        showSearch={true}
-        showCategoryFilter={true}
-        showTags={true}
-        showDescription={true}
-        sidebarWidth="w-64"
-      />
-      <DemoGallery.ExpandButton />
-      <DemoGallery.Content>
-        <DemoCardContainer 
-          showTags={true} 
-          showDescription={true}
-          scrollable={true}
-          scrollDirection="both"
-        />
-      </DemoGallery.Content>
-    </DemoGallery.Root>
+        >
+          <DemoGallery.Sidebar
+            title="组件库演示"
+            showSearch={true}
+            showCategoryFilter={true}
+            showTags={true}
+            showDescription={true}
+            sidebarWidth="w-64"
+          />
+          <DemoGallery.ExpandButton />
+          <DemoGallery.Content >
+            <DemoCardContainer
+              showTags={true}
+              showDescription={true}
+              bodyProps={{
+                scrollable: true,
+                scrollDirection: "both",
+                contentHeight: "min-h-[600px]",
+              }}
+            />
+          </DemoGallery.Content>
+        </DemoGallery.Root>
       </div>
     </div>
-  )
-})
+  );
+});
 
-export default App
+export default App;

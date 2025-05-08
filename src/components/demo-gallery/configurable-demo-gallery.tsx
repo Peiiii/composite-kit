@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import { DemoGallery, type DemoConfig } from "./demo-gallery"
+import { DemoCardContainer } from "./components/demo-card-container"
 
 // 定义配置类型
 export interface ConfigurableDemoGalleryProps {
@@ -59,11 +60,17 @@ export const ConfigurableDemoGallery = React.memo(function ConfigurableDemoGalle
         onSearch={onSearch}
       />
       <DemoGallery.ExpandButton />
-      <DemoGallery.Content
-        showTags={showTags}
-        showDescription={showDescription}
-        contentHeight={contentHeight}
-      />
+      <DemoGallery.Content>
+        <DemoCardContainer
+          showTags={showTags}
+          showDescription={showDescription}
+          bodyProps={{
+            contentHeight,
+            scrollable: true,
+            scrollDirection: "both"
+          }}
+        />
+      </DemoGallery.Content>
     </DemoGallery.Root>
   )
 }) 

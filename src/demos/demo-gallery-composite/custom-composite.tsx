@@ -1,9 +1,8 @@
 "use client"
 
 import * as React from "react"
-import { cn } from "@/lib/utils"
-import { DemoGallery, type DemoConfig } from "@/components/demo-gallery"
-import { useDemoState, useUIData, useFilter } from "@/components/demo-gallery/context"
+import { DemoGallery, DemoCardContainer, type DemoConfig } from "@/components/demo-gallery"
+import { useFilter } from "@/components/demo-gallery/context"
 import ActivityBarComposite from "../activity-bar-composite/page"
 import ActivityBarConfigurable from "../activity-bar-configurable/page"
 
@@ -28,9 +27,7 @@ const exampleDemos: DemoConfig[] = [
 ]
 
 export function DemoGalleryCustomComposite() {
-    const { currentDemo } = useDemoState()
-    const { sidebarExpanded, isLoading } = useUIData()
-    const { selectedCategory, setSelectedCategory } = useFilter()
+    const { setSelectedCategory } = useFilter()
 
     const handleCategoryReset = React.useCallback(() => {
         setSelectedCategory(null)
@@ -51,24 +48,17 @@ export function DemoGalleryCustomComposite() {
                 sidebarWidth="w-64"
             />
             <DemoGallery.ExpandButton />
-            <main className={cn(
-                "flex-1 overflow-auto transition-all duration-200",
-                sidebarExpanded ? "ml-64" : "ml-0"
-            )}>
-                <div className="container mx-auto py-8 px-4">
-                    <div className="space-y-12">
-                        <DemoGallery.DemoCard
-                            currentDemo={currentDemo}
-                            isLoading={isLoading}
-                            showTags={true}
-                            showDescription={true}
-                            contentHeight="h-[600px]"
-                            selectedCategory={selectedCategory}
-                            onCategoryReset={handleCategoryReset}
-                        />
-                    </div>
-                </div>
-            </main>
+            <DemoGallery.Content>
+                <DemoCardContainer 
+                    showTags={true}
+                    showDescription={true}
+                    bodyProps={{
+                        contentHeight: "h-[600px]",
+                        scrollable: true,
+                        scrollDirection: "both"
+                    }}
+                />
+            </DemoGallery.Content>
         </DemoGallery.Root>
     )
 } 
