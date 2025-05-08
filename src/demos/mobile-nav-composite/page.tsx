@@ -59,8 +59,8 @@ export default function MobileNavCompositeDemo() {
           </Card>
         </div>
 
-        <div>
-          <Card className="p-6">
+        <div className="flex justify-center min-w-[480px]">
+          <Card className="p-6 w-full max-w-lg">
             <h2 className="text-xl font-semibold mb-4">预览</h2>
             <Tabs defaultValue="instagram" className="space-y-4">
               <TabsList className="w-full">
