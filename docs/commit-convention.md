@@ -8,7 +8,7 @@ All commit messages must be written in English. This ensures consistency and mak
 
 We follow the [Conventional Commits](https://www.conventionalcommits.org/) specification for our commit messages. This helps maintain a clear and consistent commit history.
 
-## Note
+## Note !!!
 
 - Before git add, always run `git status` to confirm the files and changes you are about to commit.
 
