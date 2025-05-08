@@ -123,7 +123,6 @@ const App = React.memo(function App() {
       <DemoGallery.Content
         showTags={true}
         showDescription={true}
-        contentHeight="h-[600px]"
       />
     </DemoGallery.Root>
       </div>

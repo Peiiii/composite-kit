@@ -17,7 +17,7 @@ export const DemoGalleryContent = React.memo(function DemoGalleryContent({
   className,
   showTags = true,
   showDescription = true,
-  contentHeight = "h-[600px]"
+  contentHeight,
 }: DemoGalleryContentProps) {
   const { currentDemo } = useDemoState()
   const { sidebarExpanded, isLoading } = useUIData()
@@ -55,7 +55,7 @@ export interface DemoCardProps {
   isLoading: boolean
   showTags: boolean
   showDescription: boolean
-  contentHeight: string
+  contentHeight?: string
   selectedCategory: string | null
   onCategoryReset: () => void
 }
@@ -162,7 +162,7 @@ export const DemoHeader = React.memo(function DemoHeader({
 export interface DemoContentProps {
   currentDemo: DemoConfig | undefined
   isLoading: boolean
-  contentHeight: string
+  contentHeight?: string
 }
 
 export const DemoContent = React.memo(function DemoContent({
@@ -171,7 +171,7 @@ export const DemoContent = React.memo(function DemoContent({
   contentHeight
 }: DemoContentProps) {
   return (
-    <div className={cn("relative", contentHeight)}>
+    <div className={contentHeight ? `relative ${contentHeight}` : "relative"}>
       {isLoading ? (
         <LoadingSpinner />
       ) : (
