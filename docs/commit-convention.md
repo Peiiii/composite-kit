@@ -1,5 +1,9 @@
 # Commit Message Convention
 
+## Language
+
+All commit messages must be written in English. This ensures consistency and makes the commit history more accessible to all team members.
+
 ## English Message
 
 We follow the [Conventional Commits](https://www.conventionalcommits.org/) specification for our commit messages. This helps maintain a clear and consistent commit history.
