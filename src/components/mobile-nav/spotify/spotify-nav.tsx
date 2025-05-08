@@ -115,25 +115,4 @@ export function SpotifyNav({
       </div>
     </div>
   )
-}
-
-// 默认配置
-export const defaultSpotifyNavConfig: SpotifyNavConfig = {
-  items: [
-    {
-      id: "home",
-      icon: <Home />,
-      label: "首页"
-    },
-    {
-      id: "search",
-      icon: <Search />,
-      label: "搜索"
-    },
-    {
-      id: "library",
-      icon: <Bookmark />,
-      label: "音乐库"
-    }
-  ]
 } 

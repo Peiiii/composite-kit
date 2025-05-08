@@ -1,7 +1,6 @@
 "use client"
 
 import { cn } from "@/lib/utils"
-import { Bell, Home, Mail, Search } from "lucide-react"
 import * as React from "react"
 import { TwitterNavItem } from "./twitter-nav-item"
 
@@ -72,30 +71,4 @@ export function TwitterNav({
       </div>
     </div>
   )
-}
-
-// 默认配置
-export const defaultTwitterNavConfig: TwitterNavConfig = {
-  items: [
-    {
-      id: "home",
-      icon: <Home />,
-      label: "首页"
-    },
-    {
-      id: "search",
-      icon: <Search />,
-      label: "探索"
-    },
-    {
-      id: "notifications",
-      icon: <Bell />,
-      label: "通知"
-    },
-    {
-      id: "messages",
-      icon: <Mail />,
-      label: "消息"
-    }
-  ]
 } 

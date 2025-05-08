@@ -1,14 +1,151 @@
 "use client"
 
 import { MobileDevicePreview } from "@/components/mobile-device-preview"
-import { InstagramNav, defaultInstagramNavConfig } from "@/components/mobile-nav/instagram/instagram-nav"
-import { SpotifyNav, defaultSpotifyNavConfig } from "@/components/mobile-nav/spotify/spotify-nav"
-import { TwitterNav, defaultTwitterNavConfig } from "@/components/mobile-nav/twitter/twitter-nav"
-import { WeChatNav, defaultWeChatNavConfig } from "@/components/mobile-nav/wechat/wechat-nav"
-import { TikTokNav, defaultTikTokNavConfig } from "@/components/mobile-nav/tiktok/tiktok-nav"
+import { InstagramNav } from "@/components/mobile-nav/instagram/instagram-nav"
+import { SpotifyNav } from "@/components/mobile-nav/spotify/spotify-nav"
+import { TwitterNav } from "@/components/mobile-nav/twitter/twitter-nav"
+import { WeChatNav } from "@/components/mobile-nav/wechat/wechat-nav"
+import { TikTokNav } from "@/components/mobile-nav/tiktok/tiktok-nav"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Heart, MessageSquare, Plus, Search } from "lucide-react"
+import { Heart, MessageSquare, Plus, Search, Home, Bookmark, Music, Bell, Mail, User, Compass, Users } from "lucide-react"
 import * as React from "react"
+
+// Instagram 默认配置
+const defaultInstagramNavConfig = {
+  items: [
+    {
+      id: "home",
+      icon: <Home />,
+      label: "首页"
+    },
+    {
+      id: "search",
+      icon: <Search />,
+      label: "搜索"
+    },
+    {
+      id: "create",
+      icon: <Plus />,
+      label: "创建",
+      className: "scale-110"
+    },
+    {
+      id: "activity",
+      icon: <Heart />,
+      label: "活动"
+    },
+    {
+      id: "profile",
+      icon: <User />,
+      label: "我的"
+    }
+  ]
+}
+
+// Spotify 默认配置
+const defaultSpotifyNavConfig = {
+  items: [
+    {
+      id: "home",
+      icon: <Home />,
+      label: "首页"
+    },
+    {
+      id: "search",
+      icon: <Search />,
+      label: "搜索"
+    },
+    {
+      id: "library",
+      icon: <Bookmark />,
+      label: "音乐库"
+    }
+  ]
+}
+
+// Twitter 默认配置
+const defaultTwitterNavConfig = {
+  items: [
+    {
+      id: "home",
+      icon: <Home />,
+      label: "首页"
+    },
+    {
+      id: "search",
+      icon: <Search />,
+      label: "探索"
+    },
+    {
+      id: "notifications",
+      icon: <Bell />,
+      label: "通知"
+    },
+    {
+      id: "messages",
+      icon: <Mail />,
+      label: "消息"
+    }
+  ]
+}
+
+// WeChat 默认配置
+const defaultWeChatNavConfig = {
+  items: [
+    {
+      id: "chat",
+      icon: <MessageSquare />,
+      label: "微信"
+    },
+    {
+      id: "contacts",
+      icon: <Users />,
+      label: "通讯录"
+    },
+    {
+      id: "discover",
+      icon: <Compass />,
+      label: "发现"
+    },
+    {
+      id: "me",
+      icon: <User />,
+      label: "我"
+    }
+  ]
+}
+
+// TikTok 默认配置
+const defaultTikTokNavConfig = {
+  items: [
+    {
+      id: "home",
+      icon: <Home />,
+      label: "首页"
+    },
+    {
+      id: "discover",
+      icon: <Search />,
+      label: "发现"
+    },
+    {
+      id: "create",
+      icon: <Plus />,
+      label: "创建",
+      className: "scale-125"
+    },
+    {
+      id: "inbox",
+      icon: <MessageSquare />,
+      label: "收件箱"
+    },
+    {
+      id: "profile",
+      icon: <User />,
+      label: "我的"
+    }
+  ]
+}
 
 // 导航配置
 const navConfigs = {

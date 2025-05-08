@@ -1,9 +1,8 @@
 "use client"
 
-import * as React from "react"
 import { cn } from "@/lib/utils"
+import * as React from "react"
 import { InstagramNavItem } from "./instagram-nav-item"
-import { Home, Search, Plus, Heart, User } from "lucide-react"
 
 export interface InstagramNavItemConfig {
   id: string
@@ -72,36 +71,4 @@ export function InstagramNav({
       </div>
     </div>
   )
-}
-
-// 默认配置
-export const defaultInstagramNavConfig: InstagramNavConfig = {
-  items: [
-    {
-      id: "home",
-      icon: <Home />,
-      label: "首页"
-    },
-    {
-      id: "search",
-      icon: <Search />,
-      label: "搜索"
-    },
-    {
-      id: "create",
-      icon: <Plus />,
-      label: "创建",
-      className: "scale-110"
-    },
-    {
-      id: "activity",
-      icon: <Heart />,
-      label: "活动"
-    },
-    {
-      id: "profile",
-      icon: <User />,
-      label: "我的"
-    }
-  ]
 } 

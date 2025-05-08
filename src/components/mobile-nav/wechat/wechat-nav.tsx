@@ -1,9 +1,8 @@
 "use client"
 
-import * as React from "react"
 import { cn } from "@/lib/utils"
+import * as React from "react"
 import { WeChatNavItem } from "./wechat-nav-item"
-import { MessageSquare, Users, Compass, User } from "lucide-react"
 
 export interface WeChatNavItemConfig {
   id: string
@@ -74,30 +73,4 @@ export function WeChatNav({
       </div>
     </div>
   )
-}
-
-// 默认配置
-export const defaultWeChatNavConfig: WeChatNavConfig = {
-  items: [
-    {
-      id: "chat",
-      icon: <MessageSquare />,
-      label: "微信"
-    },
-    {
-      id: "contacts",
-      icon: <Users />,
-      label: "通讯录"
-    },
-    {
-      id: "discover",
-      icon: <Compass />,
-      label: "发现"
-    },
-    {
-      id: "me",
-      icon: <User />,
-      label: "我"
-    }
-  ]
 }

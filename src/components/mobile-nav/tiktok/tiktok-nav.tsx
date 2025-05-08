@@ -1,9 +1,8 @@
 "use client"
 
-import * as React from "react"
 import { cn } from "@/lib/utils"
+import * as React from "react"
 import { TikTokNavItem } from "./tiktok-nav-item"
-import { Home, Search, Plus, MessageSquare, User } from "lucide-react"
 
 export interface TikTokNavItemConfig {
   id: string
@@ -22,37 +21,6 @@ export interface TikTokNavConfig {
 
 export interface TikTokNavProps extends React.HTMLAttributes<HTMLDivElement> {
   config: TikTokNavConfig
-}
-
-export const defaultTikTokNavConfig: TikTokNavConfig = {
-  items: [
-    {
-      id: "home",
-      icon: <Home />,
-      label: "首页",
-    },
-    {
-      id: "discover",
-      icon: <Search />,
-      label: "发现",
-    },
-    {
-      id: "create",
-      icon: <Plus />,
-      label: "创建",
-      className: "scale-125",
-    },
-    {
-      id: "inbox",
-      icon: <MessageSquare />,
-      label: "收件箱",
-    },
-    {
-      id: "profile",
-      icon: <User />,
-      label: "我的",
-    },
-  ],
 }
 
 export function TikTokNav({
