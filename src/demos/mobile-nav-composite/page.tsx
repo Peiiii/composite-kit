@@ -1,6 +1,6 @@
 "use client"
 
-import { MobileDeviceContainer } from "@/components/mobile-device-container"
+import { MobileDevicePreview } from "@/components/mobile-device-preview"
 import { InstagramNav, defaultInstagramNavConfig } from "@/components/mobile-nav/instagram/instagram-nav"
 import { SpotifyNav, defaultSpotifyNavConfig } from "@/components/mobile-nav/spotify/spotify-nav"
 import { TwitterNav, defaultTwitterNavConfig } from "@/components/mobile-nav/twitter/twitter-nav"
@@ -65,7 +65,7 @@ export default function MobileNavComposite() {
         <div className="mt-4">
           {/* Instagram 风格 */}
           <TabsContent value="instagram" className="h-full">
-            <MobileDeviceContainer device="iphone14" showScaleControl>
+            <MobileDevicePreview device="iphone14" showScaleControl>
               <div className="flex flex-col h-full">
                 {/* 顶部标题栏 */}
                 <div className="flex items-center justify-between px-4 py-2 border-b">
@@ -84,12 +84,12 @@ export default function MobileNavComposite() {
                 {/* 底部导航 */}
                 <InstagramNav config={navConfigs.instagram} />
               </div>
-            </MobileDeviceContainer>
+            </MobileDevicePreview>
           </TabsContent>
 
           {/* Twitter 风格 */}
           <TabsContent value="twitter" className="h-full">
-            <MobileDeviceContainer device="iphone14Pro" showScaleControl>
+            <MobileDevicePreview device="iphone14Pro" showScaleControl>
               <div className="flex flex-col h-full">
                 {/* 顶部标题栏 */}
                 <div className="flex items-center justify-between px-4 py-2 border-b">
@@ -111,12 +111,12 @@ export default function MobileNavComposite() {
                 {/* 底部导航 */}
                 <TwitterNav config={navConfigs.twitter} />
               </div>
-            </MobileDeviceContainer>
+            </MobileDevicePreview>
           </TabsContent>
 
           {/* TikTok 风格 */}
           <TabsContent value="tiktok" className="h-full">
-            <MobileDeviceContainer device="pixel7" showScaleControl>
+            <MobileDevicePreview device="pixel7" showScaleControl>
               <div className="flex flex-col h-full">
                 {/* 顶部标题栏 */}
                 <div className="flex items-center justify-between px-4 py-2 border-b">
@@ -132,11 +132,11 @@ export default function MobileNavComposite() {
                 {/* 底部导航 */}
                 <TikTokNav config={navConfigs.tiktok} />
               </div>
-            </MobileDeviceContainer>
+            </MobileDevicePreview>
           </TabsContent>
 
           <TabsContent value="spotify" className="mt-0">
-            <MobileDeviceContainer device="iphone14">
+            <MobileDevicePreview device="iphone14">
               <div className="flex flex-col h-full">
                 <div className="flex-1 p-4">
                   <h2 className="text-2xl font-bold mb-4">Spotify 风格导航</h2>
@@ -146,11 +146,11 @@ export default function MobileNavComposite() {
                 </div>
                 <SpotifyNav config={navConfigs.spotify} />
               </div>
-            </MobileDeviceContainer>
+            </MobileDevicePreview>
           </TabsContent>
 
           <TabsContent value="wechat" className="h-full">
-            <MobileDeviceContainer device="iphoneSE" showScaleControl>
+            <MobileDevicePreview device="iphoneSE" showScaleControl>
               <div className="flex flex-col h-full">
                 {/* 顶部标题栏 */}
                 <div className="flex items-center justify-between px-4 py-2 border-b">
@@ -166,7 +166,7 @@ export default function MobileNavComposite() {
                 {/* 底部导航 */}
                 <WeChatNav config={navConfigs.wechat} />
               </div>
-            </MobileDeviceContainer>
+            </MobileDevicePreview>
           </TabsContent>
         </div>
       </Tabs>

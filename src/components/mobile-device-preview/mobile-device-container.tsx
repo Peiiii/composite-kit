@@ -58,7 +58,7 @@ export const mobileDeviceContainerVariants = cva(
   },
 )
 
-export interface MobileDeviceContainerProps
+export interface MobileDevicePreviewProps
   extends React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof mobileDeviceContainerVariants> {
   device?: keyof typeof devicePresets
@@ -72,7 +72,7 @@ export interface MobileDeviceContainerProps
   onScaleChange?: (scale: number) => void
 }
 
-export function MobileDeviceContainer({
+export function MobileDevicePreview({
   className,
   device = "iphone14",
   orientation = "portrait",
@@ -85,7 +85,7 @@ export function MobileDeviceContainer({
   onScaleChange,
   children,
   ...props
-}: MobileDeviceContainerProps) {
+}: MobileDevicePreviewProps) {
   const [scale, setScale] = React.useState(defaultScale)
   const deviceInfo = devicePresets[device]
   const isLandscape = orientation === "landscape"
