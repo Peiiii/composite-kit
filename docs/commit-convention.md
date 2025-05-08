@@ -18,6 +18,8 @@ We follow the [Conventional Commits](https://www.conventionalcommits.org/) speci
 [optional footer(s)]
 ```
 
+> **Best Practice:** Before each commit, always run `git status` to confirm the files and changes you are about to commit.
+
 ### Types
 
 - `feat`: A new feature
