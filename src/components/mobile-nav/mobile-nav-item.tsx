@@ -92,29 +92,39 @@ const animationVariants: Record<Exclude<AnimationType, "default" | "none">, {
   },
 }
 
-export interface MobileNavItemProps
-  extends Omit<HTMLMotionProps<"div">, "onClick">,
-    VariantProps<typeof mobileNavItemVariants> {
+export interface MobileNavItemConfig {
   id: string
   icon?: React.ReactNode
   label?: string
   showLabel?: boolean
   onClick?: () => void
   badge?: number
+  variant?: "default" | "minimal" | "pill" | "bordered"
+  animation?: AnimationType
+  className?: string
+}
+
+export interface MobileNavItemProps
+  extends Omit<HTMLMotionProps<"div">, "onClick"> {
+  config: MobileNavItemConfig
 }
 
 export function MobileNavItem({
-  className,
-  id,
-  icon,
-  label,
-  showLabel = true,
-  onClick,
-  variant = "default",
-  animation = "default",
-  badge,
+  config,
   ...props
 }: MobileNavItemProps) {
+  const {
+    id,
+    icon,
+    label,
+    showLabel = true,
+    onClick,
+    variant = "default",
+    animation = "default",
+    badge,
+    className
+  } = config
+
   const { activeId, setActiveId } = React.useContext(MobileNavContext)
   const isActive = activeId === id
 

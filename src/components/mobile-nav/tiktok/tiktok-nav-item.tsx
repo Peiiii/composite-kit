@@ -2,14 +2,15 @@
 
 import * as React from "react"
 import { cn } from "@/lib/utils"
-import { motion } from "framer-motion"
+import { motion, HTMLMotionProps } from "framer-motion"
 
-export interface TikTokNavItemProps extends React.HTMLAttributes<HTMLButtonElement> {
+export interface TikTokNavItemProps extends Omit<HTMLMotionProps<"button">, "onClick"> {
   id: string
   icon: React.ReactNode
   label: string
   active?: boolean
   badge?: number
+  onClick?: () => void
 }
 
 export function TikTokNavItem({
@@ -19,6 +20,7 @@ export function TikTokNavItem({
   label,
   active,
   badge,
+  onClick,
   ...props
 }: TikTokNavItemProps) {
   return (
@@ -29,6 +31,7 @@ export function TikTokNavItem({
         className
       )}
       whileTap={{ scale: 0.95 }}
+      onClick={onClick}
       {...props}
     >
       <div className="relative">
@@ -42,11 +45,12 @@ export function TikTokNavItem({
       <span className="text-xs">{label}</span>
       {active && (
         <motion.div
-          className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4 h-4 bg-white rounded-full"
+          className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 bg-white/80 rounded-full"
           layoutId="tiktok-nav-indicator"
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           exit={{ scale: 0 }}
+          transition={{ duration: 0.2 }}
         />
       )}
     </motion.button>

@@ -5,17 +5,38 @@ import { cn } from "@/lib/utils"
 import { WeChatNavItem } from "./wechat-nav-item"
 import { MessageSquare, Users, Compass, User } from "lucide-react"
 
-export interface WeChatNavProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface WeChatNavItemConfig {
+  id: string
+  label: string
+  icon: React.ReactNode
+  active?: boolean
+  onClick?: () => void
+  className?: string
+  badge?: number
+}
+
+export interface WeChatNavConfig {
+  items: WeChatNavItemConfig[]
   activeId?: string
   onActiveChange?: (id: string) => void
+  className?: string
+}
+
+export interface WeChatNavProps extends React.HTMLAttributes<HTMLDivElement> {
+  config: WeChatNavConfig
 }
 
 export function WeChatNav({
-  className,
-  activeId,
-  onActiveChange,
+  config,
   ...props
 }: WeChatNavProps) {
+  const {
+    items,
+    activeId,
+    onActiveChange,
+    className
+  } = config
+
   const [active, setActive] = React.useState(activeId || "chat")
 
   const handleActiveChange = React.useCallback(
@@ -35,35 +56,48 @@ export function WeChatNav({
       {...props}
     >
       <div className="flex justify-around items-center h-16 px-2">
-        <WeChatNavItem
-          id="chat"
-          icon={<MessageSquare />}
-          label="微信"
-          active={active === "chat"}
-          onClick={() => handleActiveChange("chat")}
-        />
-        <WeChatNavItem
-          id="contacts"
-          icon={<Users />}
-          label="通讯录"
-          active={active === "contacts"}
-          onClick={() => handleActiveChange("contacts")}
-        />
-        <WeChatNavItem
-          id="discover"
-          icon={<Compass />}
-          label="发现"
-          active={active === "discover"}
-          onClick={() => handleActiveChange("discover")}
-        />
-        <WeChatNavItem
-          id="me"
-          icon={<User />}
-          label="我"
-          active={active === "me"}
-          onClick={() => handleActiveChange("me")}
-        />
+        {items.map((item) => (
+          <WeChatNavItem
+            key={item.id}
+            id={item.id}
+            icon={item.icon}
+            label={item.label}
+            active={active === item.id}
+            onClick={() => {
+              handleActiveChange(item.id)
+              item.onClick?.()
+            }}
+            className={item.className}
+            badge={item.badge}
+          />
+        ))}
       </div>
     </div>
   )
+}
+
+// 默认配置
+export const defaultWeChatNavConfig: WeChatNavConfig = {
+  items: [
+    {
+      id: "chat",
+      icon: <MessageSquare />,
+      label: "微信"
+    },
+    {
+      id: "contacts",
+      icon: <Users />,
+      label: "通讯录"
+    },
+    {
+      id: "discover",
+      icon: <Compass />,
+      label: "发现"
+    },
+    {
+      id: "me",
+      icon: <User />,
+      label: "我"
+    }
+  ]
 }

@@ -5,17 +5,37 @@ import { cn } from "@/lib/utils"
 import { TwitterNavItem } from "./twitter-nav-item"
 import { Home, Search, Bell, Mail, User } from "lucide-react"
 
-export interface TwitterNavProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface TwitterNavItemConfig {
+  id: string
+  label: string
+  icon: React.ReactNode
+  active?: boolean
+  onClick?: () => void
+  className?: string
+}
+
+export interface TwitterNavConfig {
+  items: TwitterNavItemConfig[]
   activeId?: string
   onActiveChange?: (id: string) => void
+  className?: string
+}
+
+export interface TwitterNavProps extends React.HTMLAttributes<HTMLDivElement> {
+  config: TwitterNavConfig
 }
 
 export function TwitterNav({
-  className,
-  activeId,
-  onActiveChange,
+  config,
   ...props
 }: TwitterNavProps) {
+  const {
+    items,
+    activeId,
+    onActiveChange,
+    className
+  } = config
+
   const [active, setActive] = React.useState(activeId || "home")
 
   const handleActiveChange = React.useCallback(
@@ -35,35 +55,47 @@ export function TwitterNav({
       {...props}
     >
       <div className="flex justify-around items-center h-16 px-2">
-        <TwitterNavItem
-          id="home"
-          icon={<Home />}
-          label="首页"
-          active={active === "home"}
-          onClick={() => handleActiveChange("home")}
-        />
-        <TwitterNavItem
-          id="search"
-          icon={<Search />}
-          label="探索"
-          active={active === "search"}
-          onClick={() => handleActiveChange("search")}
-        />
-        <TwitterNavItem
-          id="notifications"
-          icon={<Bell />}
-          label="通知"
-          active={active === "notifications"}
-          onClick={() => handleActiveChange("notifications")}
-        />
-        <TwitterNavItem
-          id="messages"
-          icon={<Mail />}
-          label="消息"
-          active={active === "messages"}
-          onClick={() => handleActiveChange("messages")}
-        />
+        {items.map((item) => (
+          <TwitterNavItem
+            key={item.id}
+            id={item.id}
+            icon={item.icon}
+            label={item.label}
+            active={active === item.id}
+            onClick={() => {
+              handleActiveChange(item.id)
+              item.onClick?.()
+            }}
+            className={item.className}
+          />
+        ))}
       </div>
     </div>
   )
+}
+
+// 默认配置
+export const defaultTwitterNavConfig: TwitterNavConfig = {
+  items: [
+    {
+      id: "home",
+      icon: <Home />,
+      label: "首页"
+    },
+    {
+      id: "search",
+      icon: <Search />,
+      label: "探索"
+    },
+    {
+      id: "notifications",
+      icon: <Bell />,
+      label: "通知"
+    },
+    {
+      id: "messages",
+      icon: <Mail />,
+      label: "消息"
+    }
+  ]
 } 

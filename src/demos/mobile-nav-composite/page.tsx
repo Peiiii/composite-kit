@@ -1,13 +1,50 @@
 "use client"
 
 import { MobileDeviceContainer } from "@/components/mobile-device-container"
-import { InstagramNav } from "@/components/mobile-nav/instagram/instagram-nav"
-import { TwitterNav } from "@/components/mobile-nav/twitter/twitter-nav"
+import { InstagramNav, defaultInstagramNavConfig } from "@/components/mobile-nav/instagram/instagram-nav"
+import { SpotifyNav, defaultSpotifyNavConfig } from "@/components/mobile-nav/spotify/spotify-nav"
+import { TwitterNav, defaultTwitterNavConfig } from "@/components/mobile-nav/twitter/twitter-nav"
+import { WeChatNav, defaultWeChatNavConfig } from "@/components/mobile-nav/wechat/wechat-nav"
+import { TikTokNav, defaultTikTokNavConfig } from "@/components/mobile-nav/tiktok/tiktok-nav"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Bell, Home, MessageSquare, User, Search, Plus, Music, Compass, Heart, Settings, Camera, Bookmark, Hash, Mic } from "lucide-react"
+import { Heart, MessageSquare, Plus, Search } from "lucide-react"
 import * as React from "react"
-import { SpotifyNav } from "@/components/mobile-nav/spotify/spotify-nav"
-import { WeChatNav } from "@/components/mobile-nav/wechat/wechat-nav"
+
+// 导航配置
+const navConfigs = {
+  instagram: {
+    ...defaultInstagramNavConfig,
+    activeId: "home",
+    onActiveChange: (id: string) => console.log("Instagram 导航切换:", id)
+  },
+  spotify: {
+    ...defaultSpotifyNavConfig,
+    activeId: "home",
+    onActiveChange: (id: string) => console.log("Spotify 导航切换:", id),
+    nowPlaying: {
+      title: "正在播放的歌曲",
+      artist: "艺术家名称",
+      cover: "https://picsum.photos/200",
+      onPlay: () => console.log("播放"),
+      onAdd: () => console.log("添加到播放列表")
+    }
+  },
+  twitter: {
+    ...defaultTwitterNavConfig,
+    activeId: "home",
+    onActiveChange: (id: string) => console.log("Twitter 导航切换:", id)
+  },
+  wechat: {
+    ...defaultWeChatNavConfig,
+    activeId: "chat",
+    onActiveChange: (id: string) => console.log("WeChat 导航切换:", id)
+  },
+  tiktok: {
+    ...defaultTikTokNavConfig,
+    defaultActiveId: "home",
+    onActiveChange: (id: string) => console.log("TikTok 导航切换:", id)
+  }
+}
 
 export default function MobileNavComposite() {
   const [activeTab, setActiveTab] = React.useState("instagram")
@@ -45,7 +82,7 @@ export default function MobileNavComposite() {
                   </div>
                 </div>
                 {/* 底部导航 */}
-                <InstagramNav />
+                <InstagramNav config={navConfigs.instagram} />
               </div>
             </MobileDeviceContainer>
           </TabsContent>
@@ -72,18 +109,28 @@ export default function MobileNavComposite() {
                   </button>
                 </div>
                 {/* 底部导航 */}
-                <TwitterNav />
+                <TwitterNav config={navConfigs.twitter} />
               </div>
             </MobileDeviceContainer>
           </TabsContent>
 
-          {/* 其他风格待实现 */}
+          {/* TikTok 风格 */}
           <TabsContent value="tiktok" className="h-full">
             <MobileDeviceContainer device="pixel7" showScaleControl>
               <div className="flex flex-col h-full">
-                <div className="p-4">
-                  <p>TikTok 风格导航开发中...</p>
+                {/* 顶部标题栏 */}
+                <div className="flex items-center justify-between px-4 py-2 border-b">
+                  <h2 className="text-xl font-bold">TikTok</h2>
+                  <Search className="w-6 h-6" />
                 </div>
+                {/* 内容区域 */}
+                <div className="flex-1 overflow-y-auto">
+                  <div className="p-4">
+                    <p>内容区域</p>
+                  </div>
+                </div>
+                {/* 底部导航 */}
+                <TikTokNav config={navConfigs.tiktok} />
               </div>
             </MobileDeviceContainer>
           </TabsContent>
@@ -97,13 +144,7 @@ export default function MobileNavComposite() {
                     带有迷你播放器的音乐应用导航
                   </p>
                 </div>
-                <SpotifyNav
-                  nowPlaying={{
-                    title: "正在播放的歌曲",
-                    artist: "艺术家名称",
-                    cover: "https://picsum.photos/200"
-                  }}
-                />
+                <SpotifyNav config={navConfigs.spotify} />
               </div>
             </MobileDeviceContainer>
           </TabsContent>
@@ -123,7 +164,7 @@ export default function MobileNavComposite() {
                   </div>
                 </div>
                 {/* 底部导航 */}
-                <WeChatNav />
+                <WeChatNav config={navConfigs.wechat} />
               </div>
             </MobileDeviceContainer>
           </TabsContent>

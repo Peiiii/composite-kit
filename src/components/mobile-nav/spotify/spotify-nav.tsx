@@ -5,23 +5,47 @@ import { cn } from "@/lib/utils"
 import { SpotifyNavItem } from "./spotify-nav-item"
 import { Home, Search, Bookmark, Music, Plus } from "lucide-react"
 
-export interface SpotifyNavProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface SpotifyNavItemConfig {
+  id: string
+  label: string
+  icon: React.ReactNode
+  active?: boolean
+  onClick?: () => void
+  className?: string
+}
+
+export interface NowPlayingConfig {
+  title: string
+  artist: string
+  cover?: string
+  onPlay?: () => void
+  onAdd?: () => void
+}
+
+export interface SpotifyNavConfig {
+  items: SpotifyNavItemConfig[]
   activeId?: string
   onActiveChange?: (id: string) => void
-  nowPlaying?: {
-    title: string
-    artist: string
-    cover: string
-  }
+  nowPlaying?: NowPlayingConfig
+  className?: string
+}
+
+export interface SpotifyNavProps extends React.HTMLAttributes<HTMLDivElement> {
+  config: SpotifyNavConfig
 }
 
 export function SpotifyNav({
-  className,
-  activeId,
-  onActiveChange,
-  nowPlaying,
+  config,
   ...props
 }: SpotifyNavProps) {
+  const {
+    items,
+    activeId,
+    onActiveChange,
+    nowPlaying,
+    className
+  } = config
+
   const [active, setActive] = React.useState(activeId || "home")
 
   const handleActiveChange = React.useCallback(
@@ -54,8 +78,12 @@ export function SpotifyNav({
               </p>
             </div>
             <div className="flex gap-4">
-              <Music className="w-6 h-6" />
-              <Plus className="w-6 h-6" />
+              <button onClick={nowPlaying.onPlay}>
+                <Music className="w-6 h-6" />
+              </button>
+              <button onClick={nowPlaying.onAdd}>
+                <Plus className="w-6 h-6" />
+              </button>
             </div>
           </div>
         </div>
@@ -69,29 +97,43 @@ export function SpotifyNav({
         {...props}
       >
         <div className="flex justify-around items-center h-16 px-2">
-          <SpotifyNavItem
-            id="home"
-            icon={<Home />}
-            label="首页"
-            active={active === "home"}
-            onClick={() => handleActiveChange("home")}
-          />
-          <SpotifyNavItem
-            id="search"
-            icon={<Search />}
-            label="搜索"
-            active={active === "search"}
-            onClick={() => handleActiveChange("search")}
-          />
-          <SpotifyNavItem
-            id="library"
-            icon={<Bookmark />}
-            label="音乐库"
-            active={active === "library"}
-            onClick={() => handleActiveChange("library")}
-          />
+          {items.map((item) => (
+            <SpotifyNavItem
+              key={item.id}
+              id={item.id}
+              icon={item.icon}
+              label={item.label}
+              active={active === item.id}
+              onClick={() => {
+                handleActiveChange(item.id)
+                item.onClick?.()
+              }}
+              className={item.className}
+            />
+          ))}
         </div>
       </div>
     </div>
   )
+}
+
+// 默认配置
+export const defaultSpotifyNavConfig: SpotifyNavConfig = {
+  items: [
+    {
+      id: "home",
+      icon: <Home />,
+      label: "首页"
+    },
+    {
+      id: "search",
+      icon: <Search />,
+      label: "搜索"
+    },
+    {
+      id: "library",
+      icon: <Bookmark />,
+      label: "音乐库"
+    }
+  ]
 } 

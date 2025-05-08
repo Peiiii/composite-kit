@@ -106,26 +106,26 @@ const App = React.memo(function App() {
       </ActivityBar.Root>
 
       <div className="flex-1 overflow-hidden">
-        <DemoGallery.Root
-          demos={demos}
-          defaultDemoId="theme-switcher"
+    <DemoGallery.Root
+      demos={demos}
+      defaultDemoId="theme-switcher"
           className="h-full"
-        >
-          <DemoGallery.Sidebar
-            title="组件库演示"
-            showSearch={true}
-            showCategoryFilter={true}
-            showTags={true}
-            showDescription={true}
-            sidebarWidth="w-64"
-          />
-          <DemoGallery.ExpandButton />
-          <DemoGallery.Content
-            showTags={true}
-            showDescription={true}
-            contentHeight="h-[600px]"
-          />
-        </DemoGallery.Root>
+    >
+      <DemoGallery.Sidebar
+        title="组件库演示"
+        showSearch={true}
+        showCategoryFilter={true}
+        showTags={true}
+        showDescription={true}
+        sidebarWidth="w-64"
+      />
+      <DemoGallery.ExpandButton />
+      <DemoGallery.Content
+        showTags={true}
+        showDescription={true}
+        contentHeight="h-[600px]"
+      />
+    </DemoGallery.Root>
       </div>
     </div>
   )

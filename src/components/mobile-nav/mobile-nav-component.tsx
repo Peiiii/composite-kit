@@ -1,7 +1,7 @@
 "use client"
 
 import { cn } from "@/lib/utils"
-import { cva, type VariantProps } from "class-variance-authority"
+import { cva } from "class-variance-authority"
 import { AnimatePresence, HTMLMotionProps, motion } from "framer-motion"
 import * as React from "react"
 import { MobileNavContext } from "./mobile-nav-context"
@@ -66,41 +66,58 @@ const animationVariants = {
   },
 }
 
-export interface MobileNavProps
-  extends Omit<HTMLMotionProps<"div">, "onDragEnd">,
-    VariantProps<typeof mobileNavVariants> {
+// 导航项配置接口
+export interface MobileNavItemConfig {
+  id: string
+  label: string
+  icon?: React.ReactNode
+  badge?: React.ReactNode
+  disabled?: boolean
+  onClick?: () => void
+}
+
+// 导航配置接口
+export interface MobileNavConfig {
+  items: MobileNavItemConfig[]
+  position?: "bottom" | "top"
+  variant?: "default" | "minimal" | "floating" | "glass" | "gradient" | "bordered"
+  animation?: "default" | "slide" | "fade" | "scale" | "none"
   defaultExpanded?: boolean
   defaultActiveId?: string
   toggleable?: boolean
+  dragToExpand?: boolean
   onExpandedChange?: (expanded: boolean) => void
   onActiveChange?: (activeId: string) => void
-  dragToExpand?: boolean
-  children: React.ReactNode
+  className?: string
 }
 
-export interface MobileNavComponentProps extends MobileNavProps {}
+export interface MobileNavComponentProps extends Omit<HTMLMotionProps<"div">, "onDragEnd"> {
+  config: MobileNavConfig
+}
 
 export function MobileNavComponent({
-  className,
-  position = "bottom",
-  expanded: controlledExpanded,
-  defaultExpanded = false,
-  defaultActiveId,
-  toggleable = true,
-  onExpandedChange,
-  onActiveChange,
-  variant = "default",
-  animation = "default",
-  dragToExpand = true,
-  children,
+  config,
   ...props
 }: MobileNavComponentProps) {
+  const {
+    items,
+    position = "bottom",
+    variant = "default",
+    animation = "default",
+    defaultExpanded = false,
+    defaultActiveId,
+    toggleable = true,
+    dragToExpand = true,
+    onExpandedChange,
+    onActiveChange,
+    className,
+  } = config
+
   const [isExpanded, setIsExpanded] = React.useState(defaultExpanded)
   const [activeId, setActiveId] = React.useState<string | undefined>(defaultActiveId)
   const [dragY, setDragY] = React.useState(0)
 
-  // Allow controlled expansion state
-  const expanded = controlledExpanded ?? isExpanded
+  const expanded = isExpanded
 
   const toggleExpanded = React.useCallback(() => {
     const newExpanded = !expanded
@@ -125,15 +142,16 @@ export function MobileNavComponent({
 
   const contextValue = React.useMemo(
     () => ({
-      expanded: expanded ?? false,
-      activeId,
-      setActiveId,
+      activeId: activeId ?? "",
+      setActiveId: (id: string) => {
+        setActiveId(id)
+        onActiveChange?.(id)
+      },
+      isExpanded: expanded,
+      setIsExpanded: toggleExpanded,
+      expandOnHover: false,
     }),
-    [expanded, activeId],
-  )
-
-  const childrenArray = React.Children.toArray(children).filter((child): child is React.ReactElement => 
-    React.isValidElement(child)
+    [expanded, activeId, onActiveChange, toggleExpanded],
   )
 
   const getAnimationProps = () => {
@@ -169,7 +187,29 @@ export function MobileNavComponent({
                   transition={{ duration: 0.2 }}
                   className="flex-shrink-0"
                 >
-                  {childrenArray[0]}
+                  <div className="flex items-center justify-between p-4">
+                    {items.map((item) => (
+                      <button
+                        key={item.id}
+                        onClick={() => {
+                          setActiveId(item.id)
+                          onActiveChange?.(item.id)
+                          item.onClick?.()
+                        }}
+                        disabled={item.disabled}
+                        className={cn(
+                          "flex flex-col items-center justify-center gap-1 p-2 rounded-lg transition-colors",
+                          activeId === item.id
+                            ? "text-primary"
+                            : "text-muted-foreground hover:text-foreground"
+                        )}
+                      >
+                        {item.icon}
+                        <span className="text-xs">{item.label}</span>
+                        {item.badge}
+                      </button>
+                    ))}
+                  </div>
                 </motion.div>
               )}
             </AnimatePresence>
@@ -183,7 +223,13 @@ export function MobileNavComponent({
                 transition={{ duration: 0.2 }}
                 className="flex-1 overflow-y-auto overflow-x-hidden scrollbar-hide min-w-0"
               >
-                <div className="w-full">{childrenArray.slice(1, -1)}</div>
+                <div className="w-full">
+                  {items.map((item) => (
+                    <div key={item.id} className="p-4">
+                      {item.label}
+                    </div>
+                  ))}
+                </div>
               </motion.div>
             )}
           </AnimatePresence>
@@ -192,7 +238,29 @@ export function MobileNavComponent({
               layout
               className="flex-shrink-0"
             >
-              {childrenArray.at(-1)}
+              <div className="flex items-center justify-between p-4">
+                {items.map((item) => (
+                  <button
+                    key={item.id}
+                    onClick={() => {
+                      setActiveId(item.id)
+                      onActiveChange?.(item.id)
+                      item.onClick?.()
+                    }}
+                    disabled={item.disabled}
+                    className={cn(
+                      "flex flex-col items-center justify-center gap-1 p-2 rounded-lg transition-colors",
+                      activeId === item.id
+                        ? "text-primary"
+                        : "text-muted-foreground hover:text-foreground"
+                    )}
+                  >
+                    {item.icon}
+                    <span className="text-xs">{item.label}</span>
+                    {item.badge}
+                  </button>
+                ))}
+              </div>
             </motion.div>
           )}
         </div>
