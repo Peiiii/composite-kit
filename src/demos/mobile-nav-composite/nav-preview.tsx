@@ -144,8 +144,117 @@ export function NavPreview({ variant, device = "iphone14", showScaleControl }: N
           {renderHeader()}
         </div>
         <div className="flex-1 overflow-y-auto">
-          <div className="p-4">
-            <p>内容区域</p>
+          <div className="p-4 space-y-4">
+            {variant === "instagram" && (
+              <>
+                <div className="grid grid-cols-3 gap-1">
+                  {Array.from({ length: 9 }).map((_, i) => (
+                    <div key={i} className="aspect-square bg-muted rounded overflow-hidden">
+                      <img
+                        src={`https://picsum.photos/400/400?random=${i}`}
+                        alt={`Post ${i + 1}`}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
+
+            {variant === "twitter" && (
+              <div className="space-y-4">
+                {Array.from({ length: 3 }).map((_, i) => (
+                  <div key={i} className="flex gap-4">
+                    <div className="w-12 h-12 rounded-full bg-muted overflow-hidden">
+                      <img
+                        src={`https://picsum.photos/100/100?random=${i}`}
+                        alt={`Avatar ${i + 1}`}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="font-medium">用户名</span>
+                        <span className="text-muted-foreground">@username</span>
+                      </div>
+                      <p className="text-sm mb-2">这是一条示例推文内容，展示了基本的推文布局和样式。</p>
+                      <div className="flex gap-4 text-muted-foreground text-sm">
+                        <button className="flex items-center gap-1">
+                          <MessageSquare className="w-4 h-4" />
+                          <span>12</span>
+                        </button>
+                        <button className="flex items-center gap-1">
+                          <Heart className="w-4 h-4" />
+                          <span>34</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {variant === "tiktok" && (
+              <div className="space-y-4">
+                {Array.from({ length: 2 }).map((_, i) => (
+                  <div key={i} className="relative aspect-[9/16] bg-black rounded-lg overflow-hidden">
+                    <img
+                      src={`https://picsum.photos/400/700?random=${i}`}
+                      alt={`Video ${i + 1}`}
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute bottom-4 left-4 right-4 text-white">
+                      <div className="flex items-center gap-2 mb-2">
+                        <div className="w-8 h-8 rounded-full bg-muted overflow-hidden">
+                          <img
+                            src={`https://picsum.photos/100/100?random=${i + 10}`}
+                            alt={`Creator ${i + 1}`}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                        <span className="font-medium">创作者</span>
+                      </div>
+                      <p className="text-sm mb-2">这是一个有趣的短视频内容 #抖音 #短视频</p>
+                      <div className="flex gap-4">
+                        <button className="flex flex-col items-center">
+                          <Heart className="w-6 h-6" />
+                          <span className="text-xs">1.2w</span>
+                        </button>
+                        <button className="flex flex-col items-center">
+                          <MessageSquare className="w-6 h-6" />
+                          <span className="text-xs">234</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {variant === "wechat" && (
+              <div className="space-y-4">
+                {Array.from({ length: 3 }).map((_, i) => (
+                  <div key={i} className="flex gap-3">
+                    <div className="w-12 h-12 rounded-lg bg-muted overflow-hidden">
+                      <img
+                        src={`https://picsum.photos/100/100?random=${i + 20}`}
+                        alt={`Chat ${i + 1}`}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="font-medium">聊天名称</span>
+                        <span className="text-xs text-muted-foreground">12:34</span>
+                      </div>
+                      <p className="text-sm text-muted-foreground truncate">
+                        这是一条最新的聊天消息内容
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </>
