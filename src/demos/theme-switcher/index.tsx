@@ -1,7 +1,10 @@
-import { ConfigurableActivityBar } from "@/components/activity-bar/configurable-activity-bar";
-import { ThemeProvider, ThemeSwitcher } from "@/components/theme";
+import { useState } from 'react'
+import { ConfigurableActivityBar } from '@/components/activity-bar/configurable-activity-bar'
+import { ThemeProvider } from '@/components/theme'
+import { ThemeSwitcher } from '@/components/theme/theme-switcher'
+import { cn } from '@/lib/utils'
 
-// 示例配置
+// 配置对象
 const config = {
   header: {
     icon: (
@@ -20,15 +23,15 @@ const config = {
         <path d="M2 12l10 5 10-5" />
       </svg>
     ),
-    title: "主题切换器演示",
+    title: '主题切换器',
     showSearch: true,
   },
   groups: [
     {
-      title: "主题设置",
+      title: '主题设置',
       items: [
         {
-          id: "theme-settings",
+          id: 'theme-settings',
           icon: (
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -44,94 +47,198 @@ const config = {
               <circle cx="12" cy="12" r="3" />
             </svg>
           ),
-          label: "主题设置",
+          label: '主题设置',
         },
       ],
     },
   ],
-};
+  theme: {
+    defaultTheme: 'light',
+  },
+}
 
-export default function ThemeSwitcherDemo() {
+// 所有可用主题
+const allThemes = [
+  "material",
+  "light",
+  "dark",
+  "nord",
+  "dracula",
+  "one-dark",
+  "tokyo-night",
+  "catppuccin",
+  "wechat",
+  "telegram",
+  "github",
+  "twitter",
+  "discord",
+  "notion",
+  "monokai-pro",
+  "gruvbox",
+  "solarized",
+  "aurora",
+  "forest",
+  "ocean",
+  "starlight",
+  "desert",
+  "neon",
+  "ink-wash",
+  "sakura",
+  "moonlight",
+  "bamboo",
+  "landscape",
+  "autumn"
+];
+
+// 示例组件
+function ExampleComponent() {
   return (
-    <ThemeProvider defaultTheme="material">
-      <div className="flex min-h-0 w-full h-full">
-        <ConfigurableActivityBar config={config} className="h-full" />
-        <div className="flex-1 overflow-auto h-full">
-          <div className="p-8">
-            <div className="max-w-2xl mx-auto">
-              <h1 className="text-3xl font-bold mb-8">主题切换器演示</h1>
-              <div className="space-y-8">
-                <div>
-                  <h2 className="text-xl font-semibold mb-4">主题切换</h2>
-                  <ThemeSwitcher
-                    className="w-64"
-                    themes={[
-                      "material",
-                      "light",
-                      "dark",
-                      "nord",
-                      "dracula",
-                      "one-dark",
-                      "tokyo-night",
-                      "catppuccin",
-                      "wechat",
-                      "telegram",
-                      "github",
-                      "twitter",
-                      "discord",
-                      "notion",
-                      "monokai-pro",
-                      "gruvbox",
-                      "solarized",
-                      "aurora",
-                      "forest",
-                      "ocean",
-                      "starlight",
-                      "desert",
-                      "neon",
-                      "ink-wash",
-                      "sakura",
-                      "moonlight",
-                      "bamboo",
-                      "landscape",
-                      "autumn"
-                    ]}
-                  />
-                </div>
-                <div>
-                  <h2 className="text-xl font-semibold mb-4">主题预览</h2>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="p-4 rounded-lg bg-primary text-primary-foreground">
-                      主色调
-                    </div>
-                    <div className="p-4 rounded-lg bg-secondary text-secondary-foreground">
-                      次要色调
-                    </div>
-                    <div className="p-4 rounded-lg bg-accent text-accent-foreground">
-                      强调色
-                    </div>
-                    <div className="p-4 rounded-lg bg-muted text-muted-foreground">
-                      中性色
-                    </div>
-                    <div className="p-4 rounded-lg bg-success text-success-foreground">
-                      成功色
-                    </div>
-                    <div className="p-4 rounded-lg bg-warning text-warning-foreground">
-                      警告色
-                    </div>
-                    <div className="p-4 rounded-lg bg-error text-error-foreground">
-                      错误色
-                    </div>
-                    <div className="p-4 rounded-lg bg-background text-foreground border">
-                      背景色
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+    <div className="space-y-4">
+      <div className="flex gap-2">
+        <button className="px-4 py-2 bg-primary text-primary-foreground rounded">
+          主要按钮
+        </button>
+        <button className="px-4 py-2 bg-secondary text-secondary-foreground rounded">
+          次要按钮
+        </button>
+        <button className="px-4 py-2 bg-muted text-muted-foreground rounded">
+          中性按钮
+        </button>
+      </div>
+      
+      <div className="grid grid-cols-3 gap-4">
+        <div className="p-4 bg-background border rounded">
+          <h3 className="text-lg font-medium">卡片标题</h3>
+          <p className="text-muted-foreground">卡片内容描述</p>
+        </div>
+        <div className="p-4 bg-background border rounded">
+          <h3 className="text-lg font-medium">卡片标题</h3>
+          <p className="text-muted-foreground">卡片内容描述</p>
+        </div>
+        <div className="p-4 bg-background border rounded">
+          <h3 className="text-lg font-medium">卡片标题</h3>
+          <p className="text-muted-foreground">卡片内容描述</p>
         </div>
       </div>
+    </div>
+  )
+}
+
+export default function ThemeSwitcherDemo() {
+  const [displayMode, setDisplayMode] = useState<'dropdown' | 'grid'>('grid')
+
+  return (
+    <ThemeProvider defaultTheme={config.theme.defaultTheme}>
+      <div className="min-h-screen bg-background text-foreground">
+        <ConfigurableActivityBar
+          config={config}
+          className="border-b"
+        />
+        
+        <main className="container mx-auto px-4 py-8 max-w-6xl">
+          <div className="space-y-8">
+            {/* 主题切换器 */}
+            <section>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-2xl font-bold">主题切换</h2>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setDisplayMode('dropdown')}
+                    className={cn(
+                      "px-3 py-1 rounded",
+                      displayMode === 'dropdown'
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-muted text-muted-foreground"
+                    )}
+                  >
+                    下拉菜单
+                  </button>
+                  <button
+                    onClick={() => setDisplayMode('grid')}
+                    className={cn(
+                      "px-3 py-1 rounded",
+                      displayMode === 'grid'
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-muted text-muted-foreground"
+                    )}
+                  >
+                    网格布局
+                  </button>
+                </div>
+              </div>
+              
+              <ThemeSwitcher themes={allThemes}>
+                {displayMode === 'dropdown' ? (
+                  <ThemeSwitcher.Dropdown />
+                ) : (
+                  <ThemeSwitcher.Grid />
+                )}
+              </ThemeSwitcher>
+            </section>
+
+            {/* 主题预览 */}
+            <section>
+              <h2 className="text-2xl font-bold mb-4">主题预览</h2>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="p-4 bg-primary text-primary-foreground rounded">
+                  主色调
+                </div>
+                <div className="p-4 bg-secondary text-secondary-foreground rounded">
+                  次要色调
+                </div>
+                <div className="p-4 bg-muted text-muted-foreground rounded">
+                  中性色调
+                </div>
+                <div className="p-4 bg-accent text-accent-foreground rounded">
+                  强调色调
+                </div>
+              </div>
+            </section>
+
+            {/* 组件示例 */}
+            <section>
+              <h2 className="text-2xl font-bold mb-4">组件示例</h2>
+              <ExampleComponent />
+            </section>
+
+            {/* 使用说明 */}
+            <section>
+              <h2 className="text-2xl font-bold mb-4">使用说明</h2>
+              <div className="space-y-4">
+                <div>
+                  <h3 className="text-lg font-medium mb-2">基本用法</h3>
+                  <pre className="p-4 bg-muted rounded">
+                    {`<ThemeSwitcher themes={['light', 'dark']}>
+  <ThemeSwitcher.Dropdown />
+</ThemeSwitcher>`}
+                  </pre>
+                </div>
+                
+                <div>
+                  <h3 className="text-lg font-medium mb-2">网格布局</h3>
+                  <pre className="p-4 bg-muted rounded">
+                    {`<ThemeSwitcher themes={['light', 'dark']}>
+  <ThemeSwitcher.Grid />
+</ThemeSwitcher>`}
+                  </pre>
+                </div>
+                
+                <div>
+                  <h3 className="text-lg font-medium mb-2">自定义主题</h3>
+                  <pre className="p-4 bg-muted rounded">
+                    {`<ThemeSwitcher
+  themes={['light', 'dark', 'custom-theme']}
+  onThemeChange={(theme) => console.log('Theme changed:', theme)}
+>
+  <ThemeSwitcher.Dropdown />
+</ThemeSwitcher>`}
+                  </pre>
+                </div>
+              </div>
+            </section>
+          </div>
+        </main>
+      </div>
     </ThemeProvider>
-  );
+  )
 }
