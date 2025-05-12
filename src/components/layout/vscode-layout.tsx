@@ -10,11 +10,6 @@ export interface VSCodeLayoutProps extends React.HTMLAttributes<HTMLDivElement> 
   panel?: React.ReactNode;
   statusBar?: React.ReactNode;
   secondarySideBar?: React.ReactNode;
-  showActivityBar?: boolean;
-  showSideBar?: boolean;
-  showPanel?: boolean;
-  showStatusBar?: boolean;
-  showSecondarySideBar?: boolean;
   sideBarWidth?: string;
   secondarySideBarWidth?: string;
   panelHeight?: string;
@@ -27,11 +22,6 @@ export function VSCodeLayout({
   panel,
   statusBar,
   secondarySideBar,
-  showActivityBar = true,
-  showSideBar = true,
-  showPanel = true,
-  showStatusBar = true,
-  showSecondarySideBar = false,
   sideBarWidth = "w-64",
   secondarySideBarWidth = "w-64",
   panelHeight = "h-48",
@@ -41,14 +31,14 @@ export function VSCodeLayout({
   return (
     <div className={cn("flex w-full h-full bg-background overflow-hidden", className)} {...props}>
       {/* 左侧活动栏 */}
-      {showActivityBar && (
+      {activityBar && (
         <div className="flex-shrink-0">
           {activityBar}
         </div>
       )}
 
       {/* 左侧侧边栏 */}
-      {showSideBar && (
+      {sideBar && (
         <div className={cn("flex-shrink-0 border-r", sideBarWidth)}>
           {sideBar}
         </div>
@@ -62,7 +52,7 @@ export function VSCodeLayout({
         </div>
 
         {/* 底部面板 */}
-        {showPanel && (
+        {panel && (
           <>
             <Separator />
             <div className={cn("flex-shrink-0 overflow-hidden", panelHeight)}>
@@ -72,7 +62,7 @@ export function VSCodeLayout({
         )}
 
         {/* 状态栏 */}
-        {showStatusBar && (
+        {statusBar && (
           <>
             <Separator />
             <div className="h-6 flex-shrink-0 overflow-hidden">
@@ -83,7 +73,7 @@ export function VSCodeLayout({
       </div>
 
       {/* 右侧侧边栏 */}
-      {showSecondarySideBar && (
+      {secondarySideBar && (
         <div className={cn("flex-shrink-0 border-l overflow-hidden", secondarySideBarWidth)}>
           {secondarySideBar}
         </div>
