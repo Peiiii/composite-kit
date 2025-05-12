@@ -10,9 +10,36 @@ import { DemoGalleryCustomComposite } from "./demos/demo-gallery-composite/custo
 import ThemeSwitcherDemo from "./demos/theme-switcher";
 import MobileNavComposite from "./demos/mobile-nav-composite/page";
 import VSCodeLayoutDemo from "./demos/vscode-layout/page";
+import ChatLayoutDemo from "./demos/chat-layout/page";
+import WeChatLayoutDemo from "./demos/wechat-layout/page";
+import QQLayoutDemo from "./demos/qq-layout/page";
 
 // 所有 demo 的配置
 const demos = [
+  {
+    id: "wechat-layout",
+    title: "微信布局",
+    component: <WeChatLayoutDemo />,
+    description: "一个类似微信的现代化聊天应用布局",
+    category: "布局组件",
+    tags: ["layout", "chat", "现代化", "微信"],
+  },
+  {
+    id: "qq-layout",
+    title: "QQ 布局",
+    component: <QQLayoutDemo />,
+    description: "一个类似 QQ 的现代化聊天应用布局",
+    category: "布局组件",
+    tags: ["layout", "chat", "现代化", "QQ"],
+  },
+  {
+    id: "chat-layout",
+    title: "聊天应用布局",
+    component: <ChatLayoutDemo />,
+    description: "一个类似 Discord/微信的现代化聊天应用布局",
+    category: "布局组件",
+    tags: ["layout", "chat", "现代化"],
+  },
   {
     id: "vscode-layout",
     title: "VS Code 布局",
