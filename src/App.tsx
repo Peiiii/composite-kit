@@ -9,9 +9,18 @@ import DemoGalleryConfigurable from "./demos/demo-gallery-configurable/page";
 import { DemoGalleryCustomComposite } from "./demos/demo-gallery-composite/custom-composite";
 import ThemeSwitcherDemo from "./demos/theme-switcher";
 import MobileNavComposite from "./demos/mobile-nav-composite/page";
+import VSCodeLayoutDemo from "./demos/vscode-layout/page";
 
 // 所有 demo 的配置
 const demos = [
+  {
+    id: "vscode-layout",
+    title: "VS Code 布局",
+    component: <VSCodeLayoutDemo />,
+    description: "一个类似 VS Code 的现代化布局方案",
+    category: "布局组件",
+    tags: ["layout", "vscode", "现代化"],
+  },
   {
     id: "theme-switcher",
     title: "主题切换器",
