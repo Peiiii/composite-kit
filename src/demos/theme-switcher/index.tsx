@@ -129,7 +129,7 @@ export default function ThemeSwitcherDemo() {
 
   return (
     <ThemeProvider defaultTheme={config.theme.defaultTheme}>
-      <div className="min-h-screen bg-background text-foreground">
+      <div className="min-h-full bg-background text-foreground">
         <ConfigurableActivityBar
           config={config}
           className="border-b"

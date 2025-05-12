@@ -112,7 +112,7 @@ const App = React.memo(function App() {
   const [activeSection, setActiveSection] = React.useState("home");
 
   return (
-    <div className="flex h-screen bg-background">
+    <div className="flex h-full bg-background">
       <ActivityBar.Root
         expanded={expanded}
         defaultActiveId={activeSection}
