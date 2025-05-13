@@ -76,46 +76,96 @@ const Panel = React.forwardRef<ResizablePanelRef, ResizablePanelProps>(
     enableDoubleClickReset,
     doubleClickResetSize,
     onResize,
+    onExpand,
+    onCollapse,
     ...props
   }, ref) => {
     const [isCollapsed, setIsCollapsed] = React.useState(false);
     const [isAnimating, setIsAnimating] = React.useState(false);
     const panelRef = React.useRef<ImperativePanelHandle>(null);
 
-    const handleDoubleClick = React.useCallback(() => {
-      if (enableDoubleClickReset && doubleClickResetSize !== undefined && panelRef.current) {
-        panelRef.current.resize(doubleClickResetSize);
-      }
-    }, [enableDoubleClickReset, doubleClickResetSize]);
-
-    const handleCollapse = React.useCallback(() => {
+    const animatePanel = React.useCallback((action: () => void, callback?: () => void) => {
       if (panelRef.current) {
         setIsAnimating(true);
-        
         requestAnimationFrame(() => {
-          if (isCollapsed) {
-            panelRef.current?.expand();
-          } else {
-            panelRef.current?.collapse();
-          }
-          setIsCollapsed(!isCollapsed);
-
+          action();
+          callback?.();
           setTimeout(() => {
             setIsAnimating(false);
           }, 300);
         });
       }
-    }, [isCollapsed]);
+    }, []);
+
+    const handleExpand = React.useCallback(() => {
+      animatePanel(
+        () => {
+          panelRef.current?.expand();
+          onExpand?.();
+          setIsCollapsed(false);
+        }
+      );
+    }, [onExpand, animatePanel]);
+
+    const handleCollapse = React.useCallback(() => {
+      animatePanel(
+        () => {
+          panelRef.current?.collapse();
+          onCollapse?.();
+          setIsCollapsed(true);
+        }
+      );
+    }, [onCollapse, animatePanel]);
+
+    const handleToggle = React.useCallback(() => {
+      if (isCollapsed) {
+        handleExpand();
+      } else {
+        handleCollapse();
+      }
+    }, [isCollapsed, handleExpand, handleCollapse]);
 
     const handleResize = React.useCallback((size: number) => {
       if (panelRef.current) {
         const isCurrentlyCollapsed = panelRef.current.isCollapsed();
         if (isCurrentlyCollapsed !== isCollapsed) {
-          setIsCollapsed(isCurrentlyCollapsed);
+          if (isCurrentlyCollapsed) {
+            handleCollapse();
+          } else {
+            handleExpand();
+          }
         }
       }
       onResize?.(size);
-    }, [isCollapsed, onResize]);
+    }, [isCollapsed, onResize, handleExpand, handleCollapse]);
+
+    const handleDoubleClick = React.useCallback(() => {
+      if (enableDoubleClickReset && doubleClickResetSize !== undefined) {
+        handleResize(doubleClickResetSize);
+      }
+    }, [enableDoubleClickReset, doubleClickResetSize, handleResize]);
+
+    const handleGetSize = React.useCallback(() => {
+      return panelRef.current?.getSize() ?? 0;
+    }, []);
+
+    const handleIsCollapsed = React.useCallback(() => {
+      return isCollapsed;
+    }, [isCollapsed]);
+
+    const handlePanelResize = React.useCallback((size: number) => {
+      if (panelRef.current) {
+        panelRef.current.resize(size);
+      }
+    }, []);
+
+    React.useImperativeHandle(ref, () => ({
+      expand: handleExpand,
+      collapse: handleCollapse,
+      resize: handlePanelResize,
+      isCollapsed: handleIsCollapsed,
+      getSize: handleGetSize,
+    }), [handleExpand, handleCollapse, handlePanelResize, handleIsCollapsed, handleGetSize]);
 
     return (
       <ResizablePanelBase
@@ -153,7 +203,7 @@ const Panel = React.forwardRef<ResizablePanelRef, ResizablePanelProps>(
               collapseButtonPosition === "start" ? "left-2" : "right-2",
               isCollapsed && "rotate-180"
             )}
-            onClick={handleCollapse}
+            onClick={handleToggle}
           >
             {collapseButtonIcon || (
               <span className="text-sm">

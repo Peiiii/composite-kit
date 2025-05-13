@@ -15,9 +15,18 @@ import WeChatLayoutDemo from "./demos/wechat-layout/page";
 import QQLayoutDemo from "./demos/qq-layout/page";
 import ResizablePanelCompositeDemo from "./demos/resizable-panel-composite/page";
 import { AdvancedDemo as ResizablePanelAdvancedDemo } from "./demos/resizable-panel-composite/advanced";
+import { RefControlDemo } from "./demos/resizable-panel-composite/ref-control";
 
 // 所有 demo 的配置
 const demos = [
+  {
+    id: "resizable-panel-ref-control",
+    title: "可调整大小面板 (Ref 控制)",
+    component: <RefControlDemo />,
+    description: "展示如何使用 ref 来控制面板的折叠状态，提供更灵活的控制方式",
+    category: "布局组件",
+    tags: ["layout", "resizable", "ref", "高级功能"],
+  },
   {
     id: "resizable-panel-advanced",
     title: "可调整大小面板 (高级)",

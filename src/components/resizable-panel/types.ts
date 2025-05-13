@@ -1,6 +1,29 @@
 import { ReactNode } from "react";
 import type { ImperativePanelHandle, ImperativePanelGroupHandle } from "react-resizable-panels";
 
+export interface ResizablePanelRef {
+  /**
+   * 展开面板
+   */
+  expand: () => void;
+  /**
+   * 折叠面板
+   */
+  collapse: () => void;
+  /**
+   * 调整面板大小
+   */
+  resize: (size: number) => void;
+  /**
+   * 获取面板是否已折叠
+   */
+  isCollapsed: () => boolean;
+  /**
+   * 获取面板当前大小
+   */
+  getSize: () => number;
+}
+
 export interface ResizablePanelProps {
   /**
    * 面板的唯一标识
@@ -70,6 +93,14 @@ export interface ResizablePanelProps {
    * 拖拽状态变化时的回调
    */
   onDragging?: (isDragging: boolean) => void;
+  /**
+   * 面板展开时的回调
+   */
+  onExpand?: () => void;
+  /**
+   * 面板折叠时的回调
+   */
+  onCollapse?: () => void;
 }
 
 export interface ResizablePanelGroupProps {
@@ -146,5 +177,4 @@ export interface ResizableHandleProps {
   showDragFeedback?: boolean;
 }
 
-export type ResizablePanelRef = ImperativePanelHandle;
 export type ResizablePanelGroupRef = ImperativePanelGroupHandle; 
