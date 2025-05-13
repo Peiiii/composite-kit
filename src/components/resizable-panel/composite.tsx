@@ -179,7 +179,7 @@ const Panel = React.forwardRef<ResizablePanelRef, ResizablePanelProps>(
         }}
         className={cn(
           "relative",
-          isAnimating && "transition-all duration-300 ease-in-out",
+          isAnimating && "transition-all duration-200 ease-out",
           className
         )}
         onDoubleClick={handleDoubleClick}
@@ -188,12 +188,12 @@ const Panel = React.forwardRef<ResizablePanelRef, ResizablePanelProps>(
       >
         <div className={cn(
           "h-full w-full overflow-hidden",
-          isAnimating && "transition-all duration-300 ease-in-out",
+          isAnimating && "transition-all duration-200 ease-out",
           isCollapsed && "opacity-0 translate-x-[-100%]"
         )}>
           <div className={cn(
             "h-full w-full whitespace-nowrap",
-            isAnimating && "transition-all duration-300 ease-in-out",
+            isAnimating && "transition-all duration-200 ease-out",
             isCollapsed && "translate-x-[-100%]"
           )}>
             {children}
@@ -203,7 +203,7 @@ const Panel = React.forwardRef<ResizablePanelRef, ResizablePanelProps>(
           <button
             className={cn(
               "absolute top-2 z-10 rounded-md p-1 hover:bg-accent",
-              isAnimating && "transition-all duration-300 ease-in-out",
+              isAnimating && "transition-all duration-200 ease-out",
               collapseButtonPosition === "start" ? "left-2" : "right-2",
               isCollapsed && "rotate-180"
             )}
