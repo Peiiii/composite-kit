@@ -68,7 +68,7 @@ export function VSCodeDualSidebarDemo() {
         >
           <div className="flex h-full">
             {/* 左侧活动栏 */}
-            <div className="w-12 h-full bg-muted flex flex-col items-center py-2 border-r">
+            <div className="w-12 h-full bg-muted flex flex-col items-center py-2 border-r shrink-0">
               <button
                 className={`p-2 hover:bg-accent rounded-md mb-2 ${
                   leftActiveIcon === "explorer" ? "bg-accent/30" : ""
