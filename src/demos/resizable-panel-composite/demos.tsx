@@ -2,6 +2,7 @@ import { DemoConfig } from "@/components/demo-gallery";
 import ResizablePanelCompositeDemo from "./page";
 import { AdvancedDemo as ResizablePanelAdvancedDemo } from "./advanced";
 import { RefControlDemo } from "./ref-control";
+import { ThreeColumnDemo } from "./three-column";
 
 export const resizablePanelDemos: DemoConfig[] = [
   {
@@ -28,4 +29,16 @@ export const resizablePanelDemos: DemoConfig[] = [
     category: "布局组件",
     tags: ["layout", "resizable", "复合组件"],
   },
-]; 
+  {
+    id: "resizable-panel-three-column",
+    title: "三栏布局面板",
+    component: <ThreeColumnDemo />,
+    description: "展示如何使用可调整大小面板创建经典的三栏布局，左右面板可折叠",
+    category: "布局组件",
+    tags: ["layout", "resizable", "三栏布局", "可折叠"],
+  },
+];
+
+export * from "./advanced";
+export * from "./ref-control";
+export * from "./three-column"; 
