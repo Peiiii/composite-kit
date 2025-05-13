@@ -68,7 +68,7 @@ export function VSCodeActivitySidebarDemo() {
           >
             <Play className="h-5 w-5" />
           </button>
-          <div className="mt-auto">
+          <div className="mt-auto flex flex-col items-center">
             <button className="p-2 hover:bg-accent rounded-md mb-2">
               <Users className="h-5 w-5" />
             </button>
