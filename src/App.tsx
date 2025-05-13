@@ -2,71 +2,20 @@ import * as React from "react";
 import { DemoGallery, DemoCardContainer } from "@/components/demo-gallery";
 import { ActivityBar } from "@/components/activity-bar";
 import { Home, BookOpen, Settings, HelpCircle } from "lucide-react";
-import ActivityBarComposite from "./demos/activity-bar-composite/page";
-import ActivityBarConfigurable from "./demos/activity-bar-configurable/page";
-import DemoGalleryComposite from "./demos/demo-gallery-composite/page";
-import DemoGalleryConfigurable from "./demos/demo-gallery-configurable/page";
-import { DemoGalleryCustomComposite } from "./demos/demo-gallery-composite/custom-composite";
 import ThemeSwitcherDemo from "./demos/theme-switcher";
 import MobileNavComposite from "./demos/mobile-nav-composite/page";
 import VSCodeLayoutDemo from "./demos/vscode-layout/page";
-import ChatLayoutDemo from "./demos/chat-layout/page";
-import WeChatLayoutDemo from "./demos/wechat-layout/page";
-import QQLayoutDemo from "./demos/qq-layout/page";
-import ResizablePanelCompositeDemo from "./demos/resizable-panel-composite/page";
-import { AdvancedDemo as ResizablePanelAdvancedDemo } from "./demos/resizable-panel-composite/advanced";
-import { RefControlDemo } from "./demos/resizable-panel-composite/ref-control";
+import { resizablePanelDemos } from "./demos/resizable-panel-composite/demos";
+import { chatLayoutDemos } from "./demos/chat-layout/demos";
+import { activityBarDemos } from "./demos/activity-bar-composite/demos";
+import { demoGalleryDemos } from "./demos/demo-gallery-composite/demos";
 
 // 所有 demo 的配置
 const demos = [
-  {
-    id: "resizable-panel-ref-control",
-    title: "可调整大小面板 (Ref 控制)",
-    component: <RefControlDemo />,
-    description: "展示如何使用 ref 来控制面板的折叠状态，提供更灵活的控制方式",
-    category: "布局组件",
-    tags: ["layout", "resizable", "ref", "高级功能"],
-  },
-  {
-    id: "resizable-panel-advanced",
-    title: "可调整大小面板 (高级)",
-    component: <ResizablePanelAdvancedDemo />,
-    description: "展示可调整大小面板的高级功能，包括嵌套面板、网格对齐、键盘操作等",
-    category: "布局组件",
-    tags: ["layout", "resizable", "复合组件", "高级功能"],
-  },
-  {
-    id: "resizable-panel-composite",
-    title: "可调整大小面板 (基础)",
-    component: <ResizablePanelCompositeDemo />,
-    description: "一个支持拖拽调整大小的面板组件，支持水平和垂直分割",
-    category: "布局组件",
-    tags: ["layout", "resizable", "复合组件"],
-  },
-  {
-    id: "wechat-layout",
-    title: "微信布局",
-    component: <WeChatLayoutDemo />,
-    description: "一个类似微信的现代化聊天应用布局",
-    category: "布局组件",
-    tags: ["layout", "chat", "现代化", "微信"],
-  },
-  {
-    id: "qq-layout",
-    title: "QQ 布局",
-    component: <QQLayoutDemo />,
-    description: "一个类似 QQ 的现代化聊天应用布局",
-    category: "布局组件",
-    tags: ["layout", "chat", "现代化", "QQ"],
-  },
-  {
-    id: "chat-layout",
-    title: "聊天应用布局",
-    component: <ChatLayoutDemo />,
-    description: "一个类似 Discord/微信的现代化聊天应用布局",
-    category: "布局组件",
-    tags: ["layout", "chat", "现代化"],
-  },
+  ...resizablePanelDemos,
+  ...chatLayoutDemos,
+  ...activityBarDemos,
+  ...demoGalleryDemos,
   {
     id: "vscode-layout",
     title: "VS Code 布局",
@@ -84,53 +33,12 @@ const demos = [
     tags: ["theme", "主题切换", "material-design"],
   },
   {
-    id: "activity-bar-configurable",
-    title: "Activity Bar (配置模式)",
-    component: <ActivityBarConfigurable />,
-    description: "使用配置对象的方式构建 Activity Bar",
-    category: "布局组件",
-    tags: ["activity-bar", "配置模式"],
-  },
-  {
-    id: "activity-bar-composite",
-    title: "Activity Bar (复合组件模式)",
-    component: <ActivityBarComposite />,
-    description: "使用复合组件模式构建 Activity Bar",
-    category: "布局组件",
-    tags: ["activity-bar", "复合组件"],
-  },
-  {
     id: "mobile-nav-composite",
     title: "移动端导航 (复合组件模式)",
     component: <MobileNavComposite />,
     description: "使用复合组件模式构建移动端导航",
     category: "布局组件",
     tags: ["mobile-nav", "复合组件", "响应式"],
-  },
-  {
-    id: "demo-gallery-configurable",
-    title: "Demo Gallery (配置模式)",
-    component: <DemoGalleryConfigurable />,
-    description: "使用配置对象的方式构建 Demo Gallery",
-    category: "布局组件",
-    tags: ["demo-gallery", "配置模式"],
-  },
-  {
-    id: "demo-gallery-composite",
-    title: "Demo Gallery (复合组件模式)",
-    component: <DemoGalleryComposite />,
-    description: "使用复合组件模式构建 Demo Gallery",
-    category: "布局组件",
-    tags: ["demo-gallery", "复合组件"],
-  },
-  {
-    id: "demo-gallery-custom-composite",
-    title: "Demo Gallery (自定义组合模式)",
-    component: <DemoGalleryCustomComposite />,
-    description:
-      "使用自定义组合模式构建 Demo Gallery，展示如何使用基础组件进行组合",
-    category: "布局组件",
-    tags: ["demo-gallery", "自定义组合"],
   },
 ];
 
