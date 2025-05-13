@@ -70,7 +70,7 @@ export function VSCodeDualSidebarDemo() {
             {/* 左侧活动栏 */}
             <div className="w-12 h-full bg-muted flex flex-col items-center py-2 border-r">
               <button
-                className={`p-2 px-3 hover:bg-accent rounded-md mb-2 ${
+                className={`p-2 hover:bg-accent rounded-md mb-2 ${
                   leftActiveIcon === "explorer" ? "bg-accent/30" : ""
                 }`}
                 onClick={() => setLeftActiveIcon("explorer")}
@@ -78,7 +78,7 @@ export function VSCodeDualSidebarDemo() {
                 <Folder className="h-5 w-5" />
               </button>
               <button
-                className={`p-2 px-3 hover:bg-accent rounded-md mb-2 ${
+                className={`p-2 hover:bg-accent rounded-md mb-2 ${
                   leftActiveIcon === "search" ? "bg-accent/30" : ""
                 }`}
                 onClick={() => setLeftActiveIcon("search")}
@@ -86,7 +86,7 @@ export function VSCodeDualSidebarDemo() {
                 <Search className="h-5 w-5" />
               </button>
               <button
-                className={`p-2 px-3 hover:bg-accent rounded-md mb-2 ${
+                className={`p-2 hover:bg-accent rounded-md mb-2 ${
                   leftActiveIcon === "git" ? "bg-accent/30" : ""
                 }`}
                 onClick={() => setLeftActiveIcon("git")}
@@ -94,7 +94,7 @@ export function VSCodeDualSidebarDemo() {
                 <GitBranch className="h-5 w-5" />
               </button>
               <button
-                className={`p-2 px-3 hover:bg-accent rounded-md mb-2 ${
+                className={`p-2 hover:bg-accent rounded-md mb-2 ${
                   leftActiveIcon === "debug" ? "bg-accent/30" : ""
                 }`}
                 onClick={() => setLeftActiveIcon("debug")}
@@ -102,7 +102,7 @@ export function VSCodeDualSidebarDemo() {
                 <Play className="h-5 w-5" />
               </button>
               <button
-                className={`p-2 px-3 hover:bg-accent rounded-md mb-2 ${
+                className={`p-2 hover:bg-accent rounded-md mb-2 ${
                   leftActiveIcon === "extensions" ? "bg-accent/30" : ""
                 }`}
                 onClick={() => setLeftActiveIcon("extensions")}
@@ -110,10 +110,10 @@ export function VSCodeDualSidebarDemo() {
                 <LayoutGrid className="h-5 w-5" />
               </button>
               <div className="mt-auto flex flex-col items-center">
-                <button className="p-2 px-3 hover:bg-accent rounded-md mb-2">
+                <button className="p-2 hover:bg-accent rounded-md mb-2">
                   <Users className="h-5 w-5" />
                 </button>
-                <button className="p-2 px-3 hover:bg-accent rounded-md mb-2">
+                <button className="p-2 hover:bg-accent rounded-md mb-2">
                   <Settings className="h-5 w-5" />
                 </button>
               </div>
@@ -512,7 +512,7 @@ webpack compiled successfully`}
               <div className="border-b flex items-center justify-between py-1 px-2">
                 <div className="flex">
                   <button
-                    className={`p-1 px-2 hover:bg-accent rounded-md mr-1 ${
+                    className={`p-1 hover:bg-accent rounded-md mr-1 ${
                       rightActiveIcon === "outline" ? "bg-accent/30" : ""
                     }`}
                     onClick={() => setRightActiveIcon("outline")}
@@ -520,7 +520,7 @@ webpack compiled successfully`}
                     <Code className="h-4 w-4" />
                   </button>
                   <button
-                    className={`p-1 px-2 hover:bg-accent rounded-md mr-1 ${
+                    className={`p-1 hover:bg-accent rounded-md mr-1 ${
                       rightActiveIcon === "problems" ? "bg-accent/30" : ""
                     }`}
                     onClick={() => setRightActiveIcon("problems")}
@@ -528,7 +528,7 @@ webpack compiled successfully`}
                     <Info className="h-4 w-4" />
                   </button>
                   <button
-                    className={`p-1 px-2 hover:bg-accent rounded-md mr-1 ${
+                    className={`p-1 hover:bg-accent rounded-md mr-1 ${
                       rightActiveIcon === "docs" ? "bg-accent/30" : ""
                     }`}
                     onClick={() => setRightActiveIcon("docs")}
@@ -536,7 +536,7 @@ webpack compiled successfully`}
                     <BookOpen className="h-4 w-4" />
                   </button>
                   <button
-                    className={`p-1 px-2 hover:bg-accent rounded-md ${
+                    className={`p-1 hover:bg-accent rounded-md ${
                       rightActiveIcon === "help" ? "bg-accent/30" : ""
                     }`}
                     onClick={() => setRightActiveIcon("help")}
