@@ -1,6 +1,5 @@
 import { ActivityBar } from "@/components/activity-bar";
 import { BookOpen, Bug, FileText, HelpCircle, Home, Search, Settings } from "lucide-react";
-import * as React from "react";
 
 interface ActivityBarProps {
   expanded: boolean;

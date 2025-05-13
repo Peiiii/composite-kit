@@ -46,7 +46,7 @@ export default function WeChatLayoutDemo() {
                 <Input
                   placeholder="搜索"
                   className="flex-1"
-                  prefix={<Search className="h-4 w-4 text-gray-400" />}
+                  prefix={<Search className="h-4 w-4 text-gray-400" /> as any}
                 />
                 <Button variant="ghost" size="icon">
                   <Plus className="h-5 w-5" />

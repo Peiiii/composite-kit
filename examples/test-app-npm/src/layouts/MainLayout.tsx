@@ -1,12 +1,12 @@
 import * as React from 'react'
-import { ConfigurableActivityBar } from 'composite-kit'
+import { VSCodeLayout } from 'composite-kit'
 import { Home, Settings, FileText, HelpCircle, GitBranch, Search, Terminal } from 'lucide-react'
 
 interface MainLayoutProps {
   children: React.ReactNode
 }
 
-export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
+export function MainLayout({ children }: MainLayoutProps) {
   const config = {
     header: {
       icon: <Home />,
@@ -63,31 +63,11 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   }
 
   return (
-    <div className="flex h-screen bg-gray-50">
-      <ConfigurableActivityBar 
-        config={config}
-        defaultExpanded={true}
-        onActiveChange={(id) => console.log('Active item:', id)}
-      />
-      <div className="flex-1 flex flex-col">
-        <main className="flex-1 overflow-auto">
-          {children}
-        </main>
-        <footer className="h-8 bg-gray-100 border-t border-gray-200 flex items-center px-4 text-sm text-gray-600">
-          <div className="flex items-center space-x-4">
-            <span>主分支</span>
-            <span>•</span>
-            <span>TypeScript</span>
-            <span>•</span>
-            <span>UTF-8</span>
-          </div>
-          <div className="ml-auto flex items-center space-x-4">
-            <span>Ln 1, Col 1</span>
-            <span>•</span>
-            <span>Spaces: 2</span>
-          </div>
-        </footer>
-      </div>
-    </div>
+    <VSCodeLayout
+      activityBar={<div className="h-full bg-gray-800 text-white p-4">活动栏</div>}
+      sideBar={<div className="h-full bg-gray-100 p-4">侧边栏</div>}
+      editor={<div className="h-full bg-white p-4">{children}</div>}
+      secondarySideBar={<div className="h-full bg-gray-100 p-4">次要侧边栏</div>}
+    />
   )
 } 
