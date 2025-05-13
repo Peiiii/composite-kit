@@ -5,8 +5,17 @@ import { RefControlDemo } from "./ref-control";
 import { ThreeColumnDemo } from "./three-column";
 import { VSCodeLayoutDemo } from "./vscode-layout";
 import { VSCodeLayoutSimplifiedDemo } from "./vscode-layout-simplified";
+import { VSCodeDualSidebarDemo } from "./vscode-dual-sidebar";
 
 export const resizablePanelDemos: DemoConfig[] = [
+  {
+    id: "resizable-panel-vscode-dual-sidebar",
+    title: "VS Code 双侧边栏布局",
+    component: <VSCodeDualSidebarDemo />,
+    description: "模拟VS Code的双侧边栏布局，左右两侧均有可折叠的侧边栏，使用自定义Hook简化状态管理",
+    category: "布局组件",
+    tags: ["layout", "resizable", "复合布局", "IDE", "双侧边栏", "Hook简化"],
+  },
   {
     id: "resizable-panel-vscode-layout-simplified",
     title: "VS Code 布局 (简化版)",
@@ -61,4 +70,5 @@ export * from "./advanced";
 export * from "./ref-control";
 export * from "./three-column";
 export * from "./vscode-layout";
-export * from "./vscode-layout-simplified"; 
+export * from "./vscode-layout-simplified";
+export * from "./vscode-dual-sidebar"; 
