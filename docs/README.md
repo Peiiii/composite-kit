@@ -19,6 +19,7 @@
 - React
 - TypeScript
 - Tailwind CSS
+- Shadcn/ui
 - Vite
 
 ## 开发指南

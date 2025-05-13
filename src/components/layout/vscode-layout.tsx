@@ -1,7 +1,6 @@
-import * as React from "react";
-import { cn } from "@/lib/utils";
-import { ActivityBar } from "@/components/activity-bar";
 import { Separator } from "@/components/ui/separator";
+import { cn } from "@/lib/utils";
+import * as React from "react";
 
 export interface VSCodeLayoutProps extends React.HTMLAttributes<HTMLDivElement> {
   activityBar?: React.ReactNode;

@@ -13,9 +13,27 @@ import VSCodeLayoutDemo from "./demos/vscode-layout/page";
 import ChatLayoutDemo from "./demos/chat-layout/page";
 import WeChatLayoutDemo from "./demos/wechat-layout/page";
 import QQLayoutDemo from "./demos/qq-layout/page";
+import ResizablePanelCompositeDemo from "./demos/resizable-panel-composite/page";
+import { AdvancedDemo as ResizablePanelAdvancedDemo } from "./demos/resizable-panel-composite/advanced";
 
 // 所有 demo 的配置
 const demos = [
+  {
+    id: "resizable-panel-advanced",
+    title: "可调整大小面板 (高级)",
+    component: <ResizablePanelAdvancedDemo />,
+    description: "展示可调整大小面板的高级功能，包括嵌套面板、网格对齐、键盘操作等",
+    category: "布局组件",
+    tags: ["layout", "resizable", "复合组件", "高级功能"],
+  },
+  {
+    id: "resizable-panel-composite",
+    title: "可调整大小面板 (基础)",
+    component: <ResizablePanelCompositeDemo />,
+    description: "一个支持拖拽调整大小的面板组件，支持水平和垂直分割",
+    category: "布局组件",
+    tags: ["layout", "resizable", "复合组件"],
+  },
   {
     id: "wechat-layout",
     title: "微信布局",
