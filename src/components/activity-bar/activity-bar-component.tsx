@@ -39,7 +39,7 @@ export interface ActivityBarProps
   onActiveChange?: (activeId: string) => void
 }
 
-export interface ActivityBarComponentProps extends ActivityBarProps {}
+export type ActivityBarComponentProps = ActivityBarProps
 
 export function ActivityBarComponent({
   className,

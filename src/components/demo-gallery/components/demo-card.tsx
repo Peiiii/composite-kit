@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils"
 import { ChevronDown, ChevronRight, ChevronUp, Home } from "lucide-react"
 import * as React from "react"
 
-export interface DemoCardRootProps extends React.HTMLAttributes<HTMLDivElement> {}
+export type DemoCardRootProps = React.HTMLAttributes<HTMLDivElement>
 export const DemoCardRoot = React.forwardRef<HTMLDivElement, DemoCardRootProps>(
   ({ className, ...props }, ref) => (
     <div ref={ref} className={cn("rounded-lg border bg-card shadow-sm", className)} {...props} />
@@ -162,7 +162,7 @@ export const DemoCardBody = React.forwardRef<HTMLDivElement, DemoCardBodyProps>(
 )
 DemoCardBody.displayName = "DemoCardBody"
 
-export interface DemoCardFooterProps extends React.HTMLAttributes<HTMLDivElement> {}
+export type DemoCardFooterProps = React.HTMLAttributes<HTMLDivElement>
 export const DemoCardFooter = React.forwardRef<HTMLDivElement, DemoCardFooterProps>(
   ({ className, ...props }, ref) => (
     <div ref={ref} className={cn("border-t p-4", className)} {...props} />

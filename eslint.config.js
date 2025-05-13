@@ -26,6 +26,17 @@ export default tseslint.config(
         { allowConstantExport: true },
       ],
       'unused-imports/no-unused-imports': 'error',
+      '@typescript-eslint/no-unused-vars': ['warn', { 
+        'vars': 'all',
+        'args': 'after-used',
+        'ignoreRestSiblings': true,
+        'argsIgnorePattern': '^_',
+        'varsIgnorePattern': '^_'
+      }],
+      '@typescript-eslint/no-empty-interface': ['warn', {
+        'allowSingleExtends': false
+      }],
+      '@typescript-eslint/no-explicit-any': 'warn',
     },
   },
 )
