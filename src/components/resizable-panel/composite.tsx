@@ -189,9 +189,13 @@ const Panel = React.forwardRef<ResizablePanelRef, ResizablePanelProps>(
         <div className={cn(
           "h-full w-full overflow-hidden",
           isAnimating && "transition-all duration-300 ease-in-out",
-          isCollapsed && "opacity-0"
+          isCollapsed && "opacity-0 translate-x-[-100%]"
         )}>
-          <div className="h-full w-full whitespace-nowrap">
+          <div className={cn(
+            "h-full w-full whitespace-nowrap",
+            isAnimating && "transition-all duration-300 ease-in-out",
+            isCollapsed && "translate-x-[-100%]"
+          )}>
             {children}
           </div>
         </div>
