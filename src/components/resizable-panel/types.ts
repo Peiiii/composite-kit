@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import type { ImperativePanelHandle, ImperativePanelGroupHandle } from "react-resizable-panels";
+import type { ImperativePanelGroupHandle } from "react-resizable-panels";
 
 export interface ResizablePanelRef {
   /**

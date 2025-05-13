@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { ConfigurableActivityBar } from 'composite-kit'
-import { Home, Settings, User, FileText, HelpCircle, GitBranch, Search, Terminal } from 'lucide-react'
+import { Home, Settings, FileText, HelpCircle, GitBranch, Search, Terminal } from 'lucide-react'
 
 interface MainLayoutProps {
   children: React.ReactNode
