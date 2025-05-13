@@ -3,8 +3,17 @@ import ResizablePanelCompositeDemo from "./page";
 import { AdvancedDemo as ResizablePanelAdvancedDemo } from "./advanced";
 import { RefControlDemo } from "./ref-control";
 import { ThreeColumnDemo } from "./three-column";
+import { VSCodeLayoutDemo } from "./vscode-layout";
 
 export const resizablePanelDemos: DemoConfig[] = [
+  {
+    id: "resizable-panel-vscode-layout",
+    title: "VS Code 布局",
+    component: <VSCodeLayoutDemo />,
+    description: "模拟 VS Code 的四栏布局，包含左侧活动栏、侧边栏、主编辑区域和底部面板，支持水平和垂直拖拽调整",
+    category: "布局组件",
+    tags: ["layout", "resizable", "复合布局", "IDE", "垂直拖拽"],
+  },
   {
     id: "resizable-panel-ref-control",
     title: "可调整大小面板 (Ref 控制)",
@@ -41,4 +50,5 @@ export const resizablePanelDemos: DemoConfig[] = [
 
 export * from "./advanced";
 export * from "./ref-control";
-export * from "./three-column"; 
+export * from "./three-column";
+export * from "./vscode-layout"; 
