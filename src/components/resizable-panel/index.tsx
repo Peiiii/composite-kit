@@ -1,4 +1,4 @@
-export { ResizablePanel as Resizable } from "./composite";
+export { ResizablePanel } from "./composite";
 export type {
   ResizablePanelProps,
   ResizablePanelGroupProps,
