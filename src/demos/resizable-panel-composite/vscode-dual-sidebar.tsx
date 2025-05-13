@@ -1,41 +1,48 @@
 import { ResizablePanel } from "@/components/resizable-panel/composite";
-import { usePanelSizes, useResizablePanel } from "@/components/resizable-panel/hooks";
 import {
-    Beaker,
-    BookOpen,
-    ChevronDown,
-    ChevronLeft,
-    ChevronRight,
-    ChevronUp,
-    CircleHelp,
-    Code,
-    Database,
-    FileText,
-    Folder,
-    GitBranch,
-    Info,
-    LayoutGrid,
-    Play,
-    Search,
-    Settings,
-    Terminal,
-    Users
+  usePanelSizes,
+  useResizablePanel,
+} from "@/components/resizable-panel/hooks";
+import {
+  Beaker,
+  BookOpen,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  ChevronUp,
+  CircleHelp,
+  Code,
+  Database,
+  FileText,
+  Folder,
+  GitBranch,
+  Info,
+  LayoutGrid,
+  Play,
+  Search,
+  Settings,
+  Terminal,
+  Users,
 } from "lucide-react";
 import * as React from "react";
 
 export function VSCodeDualSidebarDemo() {
-  const { onLayout: onHorizontalLayout } = usePanelSizes("vscode-dual-sidebar-horizontal");
-  const { onLayout: onVerticalLayout } = usePanelSizes("vscode-dual-sidebar-vertical");
-  
+  const { onLayout: onHorizontalLayout } = usePanelSizes(
+    "vscode-dual-sidebar-horizontal"
+  );
+  const { onLayout: onVerticalLayout } = usePanelSizes(
+    "vscode-dual-sidebar-vertical"
+  );
+
   // 使用Hook简化左侧边栏面板的状态管理
   const leftSidebar = useResizablePanel();
-  
+
   // 使用Hook简化右侧边栏面板的状态管理
   const rightSidebar = useResizablePanel();
-  
+
   // 使用Hook简化底部面板的状态管理
   const bottomPanel = useResizablePanel();
-  
+
   const [activeTab, setActiveTab] = React.useState("terminal");
   const [activeFile, setActiveFile] = React.useState("index.tsx");
   const [leftActiveIcon, setLeftActiveIcon] = React.useState("explorer");
@@ -62,41 +69,51 @@ export function VSCodeDualSidebarDemo() {
           <div className="flex h-full">
             {/* 左侧活动栏 */}
             <div className="w-12 h-full bg-muted flex flex-col items-center py-2 border-r">
-              <button 
-                className={`p-2 hover:bg-accent rounded-md mb-2 ${leftActiveIcon === "explorer" ? "bg-accent/30" : ""}`}
+              <button
+                className={`p-2 px-3 hover:bg-accent rounded-md mb-2 ${
+                  leftActiveIcon === "explorer" ? "bg-accent/30" : ""
+                }`}
                 onClick={() => setLeftActiveIcon("explorer")}
               >
                 <Folder className="h-5 w-5" />
               </button>
-              <button 
-                className={`p-2 hover:bg-accent rounded-md mb-2 ${leftActiveIcon === "search" ? "bg-accent/30" : ""}`}
+              <button
+                className={`p-2 px-3 hover:bg-accent rounded-md mb-2 ${
+                  leftActiveIcon === "search" ? "bg-accent/30" : ""
+                }`}
                 onClick={() => setLeftActiveIcon("search")}
               >
                 <Search className="h-5 w-5" />
               </button>
-              <button 
-                className={`p-2 hover:bg-accent rounded-md mb-2 ${leftActiveIcon === "git" ? "bg-accent/30" : ""}`}
+              <button
+                className={`p-2 px-3 hover:bg-accent rounded-md mb-2 ${
+                  leftActiveIcon === "git" ? "bg-accent/30" : ""
+                }`}
                 onClick={() => setLeftActiveIcon("git")}
               >
                 <GitBranch className="h-5 w-5" />
               </button>
-              <button 
-                className={`p-2 hover:bg-accent rounded-md mb-2 ${leftActiveIcon === "debug" ? "bg-accent/30" : ""}`}
+              <button
+                className={`p-2 px-3 hover:bg-accent rounded-md mb-2 ${
+                  leftActiveIcon === "debug" ? "bg-accent/30" : ""
+                }`}
                 onClick={() => setLeftActiveIcon("debug")}
               >
                 <Play className="h-5 w-5" />
               </button>
-              <button 
-                className={`p-2 hover:bg-accent rounded-md mb-2 ${leftActiveIcon === "extensions" ? "bg-accent/30" : ""}`}
+              <button
+                className={`p-2 px-3 hover:bg-accent rounded-md mb-2 ${
+                  leftActiveIcon === "extensions" ? "bg-accent/30" : ""
+                }`}
                 onClick={() => setLeftActiveIcon("extensions")}
               >
                 <LayoutGrid className="h-5 w-5" />
               </button>
-              <div className="mt-auto">
-                <button className="p-2 hover:bg-accent rounded-md mb-2">
+              <div className="mt-auto flex flex-col items-center">
+                <button className="p-2 px-3 hover:bg-accent rounded-md mb-2">
                   <Users className="h-5 w-5" />
                 </button>
-                <button className="p-2 hover:bg-accent rounded-md mb-2">
+                <button className="p-2 px-3 hover:bg-accent rounded-md mb-2">
                   <Settings className="h-5 w-5" />
                 </button>
               </div>
@@ -146,15 +163,23 @@ export function VSCodeDualSidebarDemo() {
                             <span>components</span>
                           </div>
                           <div className="ml-2">
-                            <div 
-                              className={`flex items-center py-1 text-xs rounded px-1 cursor-pointer ${activeFile === "button.tsx" ? "bg-accent" : "hover:bg-accent"}`}
+                            <div
+                              className={`flex items-center py-1 text-xs rounded px-1 cursor-pointer ${
+                                activeFile === "button.tsx"
+                                  ? "bg-accent"
+                                  : "hover:bg-accent"
+                              }`}
                               onClick={() => setActiveFile("button.tsx")}
                             >
                               <FileText className="h-3 w-3 mr-1 text-muted-foreground" />
                               <span>button.tsx</span>
                             </div>
-                            <div 
-                              className={`flex items-center py-1 text-xs rounded px-1 cursor-pointer ${activeFile === "index.tsx" ? "bg-accent" : "hover:bg-accent"}`}
+                            <div
+                              className={`flex items-center py-1 text-xs rounded px-1 cursor-pointer ${
+                                activeFile === "index.tsx"
+                                  ? "bg-accent"
+                                  : "hover:bg-accent"
+                              }`}
                               onClick={() => setActiveFile("index.tsx")}
                             >
                               <FileText className="h-3 w-3 mr-1 text-muted-foreground" />
@@ -174,7 +199,7 @@ export function VSCodeDualSidebarDemo() {
                     </div>
                   </div>
                 )}
-                
+
                 {leftActiveIcon === "search" && (
                   <div className="p-2">
                     <div className="mb-2">
@@ -252,11 +277,14 @@ export function VSCodeDualSidebarDemo() {
         </ResizablePanel.Panel>
 
         {/* 左侧侧边栏与主编辑区的分隔条 */}
-        <ResizablePanel.Handle showDragFeedback dragStyle={{ backgroundColor: "rgba(var(--primary), 0.2)" }} />
+        <ResizablePanel.Handle
+          showDragFeedback
+          dragStyle={{ backgroundColor: "rgba(var(--primary), 0.2)" }}
+        />
 
         {/* 中央主内容区 */}
         <ResizablePanel.Panel defaultSize={60}>
-          <ResizablePanel.Root 
+          <ResizablePanel.Root
             direction="vertical"
             onLayout={onVerticalLayout}
             autoSaveId="vscode-dual-sidebar-vertical"
@@ -267,27 +295,31 @@ export function VSCodeDualSidebarDemo() {
               <div className="flex h-full flex-col">
                 {/* 标签栏 */}
                 <div className="bg-muted/40 border-b flex">
-                  <div 
-                    className={`px-3 py-1.5 text-xs border-r flex items-center ${activeFile === "index.tsx" ? "bg-background" : ""}`}
+                  <div
+                    className={`px-3 py-1.5 text-xs border-r flex items-center ${
+                      activeFile === "index.tsx" ? "bg-background" : ""
+                    }`}
                     onClick={() => setActiveFile("index.tsx")}
                   >
                     <FileText className="h-3 w-3 mr-1.5" />
                     index.tsx
                   </div>
-                  <div 
-                    className={`px-3 py-1.5 text-xs border-r flex items-center ${activeFile === "button.tsx" ? "bg-background" : ""}`}
+                  <div
+                    className={`px-3 py-1.5 text-xs border-r flex items-center ${
+                      activeFile === "button.tsx" ? "bg-background" : ""
+                    }`}
                     onClick={() => setActiveFile("button.tsx")}
                   >
                     <FileText className="h-3 w-3 mr-1.5" />
                     button.tsx
                   </div>
                 </div>
-                
+
                 {/* 编辑器内容 */}
                 <div className="flex-1 overflow-auto p-4 bg-muted/10">
                   {activeFile === "index.tsx" ? (
                     <pre className="text-xs font-mono">
-{`import * as React from "react";
+                      {`import * as React from "react";
 import { Button } from "./button";
 
 export function App() {
@@ -303,7 +335,7 @@ export function App() {
                     </pre>
                   ) : (
                     <pre className="text-xs font-mono">
-{`import * as React from "react";
+                      {`import * as React from "react";
 
 interface ButtonProps {
   children: React.ReactNode;
@@ -339,10 +371,13 @@ export function Button({
             </ResizablePanel.Panel>
 
             {/* 编辑器和底部面板的分隔条 */}
-            <ResizablePanel.Handle showDragFeedback dragStyle={{ backgroundColor: "rgba(var(--primary), 0.2)" }} />
+            <ResizablePanel.Handle
+              showDragFeedback
+              dragStyle={{ backgroundColor: "rgba(var(--primary), 0.2)" }}
+            />
 
             {/* 底部面板（终端、问题、输出等） */}
-            <ResizablePanel.Panel 
+            <ResizablePanel.Panel
               ref={bottomPanel.ref}
               defaultSize={30}
               minSize={20}
@@ -353,22 +388,28 @@ export function Button({
               <div className="flex h-full flex-col border-t">
                 <div className="bg-muted/40 border-b flex justify-between items-center">
                   <div className="flex">
-                    <button 
-                      className={`px-3 py-1.5 text-xs border-r flex items-center ${activeTab === "terminal" ? "bg-background" : ""}`}
+                    <button
+                      className={`px-3 py-1.5 text-xs border-r flex items-center ${
+                        activeTab === "terminal" ? "bg-background" : ""
+                      }`}
                       onClick={() => setActiveTab("terminal")}
                     >
                       <Terminal className="h-3 w-3 mr-1.5" />
                       终端
                     </button>
-                    <button 
-                      className={`px-3 py-1.5 text-xs border-r flex items-center ${activeTab === "output" ? "bg-background" : ""}`}
+                    <button
+                      className={`px-3 py-1.5 text-xs border-r flex items-center ${
+                        activeTab === "output" ? "bg-background" : ""
+                      }`}
                       onClick={() => setActiveTab("output")}
                     >
                       <Code className="h-3 w-3 mr-1.5" />
                       输出
                     </button>
-                    <button 
-                      className={`px-3 py-1.5 text-xs border-r flex items-center ${activeTab === "debug" ? "bg-background" : ""}`}
+                    <button
+                      className={`px-3 py-1.5 text-xs border-r flex items-center ${
+                        activeTab === "debug" ? "bg-background" : ""
+                      }`}
                       onClick={() => setActiveTab("debug")}
                     >
                       <Play className="h-3 w-3 mr-1.5" />
@@ -379,13 +420,17 @@ export function Button({
                     onClick={bottomPanel.toggle}
                     className="px-2 py-1 hover:bg-accent"
                   >
-                    {bottomPanel.isCollapsed ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                    {bottomPanel.isCollapsed ? (
+                      <ChevronUp className="h-4 w-4" />
+                    ) : (
+                      <ChevronDown className="h-4 w-4" />
+                    )}
                   </button>
                 </div>
                 <div className="flex-1 overflow-auto bg-muted/10 p-2">
                   {activeTab === "terminal" && (
                     <pre className="text-xs font-mono text-muted-foreground">
-{`$ npm start
+                      {`$ npm start
 > my-app@0.1.0 start
 > react-scripts start
 
@@ -406,7 +451,7 @@ webpack compiled successfully`}
                   )}
                   {activeTab === "output" && (
                     <pre className="text-xs font-mono text-muted-foreground">
-{`[Info  - 10:42:35] Starting TypeScript server
+                      {`[Info  - 10:42:35] Starting TypeScript server
 [Info  - 10:42:36] TypeScript server started
 [Info  - 10:42:38] Project root: /Users/user/Projects/my-app
 [Info  - 10:42:39] Using tsconfig.json from project root
@@ -426,9 +471,12 @@ webpack compiled successfully`}
             </ResizablePanel.Panel>
           </ResizablePanel.Root>
         </ResizablePanel.Panel>
-        
+
         {/* 主编辑区与右侧侧边栏的分隔条 */}
-        <ResizablePanel.Handle showDragFeedback dragStyle={{ backgroundColor: "rgba(var(--primary), 0.2)" }} />
+        <ResizablePanel.Handle
+          showDragFeedback
+          dragStyle={{ backgroundColor: "rgba(var(--primary), 0.2)" }}
+        />
 
         {/* 右侧侧边栏 */}
         <ResizablePanel.Panel
@@ -459,37 +507,45 @@ webpack compiled successfully`}
                   </button>
                 </div>
               </div>
-              
+
               {/* 右侧活动栏图标 */}
               <div className="border-b flex items-center justify-between py-1 px-2">
                 <div className="flex">
-                  <button 
-                    className={`p-1 hover:bg-accent rounded-md mr-1 ${rightActiveIcon === "outline" ? "bg-accent/30" : ""}`}
+                  <button
+                    className={`p-1 px-2 hover:bg-accent rounded-md mr-1 ${
+                      rightActiveIcon === "outline" ? "bg-accent/30" : ""
+                    }`}
                     onClick={() => setRightActiveIcon("outline")}
                   >
                     <Code className="h-4 w-4" />
                   </button>
-                  <button 
-                    className={`p-1 hover:bg-accent rounded-md mr-1 ${rightActiveIcon === "problems" ? "bg-accent/30" : ""}`}
+                  <button
+                    className={`p-1 px-2 hover:bg-accent rounded-md mr-1 ${
+                      rightActiveIcon === "problems" ? "bg-accent/30" : ""
+                    }`}
                     onClick={() => setRightActiveIcon("problems")}
                   >
                     <Info className="h-4 w-4" />
                   </button>
-                  <button 
-                    className={`p-1 hover:bg-accent rounded-md mr-1 ${rightActiveIcon === "docs" ? "bg-accent/30" : ""}`}
+                  <button
+                    className={`p-1 px-2 hover:bg-accent rounded-md mr-1 ${
+                      rightActiveIcon === "docs" ? "bg-accent/30" : ""
+                    }`}
                     onClick={() => setRightActiveIcon("docs")}
                   >
                     <BookOpen className="h-4 w-4" />
                   </button>
-                  <button 
-                    className={`p-1 hover:bg-accent rounded-md ${rightActiveIcon === "help" ? "bg-accent/30" : ""}`}
+                  <button
+                    className={`p-1 px-2 hover:bg-accent rounded-md ${
+                      rightActiveIcon === "help" ? "bg-accent/30" : ""
+                    }`}
                     onClick={() => setRightActiveIcon("help")}
                   >
                     <CircleHelp className="h-4 w-4" />
                   </button>
                 </div>
               </div>
-              
+
               <div className="flex-1 overflow-auto">
                 {rightActiveIcon === "outline" && (
                   <div className="p-2">
@@ -517,7 +573,7 @@ webpack compiled successfully`}
                     </div>
                   </div>
                 )}
-                
+
                 {rightActiveIcon === "problems" && (
                   <div className="p-2">
                     <div className="text-xs mb-2">
@@ -528,7 +584,7 @@ webpack compiled successfully`}
                     </div>
                   </div>
                 )}
-                
+
                 {rightActiveIcon === "docs" && (
                   <div className="p-2">
                     <div className="text-xs mb-2">
@@ -550,7 +606,7 @@ webpack compiled successfully`}
                     </div>
                   </div>
                 )}
-                
+
                 {rightActiveIcon === "help" && (
                   <div className="p-2">
                     <div className="text-xs mb-2">
@@ -579,4 +635,4 @@ webpack compiled successfully`}
       </ResizablePanel.Root>
     </div>
   );
-} 
+}
