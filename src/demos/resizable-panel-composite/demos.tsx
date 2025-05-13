@@ -6,8 +6,17 @@ import { ThreeColumnDemo } from "./three-column";
 import { VSCodeLayoutDemo } from "./vscode-layout";
 import { VSCodeLayoutSimplifiedDemo } from "./vscode-layout-simplified";
 import { VSCodeDualSidebarDemo } from "./vscode-dual-sidebar";
+import { VSCodeActivitySidebarDemo } from "./vscode-activity-sidebar";
 
 export const resizablePanelDemos: DemoConfig[] = [
+  {
+    id: "resizable-panel-vscode-activity-sidebar",
+    title: "VS Code 活动栏分离布局",
+    component: <VSCodeActivitySidebarDemo />,
+    description: "更准确地模拟VS Code布局，活动栏保持固定宽度且不可折叠，只有侧边栏内容区域可折叠",
+    category: "布局组件",
+    tags: ["layout", "resizable", "复合布局", "IDE", "活动栏", "侧边栏"],
+  },
   {
     id: "resizable-panel-vscode-dual-sidebar",
     title: "VS Code 双侧边栏布局",

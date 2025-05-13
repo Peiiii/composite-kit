@@ -1,30 +1,27 @@
-import * as React from "react";
 import { ResizablePanel } from "@/components/resizable-panel/composite";
 import { usePanelSizes, useResizablePanel } from "@/components/resizable-panel/hooks";
-import { 
-  FileText, 
-  Code,
-  Terminal,
-  Search,
-  Server,
-  GitBranch,
-  Settings,
-  Play,
-  Folder,
-  FileBadge,
-  ChevronDown,
-  ChevronUp,
-  ChevronLeft,
-  ChevronRight,
-  LayoutGrid,
-  Users,
-  BookOpen,
-  Info,
-  PieChart,
-  Beaker,
-  Database,
-  CircleHelp
+import {
+    Beaker,
+    BookOpen,
+    ChevronDown,
+    ChevronLeft,
+    ChevronRight,
+    ChevronUp,
+    CircleHelp,
+    Code,
+    Database,
+    FileText,
+    Folder,
+    GitBranch,
+    Info,
+    LayoutGrid,
+    Play,
+    Search,
+    Settings,
+    Terminal,
+    Users
 } from "lucide-react";
+import * as React from "react";
 
 export function VSCodeDualSidebarDemo() {
   const { onLayout: onHorizontalLayout } = usePanelSizes("vscode-dual-sidebar-horizontal");
