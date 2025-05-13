@@ -4,8 +4,17 @@ import { AdvancedDemo as ResizablePanelAdvancedDemo } from "./advanced";
 import { RefControlDemo } from "./ref-control";
 import { ThreeColumnDemo } from "./three-column";
 import { VSCodeLayoutDemo } from "./vscode-layout";
+import { VSCodeLayoutSimplifiedDemo } from "./vscode-layout-simplified";
 
 export const resizablePanelDemos: DemoConfig[] = [
+  {
+    id: "resizable-panel-vscode-layout-simplified",
+    title: "VS Code 布局 (简化版)",
+    component: <VSCodeLayoutSimplifiedDemo />,
+    description: "使用自定义Hook简化的VS Code风格四栏布局，减少了状态管理的样板代码",
+    category: "布局组件",
+    tags: ["layout", "resizable", "复合布局", "IDE", "垂直拖拽", "Hook简化"],
+  },
   {
     id: "resizable-panel-vscode-layout",
     title: "VS Code 布局",
@@ -51,4 +60,5 @@ export const resizablePanelDemos: DemoConfig[] = [
 export * from "./advanced";
 export * from "./ref-control";
 export * from "./three-column";
-export * from "./vscode-layout"; 
+export * from "./vscode-layout";
+export * from "./vscode-layout-simplified"; 
