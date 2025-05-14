@@ -1,4 +1,9 @@
 export * from "./vscode-layout";
+export { VSCodeLayout as VSCodeLayoutCompound } from "./vscode-layout-compound";
+export { SidebarCompound } from "./sidebar-compound";
+export { ActivityBarCompound } from "./activity-bar-compound";
+export { EditorTabsCompound } from "./editor-tabs-compound";
+export { BottomPanelCompound } from "./bottom-panel-compound";
 export * from "./activity-bar";
 export * from "./sidebar";
 export * from "./editor-tabs";

@@ -1,6 +1,7 @@
 import * as React from "react";
-import { VSCodeLayout } from "./components/vscode-layout";
 import { VSCodeLayoutDemo } from "./components/vscode-layout-demo";
+import { VSCodeLayoutCompoundDemo } from "./components/vscode-layout-compound-demo";
+import { FullyCompoundDemo } from "./components/fully-compound-demo";
 
 export const vscodeLayoutDemos = [
   {
@@ -12,11 +13,19 @@ export const vscodeLayoutDemos = [
     tags: ["layout", "vscode", "现代化", "react-resizable-panels"],
   },
   {
-    id: "vscode-layout-demo",
-    title: "VS Code 布局示例",
-    component: <VSCodeLayout />,
-    description: "展示如何使用 VSCodeLayout 组件构建完整的 VS Code 风格界面",
+    id: "vscode-layout-compound",
+    title: "VS Code 布局（复合组件）",
+    component: <VSCodeLayoutCompoundDemo />,
+    description: "使用命名空间模式的复合组件实现的 VS Code 布局，更加灵活和可组合",
     category: "布局组件",
-    tags: ["layout", "vscode", "示例", "教程"],
+    tags: ["layout", "vscode", "复合组件", "现代化", "react-resizable-panels"],
+  },
+  {
+    id: "vscode-layout-fully-compound",
+    title: "VS Code 布局（全命名空间模式）",
+    component: <FullyCompoundDemo />,
+    description: "所有组件均使用命名空间模式实现的 VS Code 布局，完全组合式 API",
+    category: "布局组件",
+    tags: ["layout", "vscode", "复合组件", "命名空间", "组合式 API"],
   },
 ]; 
