@@ -5,18 +5,15 @@ import { Home, BookOpen, Settings, HelpCircle } from "lucide-react";
 import ThemeSwitcherDemo from "./demos/theme-switcher";
 import MobileNavComposite from "./demos/mobile-nav-composite/page";
 import VSCodeLayoutDemo from "./demos/vscode-layout/page";
-import VSCodeLayoutV2Demo from "./demos/vscode-layout-v2/page";
 import { resizablePanelDemos } from "./demos/resizable-panel-composite/demos";
 import { chatLayoutDemos } from "./demos/chat-layout/demos";
 import { activityBarDemos } from "./demos/activity-bar-composite/demos";
 import { demoGalleryDemos } from "./demos/demo-gallery-composite/demos";
+import { vscodeLayoutDemos } from "./demos/vscode-layout-v2/demos";
 
 // 所有 demo 的配置
 const demos = [
-  ...resizablePanelDemos,
-  ...chatLayoutDemos,
-  ...activityBarDemos,
-  ...demoGalleryDemos,
+  ...vscodeLayoutDemos,
   {
     id: "vscode-layout",
     title: "VS Code 布局",
@@ -25,14 +22,10 @@ const demos = [
     category: "布局组件",
     tags: ["layout", "vscode", "现代化"],
   },
-  {
-    id: "vscode-layout-v2",
-    title: "VS Code 布局 V2",
-    component: <VSCodeLayoutV2Demo />,
-    description: "使用 react-resizable-panels 实现的 VS Code 布局",
-    category: "布局组件",
-    tags: ["layout", "vscode", "现代化", "react-resizable-panels"],
-  },
+  ...resizablePanelDemos,
+  ...chatLayoutDemos,
+  ...activityBarDemos,
+  ...demoGalleryDemos,
   {
     id: "theme-switcher",
     title: "主题切换器",

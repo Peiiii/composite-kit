@@ -1,82 +1,128 @@
-import { Separator } from "@/components/ui/separator";
-import { cn } from "@/lib/utils";
 import * as React from "react";
+import {
+  Panel,
+  PanelGroup,
+  PanelResizeHandle,
+  ImperativePanelHandle,
+} from "react-resizable-panels";
+import { usePanelState } from "@/demos/vscode-layout-v2/components/use-panel-state";
 
-export interface VSCodeLayoutProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface VSCodeLayoutProps {
+  className?: string;
+  leftSidebar?: {
+    content: React.ReactNode;
+    defaultSize?: number;
+    minSize?: number;
+    maxSize?: number;
+  };
+  rightSidebar?: {
+    content: React.ReactNode;
+    defaultSize?: number;
+    minSize?: number;
+    maxSize?: number;
+  };
+  bottomPanel?: {
+    content: React.ReactNode;
+    defaultSize?: number;
+    minSize?: number;
+  };
+  mainContent: React.ReactNode;
   activityBar?: React.ReactNode;
-  sideBar?: React.ReactNode;
-  editor?: React.ReactNode;
-  panel?: React.ReactNode;
-  statusBar?: React.ReactNode;
-  secondarySideBar?: React.ReactNode;
-  sideBarWidth?: string;
-  secondarySideBarWidth?: string;
-  panelHeight?: string;
 }
 
 export function VSCodeLayout({
-  activityBar,
-  sideBar,
-  editor,
-  panel,
-  statusBar,
-  secondarySideBar,
-  sideBarWidth = "w-64",
-  secondarySideBarWidth = "w-64",
-  panelHeight = "h-48",
   className,
-  ...props
+  leftSidebar,
+  rightSidebar,
+  bottomPanel,
+  mainContent,
+  activityBar,
 }: VSCodeLayoutProps) {
+  const leftSidebarState = usePanelState();
+  const rightSidebarState = usePanelState();
+  const bottomPanelState = usePanelState();
+
   return (
-    <div className={cn("flex w-full h-full bg-background overflow-hidden", className)} {...props}>
-      {/* 左侧活动栏 */}
-      {activityBar && (
-        <div className="flex-shrink-0">
-          {activityBar}
-        </div>
-      )}
-
-      {/* 左侧侧边栏 */}
-      {sideBar && (
-        <div className={cn("flex-shrink-0 border-r", sideBarWidth)}>
-          {sideBar}
-        </div>
-      )}
-
-      {/* 主内容区 */}
-      <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
-        {/* 编辑器区域 */}
-        <div className="flex-1 min-h-0 overflow-hidden">
-          {editor}
-        </div>
-
-        {/* 底部面板 */}
-        {panel && (
-          <>
-            <Separator />
-            <div className={cn("flex-shrink-0 overflow-hidden", panelHeight)}>
-              {panel}
-            </div>
-          </>
+    <div className={`h-full w-full ${className}`}>
+      <div className="h-full w-full rounded-lg border bg-background overflow-hidden flex">
+        {/* 左侧活动栏 */}
+        {activityBar && (
+          <div className="w-12 h-full bg-muted flex flex-col items-center py-2 border-r shrink-0">
+            {activityBar}
+          </div>
         )}
 
-        {/* 状态栏 */}
-        {statusBar && (
-          <>
-            <Separator />
-            <div className="h-6 flex-shrink-0 overflow-hidden">
-              {statusBar}
-            </div>
-          </>
-        )}
+        {/* 主内容区域 */}
+        <div className="flex-1 h-full">
+          <PanelGroup direction="horizontal">
+            {/* 左侧边栏 */}
+            {leftSidebar && (
+              <>
+                <Panel
+                  ref={leftSidebarState.panelRef}
+                  defaultSize={leftSidebar.defaultSize ?? 20}
+                  minSize={leftSidebar.minSize ?? 15}
+                  maxSize={leftSidebar.maxSize ?? 30}
+                  collapsible
+                  onCollapse={leftSidebarState.collapse}
+                  onExpand={leftSidebarState.expand}
+                >
+                  {leftSidebar.content}
+                </Panel>
+
+                <PanelResizeHandle className="w-1 bg-border hover:bg-primary/20 transition-colors" />
+              </>
+            )}
+
+            {/* 主编辑区 */}
+            <Panel defaultSize={60}>
+              <PanelGroup direction="vertical">
+                {/* 编辑器区域 */}
+                <Panel defaultSize={70}>
+                  {mainContent}
+                </Panel>
+
+                {/* 底部面板 */}
+                {bottomPanel && (
+                  <>
+                    <PanelResizeHandle className="h-1 bg-border hover:bg-primary/20 transition-colors" />
+
+                    <Panel
+                      ref={bottomPanelState.panelRef}
+                      defaultSize={bottomPanel.defaultSize ?? 30}
+                      minSize={bottomPanel.minSize ?? 20}
+                      collapsible
+                      onCollapse={bottomPanelState.collapse}
+                      onExpand={bottomPanelState.expand}
+                    >
+                      {bottomPanel.content}
+                    </Panel>
+                  </>
+                )}
+              </PanelGroup>
+            </Panel>
+
+            {/* 右侧边栏 */}
+            {rightSidebar && (
+              <>
+                <PanelResizeHandle className="w-1 bg-border hover:bg-primary/20 transition-colors" />
+
+                <Panel
+                  ref={rightSidebarState.panelRef}
+                  defaultSize={rightSidebar.defaultSize ?? 20}
+                  minSize={rightSidebar.minSize ?? 15}
+                  maxSize={rightSidebar.maxSize ?? 30}
+                  collapsible
+                  onCollapse={rightSidebarState.collapse}
+                  onExpand={rightSidebarState.expand}
+                >
+                  {rightSidebar.content}
+                </Panel>
+              </>
+            )}
+          </PanelGroup>
+        </div>
       </div>
-
-      {/* 右侧侧边栏 */}
-      {secondarySideBar && (
-        <div className={cn("flex-shrink-0 border-l overflow-hidden", secondarySideBarWidth)}>
-          {secondarySideBar}
-        </div>
-      )}
     </div>
   );
 } 
