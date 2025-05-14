@@ -5,6 +5,7 @@ import { Home, BookOpen, Settings, HelpCircle } from "lucide-react";
 import ThemeSwitcherDemo from "./demos/theme-switcher";
 import MobileNavComposite from "./demos/mobile-nav-composite/page";
 import VSCodeLayoutDemo from "./demos/vscode-layout/page";
+import VSCodeLayoutV2Demo from "./demos/vscode-layout-v2/page";
 import { resizablePanelDemos } from "./demos/resizable-panel-composite/demos";
 import { chatLayoutDemos } from "./demos/chat-layout/demos";
 import { activityBarDemos } from "./demos/activity-bar-composite/demos";
@@ -23,6 +24,14 @@ const demos = [
     description: "一个类似 VS Code 的现代化布局方案",
     category: "布局组件",
     tags: ["layout", "vscode", "现代化"],
+  },
+  {
+    id: "vscode-layout-v2",
+    title: "VS Code 布局 V2",
+    component: <VSCodeLayoutV2Demo />,
+    description: "使用 react-resizable-panels 实现的 VS Code 布局",
+    category: "布局组件",
+    tags: ["layout", "vscode", "现代化", "react-resizable-panels"],
   },
   {
     id: "theme-switcher",
@@ -80,7 +89,7 @@ const App = React.memo(function App() {
       <div className="flex-1 overflow-hidden">
         <DemoGallery.Root
           demos={demos}
-          defaultDemoId="theme-switcher"
+          defaultDemoId="vscode-layout-v2"
           className="h-full"
         >
           <DemoGallery.Sidebar
@@ -92,7 +101,7 @@ const App = React.memo(function App() {
             sidebarWidth="w-64"
           />
           <DemoGallery.ExpandButton />
-          <DemoGallery.Content >
+          <DemoGallery.Content>
             <DemoCardContainer
               showTags={true}
               showDescription={true}
