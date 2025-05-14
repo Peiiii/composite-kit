@@ -108,7 +108,7 @@ export function VSCodeLayout({ className }: VSCodeLayoutProps) {
             >
               <div className="h-full flex flex-col border-r">
                 <div className="border-b p-2 flex justify-between items-center">
-                  <h3 className="font-semibold text-sm">
+                  <h3 className="font-semibold text-sm truncate">
                     {activeLeftIcon === "explorer" && "资源管理器"}
                     {activeLeftIcon === "search" && "搜索"}
                     {activeLeftIcon === "git" && "源代码管理"}
@@ -117,7 +117,7 @@ export function VSCodeLayout({ className }: VSCodeLayoutProps) {
                   </h3>
                   <button
                     onClick={leftSidebar.toggle}
-                    className="rounded-md p-1 hover:bg-accent"
+                    className="rounded-md p-1 hover:bg-accent shrink-0"
                   >
                     <ChevronLeft className="h-4 w-4" />
                   </button>
@@ -128,18 +128,18 @@ export function VSCodeLayout({ className }: VSCodeLayoutProps) {
                     <div className="p-2">
                       <div className="mb-2">
                         <div className="flex items-center mb-1">
-                          <ChevronDown className="h-3 w-3 mr-1" />
-                          <span className="text-xs font-medium">项目</span>
+                          <ChevronDown className="h-3 w-3 mr-1 shrink-0" />
+                          <span className="text-xs font-medium truncate">项目</span>
                         </div>
                         <div className="ml-4">
                           <div className="flex items-center py-1 text-xs hover:bg-accent rounded px-1 cursor-pointer">
-                            <Folder className="h-3 w-3 mr-1 text-muted-foreground" />
-                            <span>src</span>
+                            <Folder className="h-3 w-3 mr-1 text-muted-foreground shrink-0" />
+                            <span className="truncate">src</span>
                           </div>
                           <div className="ml-2">
                             <div className="flex items-center py-1 text-xs hover:bg-accent rounded px-1 cursor-pointer">
-                              <Folder className="h-3 w-3 mr-1 text-muted-foreground" />
-                              <span>components</span>
+                              <Folder className="h-3 w-3 mr-1 text-muted-foreground shrink-0" />
+                              <span className="truncate">components</span>
                             </div>
                             <div className="ml-2">
                               <div
@@ -150,8 +150,8 @@ export function VSCodeLayout({ className }: VSCodeLayoutProps) {
                                 }`}
                                 onClick={() => setActiveFile("button.tsx")}
                               >
-                                <FileText className="h-3 w-3 mr-1 text-muted-foreground" />
-                                <span>button.tsx</span>
+                                <FileText className="h-3 w-3 mr-1 text-muted-foreground shrink-0" />
+                                <span className="truncate">button.tsx</span>
                               </div>
                               <div
                                 className={`flex items-center py-1 text-xs rounded px-1 cursor-pointer ${
@@ -161,8 +161,8 @@ export function VSCodeLayout({ className }: VSCodeLayoutProps) {
                                 }`}
                                 onClick={() => setActiveFile("index.tsx")}
                               >
-                                <FileText className="h-3 w-3 mr-1 text-muted-foreground" />
-                                <span>index.tsx</span>
+                                <FileText className="h-3 w-3 mr-1 text-muted-foreground shrink-0" />
+                                <span className="truncate">index.tsx</span>
                               </div>
                             </div>
                           </div>
@@ -355,7 +355,7 @@ webpack compiled successfully`}
               <div className="flex h-full">
                 <div className="flex-1 h-full flex flex-col border-l">
                   <div className="border-b p-2 flex justify-between items-center">
-                    <h3 className="font-semibold text-sm">
+                    <h3 className="font-semibold text-sm truncate">
                       {activeRightIcon === "outline" && "大纲"}
                       {activeRightIcon === "problems" && "问题"}
                       {activeRightIcon === "docs" && "文档"}
@@ -364,7 +364,7 @@ webpack compiled successfully`}
                     <div className="flex items-center">
                       <button
                         onClick={rightSidebar.toggle}
-                        className="rounded-md p-1 hover:bg-accent"
+                        className="rounded-md p-1 hover:bg-accent shrink-0"
                       >
                         <ChevronRight className="h-4 w-4" />
                       </button>
@@ -375,7 +375,7 @@ webpack compiled successfully`}
                   <div className="border-b flex items-center justify-between py-1 px-2">
                     <div className="flex">
                       <button
-                        className={`p-1 hover:bg-accent rounded-md mr-1 ${
+                        className={`p-1 hover:bg-accent rounded-md mr-1 shrink-0 ${
                           activeRightIcon === "outline" ? "bg-accent/30" : ""
                         }`}
                         onClick={() => setActiveRightIcon("outline")}
@@ -383,7 +383,7 @@ webpack compiled successfully`}
                         <Code className="h-4 w-4" />
                       </button>
                       <button
-                        className={`p-1 hover:bg-accent rounded-md mr-1 ${
+                        className={`p-1 hover:bg-accent rounded-md mr-1 shrink-0 ${
                           activeRightIcon === "problems" ? "bg-accent/30" : ""
                         }`}
                         onClick={() => setActiveRightIcon("problems")}
@@ -391,7 +391,7 @@ webpack compiled successfully`}
                         <Info className="h-4 w-4" />
                       </button>
                       <button
-                        className={`p-1 hover:bg-accent rounded-md mr-1 ${
+                        className={`p-1 hover:bg-accent rounded-md mr-1 shrink-0 ${
                           activeRightIcon === "docs" ? "bg-accent/30" : ""
                         }`}
                         onClick={() => setActiveRightIcon("docs")}
@@ -399,7 +399,7 @@ webpack compiled successfully`}
                         <BookOpen className="h-4 w-4" />
                       </button>
                       <button
-                        className={`p-1 hover:bg-accent rounded-md ${
+                        className={`p-1 hover:bg-accent rounded-md shrink-0 ${
                           activeRightIcon === "help" ? "bg-accent/30" : ""
                         }`}
                         onClick={() => setActiveRightIcon("help")}
@@ -413,23 +413,23 @@ webpack compiled successfully`}
                     {activeRightIcon === "outline" && (
                       <div className="p-2">
                         <div className="text-xs mb-2">
-                          <div className="font-medium mb-1">大纲</div>
+                          <div className="font-medium mb-1 truncate">大纲</div>
                           {activeFile === "index.tsx" ? (
                             <div className="ml-2">
                               <div className="flex items-center py-1 hover:bg-accent rounded px-1 cursor-pointer">
-                                <Code className="h-3 w-3 mr-1 text-muted-foreground" />
-                                <span>App (function)</span>
+                                <Code className="h-3 w-3 mr-1 text-muted-foreground shrink-0" />
+                                <span className="truncate">App (function)</span>
                               </div>
                             </div>
                           ) : (
                             <div className="ml-2">
                               <div className="flex items-center py-1 hover:bg-accent rounded px-1 cursor-pointer">
-                                <Code className="h-3 w-3 mr-1 text-muted-foreground" />
-                                <span>ButtonProps (interface)</span>
+                                <Code className="h-3 w-3 mr-1 text-muted-foreground shrink-0" />
+                                <span className="truncate">ButtonProps (interface)</span>
                               </div>
                               <div className="flex items-center py-1 hover:bg-accent rounded px-1 cursor-pointer">
-                                <Code className="h-3 w-3 mr-1 text-muted-foreground" />
-                                <span>Button (function)</span>
+                                <Code className="h-3 w-3 mr-1 text-muted-foreground shrink-0" />
+                                <span className="truncate">Button (function)</span>
                               </div>
                             </div>
                           )}
