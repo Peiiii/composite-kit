@@ -4,9 +4,7 @@ import { ActivityBar } from "@/components/activity-bar";
 import { Home, BookOpen, Settings, HelpCircle } from "lucide-react";
 import ThemeSwitcherDemo from "./demos/theme-switcher";
 import MobileNavComposite from "./demos/mobile-nav-composite/page";
-import VSCodeLayoutDemo from "./demos/vscode-layout/page";
 import { resizablePanelDemos } from "./demos/resizable-panel-composite/demos";
-import { chatLayoutDemos } from "./demos/chat-layout/demos";
 import { activityBarDemos } from "./demos/activity-bar-composite/demos";
 import { demoGalleryDemos } from "./demos/demo-gallery-composite/demos";
 import { vscodeLayoutDemos } from "./demos/vscode-layout-v2/demos";
@@ -14,16 +12,7 @@ import { vscodeLayoutDemos } from "./demos/vscode-layout-v2/demos";
 // 所有 demo 的配置
 const demos = [
   ...vscodeLayoutDemos,
-  {
-    id: "vscode-layout",
-    title: "VS Code 布局",
-    component: <VSCodeLayoutDemo />,
-    description: "一个类似 VS Code 的现代化布局方案",
-    category: "布局组件",
-    tags: ["layout", "vscode", "现代化"],
-  },
   ...resizablePanelDemos,
-  ...chatLayoutDemos,
   ...activityBarDemos,
   ...demoGalleryDemos,
   {

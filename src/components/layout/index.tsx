@@ -8,35 +8,37 @@ export * from "./hooks";
 
 // 从primitive.ts导出，但排除VSCodeLayout
 export {
-  ActivityBar,
+  ActivityBar as ActivityBarPrimitive,
   ActivityBarGroup,
   ActivityBarItem,
-  BottomPanel,
+  BottomPanel as BottomPanelPrimitive,
   BottomPanelContent,
   BottomPanelTab,
   BottomPanelTabs,
   EditorTab,
-  EditorTabs,
-  FileExplorer,
+  EditorTabs as EditorTabsPrimitive,
+  FileExplorer as FileExplorerPrimitive,
   FileExplorerFolder,
   FileExplorerGroup,
   FileExplorerItem,
-  Outline,
+  Outline as OutlinePrimitive,
   OutlineGroup,
   OutlineItem,
-  Sidebar,
+  Sidebar as SidebarPrimitive,
   SidebarContent,
-  SidebarHeader,
+  SidebarHeader
 } from "./primitive";
 
-// 从compound.ts导出，但排除VSCodeLayout
+// 从compound.ts导出复合组件
 export {
-  ActivityBarCompound,
-  BottomPanelCompound,
-  EditorTabsCompound,
-  SidebarCompound,
+  ActivityBar,
+  BottomPanel,
+  EditorTabs,
+  FileExplorer,
+  Outline,
+  Sidebar,
+  VSCodeLayout
 } from "./compound";
 
 // 单独导出并重命名以避免冲突
 export { VSCodeLayout as VSCodeLayoutPrimitive } from "./components/vscode-layout";
-export { VSCodeLayout as VSCodeLayoutCompound } from "./compounds/vscode-layout-compound";

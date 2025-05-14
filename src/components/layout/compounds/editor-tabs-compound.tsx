@@ -49,7 +49,7 @@ const EditorTab = React.forwardRef<HTMLButtonElement, EditorTabProps>(
 EditorTab.displayName = "EditorTabs.Tab";
 
 // 导出复合组件
-export const EditorTabsCompound = {
+export const EditorTabs = {
   Root: EditorTabsRoot,
   Tab: EditorTab,
 }; 

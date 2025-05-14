@@ -67,7 +67,7 @@ const ActivityBarItem = React.forwardRef<HTMLButtonElement, ActivityBarItemProps
 ActivityBarItem.displayName = "ActivityBar.Item";
 
 // 导出复合组件
-export const ActivityBarCompound = {
+export const ActivityBar = {
   Root: ActivityBarRoot,
   Group: ActivityBarGroup,
   Item: ActivityBarItem,

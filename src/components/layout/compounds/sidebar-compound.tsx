@@ -89,8 +89,8 @@ const SidebarContent = React.forwardRef<HTMLDivElement, SidebarContentProps>(
 SidebarContent.displayName = "Sidebar.Content";
 
 // 导出复合组件
-export const SidebarCompound = {
+export const Sidebar = {
   Root: SidebarRoot,
   Header: SidebarHeader,
   Content: SidebarContent,
-}; 
+};

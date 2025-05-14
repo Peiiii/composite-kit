@@ -89,7 +89,7 @@ const BottomPanelContent = React.forwardRef<HTMLDivElement, BottomPanelContentPr
 BottomPanelContent.displayName = "BottomPanel.Content";
 
 // 导出复合组件
-export const BottomPanelCompound = {
+export const BottomPanel = {
   Root: BottomPanelRoot,
   Tabs: BottomPanelTabs,
   Tab: BottomPanelTab,

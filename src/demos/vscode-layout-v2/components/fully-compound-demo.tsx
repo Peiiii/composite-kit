@@ -1,19 +1,12 @@
 import {
-    ActivityBarCompound,
-    BottomPanelCompound,
-    EditorTabsCompound,
-    SidebarCompound,
+    ActivityBar,
+    BottomPanel,
+    EditorTabs,
+    FileExplorer,
+    Outline,
+    Sidebar,
     VSCodeLayout,
 } from "@/components/layout/compound";
-import {
-    FileExplorer,
-    FileExplorerFolder,
-    FileExplorerGroup,
-    FileExplorerItem,
-    Outline,
-    OutlineGroup,
-    OutlineItem,
-} from "@/components/layout/primitive";
 import { useResizablePanel } from "@/components/layout/hooks";
 import {
     Code,
@@ -49,39 +42,39 @@ export function FullyCompoundDemo() {
       <VSCodeLayout.Root>
         {/* 左侧活动栏 */}
         <VSCodeLayout.ActivityBar>
-          <ActivityBarCompound.Root>
-            <ActivityBarCompound.Group>
-              <ActivityBarCompound.Item
+          <ActivityBar.Root>
+            <ActivityBar.Group>
+              <ActivityBar.Item
                 active={activeLeftIcon === "explorer"}
                 icon={<Folder className="h-5 w-5" />}
                 onClick={() => setActiveLeftIcon("explorer")}
               />
-              <ActivityBarCompound.Item
+              <ActivityBar.Item
                 active={activeLeftIcon === "search"}
                 icon={<Search className="h-5 w-5" />}
                 onClick={() => setActiveLeftIcon("search")}
               />
-              <ActivityBarCompound.Item
+              <ActivityBar.Item
                 active={activeLeftIcon === "git"}
                 icon={<GitBranch className="h-5 w-5" />}
                 onClick={() => setActiveLeftIcon("git")}
               />
-              <ActivityBarCompound.Item
+              <ActivityBar.Item
                 active={activeLeftIcon === "debug"}
                 icon={<Play className="h-5 w-5" />}
                 onClick={() => setActiveLeftIcon("debug")}
               />
-              <ActivityBarCompound.Item
+              <ActivityBar.Item
                 active={activeLeftIcon === "extensions"}
                 icon={<LayoutGrid className="h-5 w-5" />}
                 onClick={() => setActiveLeftIcon("extensions")}
               />
-            </ActivityBarCompound.Group>
-            <ActivityBarCompound.Group className="mt-auto">
-              <ActivityBarCompound.Item icon={<Users className="h-5 w-5" />} />
-              <ActivityBarCompound.Item icon={<Settings className="h-5 w-5" />} />
-            </ActivityBarCompound.Group>
-          </ActivityBarCompound.Root>
+            </ActivityBar.Group>
+            <ActivityBar.Group className="mt-auto">
+              <ActivityBar.Item icon={<Users className="h-5 w-5" />} />
+              <ActivityBar.Item icon={<Settings className="h-5 w-5" />} />
+            </ActivityBar.Group>
+          </ActivityBar.Root>
         </VSCodeLayout.ActivityBar>
 
         {/* 主内容区域 */}
@@ -89,8 +82,8 @@ export function FullyCompoundDemo() {
           <VSCodeLayout.Horizontal>
             {/* 左侧边栏 */}
             <VSCodeLayout.LeftSidebar ref={leftSidebar.ref}>
-              <SidebarCompound.Root position="left" onToggle={leftSidebar.toggle}>
-                <SidebarCompound.Header>
+              <Sidebar.Root position="left" onToggle={leftSidebar.toggle}>
+                <Sidebar.Header>
                   <h3 className="font-semibold text-sm truncate">
                     {activeLeftIcon === "explorer" && "资源管理器"}
                     {activeLeftIcon === "search" && "搜索"}
@@ -98,34 +91,34 @@ export function FullyCompoundDemo() {
                     {activeLeftIcon === "debug" && "运行和调试"}
                     {activeLeftIcon === "extensions" && "扩展"}
                   </h3>
-                </SidebarCompound.Header>
-                <SidebarCompound.Content>
+                </Sidebar.Header>
+                <Sidebar.Content>
                   {activeLeftIcon === "explorer" && (
-                    <FileExplorer>
-                      <FileExplorerGroup title="项目">
-                        <FileExplorerFolder>src</FileExplorerFolder>
+                    <FileExplorer.Root>
+                      <FileExplorer.Group title="项目">
+                        <FileExplorer.Folder>src</FileExplorer.Folder>
                         <div className="ml-2">
-                          <FileExplorerFolder>components</FileExplorerFolder>
+                          <FileExplorer.Folder>components</FileExplorer.Folder>
                           <div className="ml-2">
-                            <FileExplorerItem
+                            <FileExplorer.Item
                               active={activeFile === "button.tsx"}
                               onClick={() => setActiveFile("button.tsx")}
                             >
                               button.tsx
-                            </FileExplorerItem>
-                            <FileExplorerItem
+                            </FileExplorer.Item>
+                            <FileExplorer.Item
                               active={activeFile === "index.tsx"}
                               onClick={() => setActiveFile("index.tsx")}
                             >
                               index.tsx
-                            </FileExplorerItem>
+                            </FileExplorer.Item>
                           </div>
                         </div>
-                      </FileExplorerGroup>
-                    </FileExplorer>
+                      </FileExplorer.Group>
+                    </FileExplorer.Root>
                   )}
-                </SidebarCompound.Content>
-              </SidebarCompound.Root>
+                </Sidebar.Content>
+              </Sidebar.Root>
             </VSCodeLayout.LeftSidebar>
 
             <VSCodeLayout.ResizeHandle withHandle />
@@ -136,22 +129,22 @@ export function FullyCompoundDemo() {
                 {/* 编辑器区域 */}
                 <VSCodeLayout.Panel>
                   <div className="flex h-full flex-col">
-                    <EditorTabsCompound.Root>
-                      <EditorTabsCompound.Tab
+                    <EditorTabs.Root>
+                      <EditorTabs.Tab
                         active={activeFile === "index.tsx"}
                         icon={<FileText className="h-3 w-3" />}
                         onClick={() => setActiveFile("index.tsx")}
                       >
                         index.tsx
-                      </EditorTabsCompound.Tab>
-                      <EditorTabsCompound.Tab
+                      </EditorTabs.Tab>
+                      <EditorTabs.Tab
                         active={activeFile === "button.tsx"}
                         icon={<FileText className="h-3 w-3" />}
                         onClick={() => setActiveFile("button.tsx")}
                       >
                         button.tsx
-                      </EditorTabsCompound.Tab>
-                    </EditorTabsCompound.Root>
+                      </EditorTabs.Tab>
+                    </EditorTabs.Root>
 
                     <div className="flex-1 overflow-auto p-4 bg-muted/10">
                       {activeFile === "index.tsx" ? (
@@ -211,31 +204,31 @@ export function Button({
 
                 {/* 底部面板 */}
                 <VSCodeLayout.BottomPanel ref={bottomPanel.ref}>
-                  <BottomPanelCompound.Root>
-                    <BottomPanelCompound.Tabs>
-                      <BottomPanelCompound.Tab
+                  <BottomPanel.Root>
+                    <BottomPanel.Tabs>
+                      <BottomPanel.Tab
                         active={activeTab === "terminal"}
                         icon={<Terminal className="h-3 w-3" />}
                         onClick={() => setActiveTab("terminal")}
                       >
                         终端
-                      </BottomPanelCompound.Tab>
-                      <BottomPanelCompound.Tab
+                      </BottomPanel.Tab>
+                      <BottomPanel.Tab
                         active={activeTab === "output"}
                         icon={<Code className="h-3 w-3" />}
                         onClick={() => setActiveTab("output")}
                       >
                         输出
-                      </BottomPanelCompound.Tab>
-                      <BottomPanelCompound.Tab
+                      </BottomPanel.Tab>
+                      <BottomPanel.Tab
                         active={activeTab === "debug"}
                         icon={<Play className="h-3 w-3" />}
                         onClick={() => setActiveTab("debug")}
                       >
                         调试
-                      </BottomPanelCompound.Tab>
-                    </BottomPanelCompound.Tabs>
-                    <BottomPanelCompound.Content>
+                      </BottomPanel.Tab>
+                    </BottomPanel.Tabs>
+                    <BottomPanel.Content>
                       {activeTab === "terminal" && (
                         <pre className="text-xs font-mono text-muted-foreground p-2">
                           {`$ npm start
@@ -257,8 +250,8 @@ To create a production build, use npm run build.
 webpack compiled successfully`}
                         </pre>
                       )}
-                    </BottomPanelCompound.Content>
-                  </BottomPanelCompound.Root>
+                    </BottomPanel.Content>
+                  </BottomPanel.Root>
                 </VSCodeLayout.BottomPanel>
               </VSCodeLayout.Vertical>
             </VSCodeLayout.Panel>
@@ -267,32 +260,32 @@ webpack compiled successfully`}
 
             {/* 右侧边栏 */}
             <VSCodeLayout.RightSidebar ref={rightSidebar.ref}>
-              <SidebarCompound.Root position="right" onToggle={rightSidebar.toggle}>
-                <SidebarCompound.Header>
+              <Sidebar.Root position="right" onToggle={rightSidebar.toggle}>
+                <Sidebar.Header>
                   <h3 className="font-semibold text-sm truncate">
                     {activeRightIcon === "outline" && "大纲"}
                     {activeRightIcon === "problems" && "问题"}
                     {activeRightIcon === "docs" && "文档"}
                     {activeRightIcon === "help" && "帮助"}
                   </h3>
-                </SidebarCompound.Header>
-                <SidebarCompound.Content>
+                </Sidebar.Header>
+                <Sidebar.Content>
                   {activeRightIcon === "outline" && (
-                    <Outline>
-                      <OutlineGroup title="大纲">
+                    <Outline.Root>
+                      <Outline.Group title="大纲">
                         {activeFile === "index.tsx" ? (
-                          <OutlineItem itemType="function">App</OutlineItem>
+                          <Outline.Item itemType="function">App</Outline.Item>
                         ) : (
                           <>
-                            <OutlineItem itemType="interface">ButtonProps</OutlineItem>
-                            <OutlineItem itemType="function">Button</OutlineItem>
+                            <Outline.Item itemType="interface">ButtonProps</Outline.Item>
+                            <Outline.Item itemType="function">Button</Outline.Item>
                           </>
                         )}
-                      </OutlineGroup>
-                    </Outline>
+                      </Outline.Group>
+                    </Outline.Root>
                   )}
-                </SidebarCompound.Content>
-              </SidebarCompound.Root>
+                </Sidebar.Content>
+              </Sidebar.Root>
             </VSCodeLayout.RightSidebar>
           </VSCodeLayout.Horizontal>
         </VSCodeLayout.Main>

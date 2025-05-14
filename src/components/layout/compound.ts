@@ -4,7 +4,9 @@
  */
  
 export { VSCodeLayout } from "./compounds/vscode-layout-compound";
-export { SidebarCompound } from "./compounds/sidebar-compound";
-export { ActivityBarCompound } from "./compounds/activity-bar-compound";
-export { EditorTabsCompound } from "./compounds/editor-tabs-compound";
-export { BottomPanelCompound } from "./compounds/bottom-panel-compound"; 
+export { Sidebar } from "./compounds/sidebar-compound";
+export { ActivityBar } from "./compounds/activity-bar-compound";
+export { EditorTabs } from "./compounds/editor-tabs-compound";
+export { BottomPanel } from "./compounds/bottom-panel-compound";
+export { FileExplorer } from "./compounds/file-explorer-compound";
+export { Outline } from "./compounds/outline-compound"; 
