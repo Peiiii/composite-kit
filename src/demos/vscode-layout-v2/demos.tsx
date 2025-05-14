@@ -2,8 +2,25 @@ import * as React from "react";
 import { VSCodeLayoutDemo } from "./components/vscode-layout-demo";
 import { VSCodeLayoutCompoundDemo } from "./components/vscode-layout-compound-demo";
 import { FullyCompoundDemo } from "./components/fully-compound-demo";
+import { ConfiguratorDemo } from "./components/configurator-demo";
+import { LayoutControlsDemo } from "./components/layout-controls-demo";
 
 export const vscodeLayoutDemos = [
+  {
+    id: "vscode-layout-v2-layout-controls",
+    title: "VS Code 布局控制",
+    component: <LayoutControlsDemo />,
+    description: "展示VSCode布局的控制功能，包括面板显示/隐藏、折叠/展开以及布局预设",
+    category: "布局组件",
+    tags: ["layout", "vscode", "controls", "sidebar", "panel"],
+  },
+  {
+    id: "vscode-layout-v2-configurator",
+    title: "VS Code 布局 V2（配置器）",
+    component: <ConfiguratorDemo />,
+    description: "使用 react-resizable-panels 实现的 VS Code 布局，支持面板拖拽调整大小和折叠",
+    category: "布局组件",
+  },
   {
     id: "vscode-layout-v2",
     title: "VS Code 布局 V2",

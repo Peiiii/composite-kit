@@ -4,4 +4,5 @@
  */
  
 export * from "./use-resizable-panel";
-export * from "./use-panel-state"; 
+export * from "./use-panel-state";
+export * from "./use-vscode-layout-state";

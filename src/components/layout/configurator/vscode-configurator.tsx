@@ -10,6 +10,7 @@ import {
   VSCodeLayout,
 } from "../compound";
 import { useResizablePanel } from "../hooks";
+import { VSCodeLayoutState } from "../hooks/use-vscode-layout-state";
 
 // 活动栏项目配置
 export interface ActivityBarItemConfig {
@@ -109,6 +110,9 @@ export interface VSCodeConfiguratorProps {
 
   // 根布局配置
   rootClassName?: string;
+  
+  // 布局状态
+  layoutState?: VSCodeLayoutState;
 }
 
 export function VSCodeConfigurator({
@@ -118,6 +122,7 @@ export function VSCodeConfigurator({
   editor,
   bottomPanel,
   rootClassName,
+  layoutState,
 }: VSCodeConfiguratorProps) {
   // 状态管理
   const [activeActivityItem, setActiveActivityItem] = React.useState<string>(
@@ -132,10 +137,28 @@ export function VSCodeConfigurator({
     bottomPanel?.initialActiveTabId || bottomPanel?.tabs?.[0]?.id || ""
   );
 
+  // 缓存面板配置，以便在隐藏/显示切换时保持状态
+  const leftSidebarConfig = React.useRef(leftSidebar);
+  const rightSidebarConfig = React.useRef(rightSidebar);
+  const bottomPanelConfig = React.useRef(bottomPanel);
+
+  // 当配置变化时更新缓存
+  React.useEffect(() => {
+    if (leftSidebar) leftSidebarConfig.current = leftSidebar;
+  }, [leftSidebar]);
+
+  React.useEffect(() => {
+    if (rightSidebar) rightSidebarConfig.current = rightSidebar;
+  }, [rightSidebar]);
+
+  React.useEffect(() => {
+    if (bottomPanel) bottomPanelConfig.current = bottomPanel;
+  }, [bottomPanel]);
+
   // 使用Hook管理可调整大小的面板
-  const leftPanelState = useResizablePanel();
-  const rightPanelState = useResizablePanel();
-  const bottomPanelState = useResizablePanel();
+  const leftPanelState = layoutState ? { ref: layoutState.leftSidebarRef, toggle: layoutState.isLeftSidebarCollapsed ? layoutState.expandLeftSidebar : layoutState.collapseLeftSidebar } : useResizablePanel();
+  const rightPanelState = layoutState ? { ref: layoutState.rightSidebarRef, toggle: layoutState.isRightSidebarCollapsed ? layoutState.expandRightSidebar : layoutState.collapseRightSidebar } : useResizablePanel();
+  const bottomPanelState = layoutState ? { ref: layoutState.bottomPanelRef, toggle: layoutState.isBottomPanelCollapsed ? layoutState.expandBottomPanel : layoutState.collapseBottomPanel } : useResizablePanel();
 
   // 渲染文件树
   const renderFileTree = (files: FileItemConfig[], depth = 0) => {
