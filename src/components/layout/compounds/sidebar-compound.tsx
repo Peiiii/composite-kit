@@ -93,4 +93,4 @@ export const Sidebar = {
   Root: SidebarRoot,
   Header: SidebarHeader,
   Content: SidebarContent,
-};
+}; 

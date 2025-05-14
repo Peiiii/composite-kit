@@ -199,7 +199,7 @@ const VSCodeLayoutLeftSidebar = React.forwardRef<ImperativePanelHandle, VSCodeLa
         collapsible
         onCollapse={panelState.collapse}
         onExpand={panelState.expand}
-        className={className}
+        className={`overflow-hidden ${className || ""}`}
         {...props}
       >
         {children}
@@ -233,7 +233,7 @@ const VSCodeLayoutRightSidebar = React.forwardRef<ImperativePanelHandle, VSCodeL
         collapsible
         onCollapse={panelState.collapse}
         onExpand={panelState.expand}
-        className={className}
+        className={`overflow-hidden ${className || ""}`}
         {...props}
       >
         {children}

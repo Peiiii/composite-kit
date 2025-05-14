@@ -161,7 +161,7 @@ export function VSCodeConfigurator({
   const bottomPanelState = layoutState ? { ref: layoutState.bottomPanelRef, toggle: layoutState.isBottomPanelCollapsed ? layoutState.expandBottomPanel : layoutState.collapseBottomPanel } : useResizablePanel();
 
   // 渲染文件树
-  const renderFileTree = (files: FileItemConfig[], depth = 0) => {
+  const renderFileTree = React.useCallback((files: FileItemConfig[], depth = 0) => {
     return files.map((file) => {
       if (file.isFolder) {
         return (
@@ -180,13 +180,20 @@ export function VSCodeConfigurator({
         <FileExplorer.Item
           key={file.id}
           active={activeEditorTab === file.id}
-          onClick={() => file.content && setActiveEditorTab(file.id)}
+          onClick={() => {
+            if (file.content) {
+              // 使用requestAnimationFrame延迟执行，避免立即更新状态引起的布局变化
+              requestAnimationFrame(() => {
+                setActiveEditorTab(file.id);
+              });
+            }
+          }}
         >
           {file.name}
         </FileExplorer.Item>
       );
     });
-  };
+  }, [activeEditorTab, setActiveEditorTab]); // 仅在这些依赖变化时重新创建函数
 
   return (
     <div className={cn("h-full w-full", rootClassName)}>
@@ -391,3 +398,4 @@ export function VSCodeConfigurator({
     </div>
   );
 }
+ 

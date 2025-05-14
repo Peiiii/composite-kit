@@ -17,11 +17,27 @@ import {
   ChevronLeft,
   ChevronRight,
   ChevronDown,
-  ChevronUp
+  ChevronUp,
+  Maximize2,
+  Minimize2
 } from "lucide-react";
 
 export function ConfiguratorDemo() {
   const layoutState = useVSCodeLayoutState();
+  
+  // 专注模式 - 折叠所有面板
+  const activateFocusMode = React.useCallback(() => {
+    if (layoutState.leftSidebarVisible) layoutState.collapseLeftSidebar();
+    if (layoutState.rightSidebarVisible) layoutState.collapseRightSidebar();
+    if (layoutState.bottomPanelVisible) layoutState.collapseBottomPanel();
+  }, [layoutState]);
+  
+  // 完整视图 - 展开所有面板
+  const activateFullView = React.useCallback(() => {
+    if (layoutState.leftSidebarVisible) layoutState.expandLeftSidebar();
+    if (layoutState.rightSidebarVisible) layoutState.expandRightSidebar();
+    if (layoutState.bottomPanelVisible) layoutState.expandBottomPanel();
+  }, [layoutState]);
   
   return (
     <div className="flex flex-col h-[650px] w-full gap-4">
@@ -73,6 +89,23 @@ export function ConfiguratorDemo() {
         >
           {layoutState.isBottomPanelCollapsed ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
           {layoutState.isBottomPanelCollapsed ? "展开底部面板" : "折叠底部面板"}
+        </button>
+      </div>
+      
+      <div className="flex gap-2 px-4">
+        <button 
+          className="px-3 py-1 text-sm rounded bg-muted hover:bg-muted/80 flex items-center gap-1"
+          onClick={activateFocusMode}
+        >
+          <Maximize2 className="h-4 w-4" />
+          专注模式
+        </button>
+        <button 
+          className="px-3 py-1 text-sm rounded bg-muted hover:bg-muted/80 flex items-center gap-1"
+          onClick={activateFullView}
+        >
+          <Minimize2 className="h-4 w-4" />
+          完整视图
         </button>
       </div>
       

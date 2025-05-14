@@ -22,7 +22,7 @@ const FileExplorer = React.forwardRef<HTMLDivElement, FileExplorerProps>(
     return (
       <div
         ref={ref}
-        className={cn("p-2", className)}
+        className={cn("p-2 w-full", className)}
         {...props}
       >
         {children}
@@ -77,7 +77,7 @@ const FileExplorerItem = React.forwardRef<HTMLButtonElement, FileExplorerItemPro
         {...props}
       >
         {icon || <FileText className="h-3 w-3 mr-1 text-muted-foreground shrink-0" />}
-        <span className="truncate">{children}</span>
+        <span className="truncate w-full text-left">{children}</span>
       </button>
     );
   }
