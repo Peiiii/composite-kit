@@ -1,4 +1,4 @@
-import { VSCodeLayout } from "@/components/layout/vscode-layout";
+import { VSCodeLayout } from "@/components/layout/primitive";
 import {
   ActivityBar,
   ActivityBarItem,
@@ -19,8 +19,8 @@ import {
   Outline,
   OutlineGroup,
   OutlineItem,
-  useResizablePanel,
-} from "@/components/layout";
+} from "@/components/layout/primitive";
+import { useResizablePanel } from "@/components/layout/hooks";
 import {
   BookOpen,
   ChevronDown,

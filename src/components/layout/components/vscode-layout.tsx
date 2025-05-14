@@ -5,7 +5,7 @@ import {
   PanelResizeHandle,
   ImperativePanelHandle,
 } from "react-resizable-panels";
-import { usePanelState } from "./hooks/use-panel-state";
+import { usePanelState } from "../hooks/use-panel-state";
 
 export interface VSCodeLayoutProps {
   className?: string;

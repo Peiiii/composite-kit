@@ -1,3 +1,7 @@
+// 从复合组件库导入
+import { VSCodeLayout } from "@/components/layout/compound";
+
+// 从原始组件库导入
 import {
   ActivityBar,
   ActivityBarItem,
@@ -18,9 +22,11 @@ import {
   Outline,
   OutlineGroup,
   OutlineItem,
-  useResizablePanel,
-  VSCodeLayoutCompound as VSCodeLayout
-} from "@/components/layout";
+} from "@/components/layout/primitive";
+
+// 导入钩子
+import { useResizablePanel } from "@/components/layout/hooks";
+
 import {
   BookOpen,
   ChevronDown,

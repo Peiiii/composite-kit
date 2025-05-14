@@ -6,7 +6,7 @@ import {
   ImperativePanelHandle,
   ImperativePanelGroupHandle,
 } from "react-resizable-panels";
-import { usePanelState } from "./hooks/use-panel-state";
+import { usePanelState } from "../hooks/use-panel-state";
 
 // 根布局组件
 interface VSCodeLayoutRootProps extends React.HTMLAttributes<HTMLDivElement> {

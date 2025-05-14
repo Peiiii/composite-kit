@@ -2,6 +2,10 @@ import {
     ActivityBarCompound,
     BottomPanelCompound,
     EditorTabsCompound,
+    SidebarCompound,
+    VSCodeLayout,
+} from "@/components/layout/compound";
+import {
     FileExplorer,
     FileExplorerFolder,
     FileExplorerGroup,
@@ -9,10 +13,8 @@ import {
     Outline,
     OutlineGroup,
     OutlineItem,
-    SidebarCompound,
-    useResizablePanel,
-    VSCodeLayoutCompound,
-} from "@/components/layout";
+} from "@/components/layout/primitive";
+import { useResizablePanel } from "@/components/layout/hooks";
 import {
     Code,
     FileText,
@@ -44,9 +46,9 @@ export function FullyCompoundDemo() {
 
   return (
     <div className="h-[600px] w-full p-4">
-      <VSCodeLayoutCompound.Root>
+      <VSCodeLayout.Root>
         {/* 左侧活动栏 */}
-        <VSCodeLayoutCompound.ActivityBar>
+        <VSCodeLayout.ActivityBar>
           <ActivityBarCompound.Root>
             <ActivityBarCompound.Group>
               <ActivityBarCompound.Item
@@ -80,13 +82,13 @@ export function FullyCompoundDemo() {
               <ActivityBarCompound.Item icon={<Settings className="h-5 w-5" />} />
             </ActivityBarCompound.Group>
           </ActivityBarCompound.Root>
-        </VSCodeLayoutCompound.ActivityBar>
+        </VSCodeLayout.ActivityBar>
 
         {/* 主内容区域 */}
-        <VSCodeLayoutCompound.Main>
-          <VSCodeLayoutCompound.Horizontal>
+        <VSCodeLayout.Main>
+          <VSCodeLayout.Horizontal>
             {/* 左侧边栏 */}
-            <VSCodeLayoutCompound.LeftSidebar ref={leftSidebar.ref}>
+            <VSCodeLayout.LeftSidebar ref={leftSidebar.ref}>
               <SidebarCompound.Root position="left" onToggle={leftSidebar.toggle}>
                 <SidebarCompound.Header>
                   <h3 className="font-semibold text-sm truncate">
@@ -124,15 +126,15 @@ export function FullyCompoundDemo() {
                   )}
                 </SidebarCompound.Content>
               </SidebarCompound.Root>
-            </VSCodeLayoutCompound.LeftSidebar>
+            </VSCodeLayout.LeftSidebar>
 
-            <VSCodeLayoutCompound.ResizeHandle withHandle />
+            <VSCodeLayout.ResizeHandle withHandle />
 
             {/* 主编辑区域 */}
-            <VSCodeLayoutCompound.Panel>
-              <VSCodeLayoutCompound.Vertical>
+            <VSCodeLayout.Panel>
+              <VSCodeLayout.Vertical>
                 {/* 编辑器区域 */}
-                <VSCodeLayoutCompound.Panel>
+                <VSCodeLayout.Panel>
                   <div className="flex h-full flex-col">
                     <EditorTabsCompound.Root>
                       <EditorTabsCompound.Tab
@@ -203,12 +205,12 @@ export function Button({
                       )}
                     </div>
                   </div>
-                </VSCodeLayoutCompound.Panel>
+                </VSCodeLayout.Panel>
 
-                <VSCodeLayoutCompound.ResizeHandle orientation="horizontal" withHandle />
+                <VSCodeLayout.ResizeHandle orientation="horizontal" withHandle />
 
                 {/* 底部面板 */}
-                <VSCodeLayoutCompound.BottomPanel ref={bottomPanel.ref}>
+                <VSCodeLayout.BottomPanel ref={bottomPanel.ref}>
                   <BottomPanelCompound.Root>
                     <BottomPanelCompound.Tabs>
                       <BottomPanelCompound.Tab
@@ -257,14 +259,14 @@ webpack compiled successfully`}
                       )}
                     </BottomPanelCompound.Content>
                   </BottomPanelCompound.Root>
-                </VSCodeLayoutCompound.BottomPanel>
-              </VSCodeLayoutCompound.Vertical>
-            </VSCodeLayoutCompound.Panel>
+                </VSCodeLayout.BottomPanel>
+              </VSCodeLayout.Vertical>
+            </VSCodeLayout.Panel>
 
-            <VSCodeLayoutCompound.ResizeHandle withHandle />
+            <VSCodeLayout.ResizeHandle withHandle />
 
             {/* 右侧边栏 */}
-            <VSCodeLayoutCompound.RightSidebar ref={rightSidebar.ref}>
+            <VSCodeLayout.RightSidebar ref={rightSidebar.ref}>
               <SidebarCompound.Root position="right" onToggle={rightSidebar.toggle}>
                 <SidebarCompound.Header>
                   <h3 className="font-semibold text-sm truncate">
@@ -291,10 +293,10 @@ webpack compiled successfully`}
                   )}
                 </SidebarCompound.Content>
               </SidebarCompound.Root>
-            </VSCodeLayoutCompound.RightSidebar>
-          </VSCodeLayoutCompound.Horizontal>
-        </VSCodeLayoutCompound.Main>
-      </VSCodeLayoutCompound.Root>
+            </VSCodeLayout.RightSidebar>
+          </VSCodeLayout.Horizontal>
+        </VSCodeLayout.Main>
+      </VSCodeLayout.Root>
     </div>
   );
 } 

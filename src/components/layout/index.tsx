@@ -1,14 +1,42 @@
-export * from "./vscode-layout";
-export { VSCodeLayout as VSCodeLayoutCompound } from "./vscode-layout-compound";
-export { SidebarCompound } from "./sidebar-compound";
-export { ActivityBarCompound } from "./activity-bar-compound";
-export { EditorTabsCompound } from "./editor-tabs-compound";
-export { BottomPanelCompound } from "./bottom-panel-compound";
-export * from "./activity-bar";
-export * from "./sidebar";
-export * from "./editor-tabs";
-export * from "./bottom-panel";
-export * from "./file-explorer";
-export * from "./outline";
-export * from "./hooks/use-resizable-panel";
-export * from "./hooks/use-panel-state";
+/**
+ * 主导出文件
+ * 从这里可以导出所有的布局组件、复合组件和钩子
+ */
+
+// 导出钩子
+export * from "./hooks";
+
+// 从primitive.ts导出，但排除VSCodeLayout
+export {
+  ActivityBar,
+  ActivityBarGroup,
+  ActivityBarItem,
+  BottomPanel,
+  BottomPanelContent,
+  BottomPanelTab,
+  BottomPanelTabs,
+  EditorTab,
+  EditorTabs,
+  FileExplorer,
+  FileExplorerFolder,
+  FileExplorerGroup,
+  FileExplorerItem,
+  Outline,
+  OutlineGroup,
+  OutlineItem,
+  Sidebar,
+  SidebarContent,
+  SidebarHeader,
+} from "./primitive";
+
+// 从compound.ts导出，但排除VSCodeLayout
+export {
+  ActivityBarCompound,
+  BottomPanelCompound,
+  EditorTabsCompound,
+  SidebarCompound,
+} from "./compound";
+
+// 单独导出并重命名以避免冲突
+export { VSCodeLayout as VSCodeLayoutPrimitive } from "./components/vscode-layout";
+export { VSCodeLayout as VSCodeLayoutCompound } from "./compounds/vscode-layout-compound";
