@@ -180,7 +180,7 @@ export function LayoutControlsDemo() {
                       children: [
                         {
                           id: "button-tsx",
-                          name: "Button.tsx",
+                          name: "Button-With-Long-Name.tsx",
                           content: `import * as React from "react";
 
 interface ButtonProps {

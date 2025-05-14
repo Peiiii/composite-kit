@@ -4,8 +4,17 @@ import { VSCodeLayoutCompoundDemo } from "./components/vscode-layout-compound-de
 import { FullyCompoundDemo } from "./components/fully-compound-demo";
 import { ConfiguratorDemo } from "./components/configurator-demo";
 import { LayoutControlsDemo } from "./components/layout-controls-demo";
+import { VSCodeLayoutPureDemo } from "./components/vscode-layout-pure-demo";
 
 export const vscodeLayoutDemos = [
+  {
+    id: "vscode-layout-v2-pure",
+    title: "VS Code 布局（纯组件）",
+    component: <VSCodeLayoutPureDemo />,
+    description: "使用纯组件实现的 VS Code 布局，不依赖任何外部状态管理",
+    category: "布局组件",
+    tags: ["layout", "vscode", "纯组件", "react-resizable-panels"],
+  },
   {
     id: "vscode-layout-v2-layout-controls",
     title: "VS Code 布局控制",
