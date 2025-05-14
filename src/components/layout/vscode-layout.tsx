@@ -5,7 +5,7 @@ import {
   PanelResizeHandle,
   ImperativePanelHandle,
 } from "react-resizable-panels";
-import { usePanelState } from "@/demos/vscode-layout-v2/components/use-panel-state";
+import { usePanelState } from "./hooks/use-panel-state";
 
 export interface VSCodeLayoutProps {
   className?: string;
@@ -14,17 +14,26 @@ export interface VSCodeLayoutProps {
     defaultSize?: number;
     minSize?: number;
     maxSize?: number;
+    ref?: React.RefObject<ImperativePanelHandle>;
+    onExpand?: () => void;
+    onCollapse?: () => void;
   };
   rightSidebar?: {
     content: React.ReactNode;
     defaultSize?: number;
     minSize?: number;
     maxSize?: number;
+    ref?: React.RefObject<ImperativePanelHandle>;
+    onExpand?: () => void;
+    onCollapse?: () => void;
   };
   bottomPanel?: {
     content: React.ReactNode;
     defaultSize?: number;
     minSize?: number;
+    ref?: React.RefObject<ImperativePanelHandle>;
+    onExpand?: () => void;
+    onCollapse?: () => void;
   };
   mainContent: React.ReactNode;
   activityBar?: React.ReactNode;
@@ -59,13 +68,13 @@ export function VSCodeLayout({
             {leftSidebar && (
               <>
                 <Panel
-                  ref={leftSidebarState.panelRef}
+                  ref={leftSidebar.ref || leftSidebarState.panelRef}
                   defaultSize={leftSidebar.defaultSize ?? 20}
                   minSize={leftSidebar.minSize ?? 15}
                   maxSize={leftSidebar.maxSize ?? 30}
                   collapsible
-                  onCollapse={leftSidebarState.collapse}
-                  onExpand={leftSidebarState.expand}
+                  onCollapse={leftSidebar.onCollapse || leftSidebarState.collapse}
+                  onExpand={leftSidebar.onExpand || leftSidebarState.expand}
                 >
                   {leftSidebar.content}
                 </Panel>
@@ -88,12 +97,12 @@ export function VSCodeLayout({
                     <PanelResizeHandle className="h-1 bg-border hover:bg-primary/20 transition-colors" />
 
                     <Panel
-                      ref={bottomPanelState.panelRef}
+                      ref={bottomPanel.ref || bottomPanelState.panelRef}
                       defaultSize={bottomPanel.defaultSize ?? 30}
                       minSize={bottomPanel.minSize ?? 20}
                       collapsible
-                      onCollapse={bottomPanelState.collapse}
-                      onExpand={bottomPanelState.expand}
+                      onCollapse={bottomPanel.onCollapse || bottomPanelState.collapse}
+                      onExpand={bottomPanel.onExpand || bottomPanelState.expand}
                     >
                       {bottomPanel.content}
                     </Panel>
@@ -108,13 +117,13 @@ export function VSCodeLayout({
                 <PanelResizeHandle className="w-1 bg-border hover:bg-primary/20 transition-colors" />
 
                 <Panel
-                  ref={rightSidebarState.panelRef}
+                  ref={rightSidebar.ref || rightSidebarState.panelRef}
                   defaultSize={rightSidebar.defaultSize ?? 20}
                   minSize={rightSidebar.minSize ?? 15}
                   maxSize={rightSidebar.maxSize ?? 30}
                   collapsible
-                  onCollapse={rightSidebarState.collapse}
-                  onExpand={rightSidebarState.expand}
+                  onCollapse={rightSidebar.onCollapse || rightSidebarState.collapse}
+                  onExpand={rightSidebar.onExpand || rightSidebarState.expand}
                 >
                   {rightSidebar.content}
                 </Panel>

@@ -1,5 +1,27 @@
 import { VSCodeLayout } from "@/components/layout/vscode-layout";
 import {
+  ActivityBar,
+  ActivityBarItem,
+  ActivityBarGroup,
+  Sidebar,
+  SidebarHeader,
+  SidebarContent,
+  EditorTabs,
+  EditorTab,
+  BottomPanel,
+  BottomPanelTabs,
+  BottomPanelTab,
+  BottomPanelContent,
+  FileExplorer,
+  FileExplorerGroup,
+  FileExplorerItem,
+  FileExplorerFolder,
+  Outline,
+  OutlineGroup,
+  OutlineItem,
+  useResizablePanel,
+} from "@/components/layout";
+import {
   BookOpen,
   ChevronDown,
   CircleHelp,
@@ -13,7 +35,7 @@ import {
   Search,
   Settings,
   Terminal,
-  Users
+  Users,
 } from "lucide-react";
 import * as React from "react";
 
@@ -23,64 +45,56 @@ export function VSCodeLayoutDemo() {
   const [activeTab, setActiveTab] = React.useState("terminal");
   const [activeFile, setActiveFile] = React.useState("index.tsx");
 
+  // 使用Hook简化左侧边栏内容区的状态管理
+  const leftSidebar = useResizablePanel();
+
+  // 使用Hook简化右侧边栏面板的状态管理
+  const rightSidebar = useResizablePanel();
+
+  // 使用Hook简化底部面板的状态管理
+  const bottomPanel = useResizablePanel();
+
   // 左侧活动栏
   const activityBar = (
-    <>
-      <button
-        className={`p-2 hover:bg-accent rounded-md mb-2 ${
-          activeLeftIcon === "explorer" ? "bg-accent/30" : ""
-        }`}
-        onClick={() => setActiveLeftIcon("explorer")}
-      >
-        <Folder className="h-5 w-5" />
-      </button>
-      <button
-        className={`p-2 hover:bg-accent rounded-md mb-2 ${
-          activeLeftIcon === "search" ? "bg-accent/30" : ""
-        }`}
-        onClick={() => setActiveLeftIcon("search")}
-      >
-        <Search className="h-5 w-5" />
-      </button>
-      <button
-        className={`p-2 hover:bg-accent rounded-md mb-2 ${
-          activeLeftIcon === "git" ? "bg-accent/30" : ""
-        }`}
-        onClick={() => setActiveLeftIcon("git")}
-      >
-        <GitBranch className="h-5 w-5" />
-      </button>
-      <button
-        className={`p-2 hover:bg-accent rounded-md mb-2 ${
-          activeLeftIcon === "debug" ? "bg-accent/30" : ""
-        }`}
-        onClick={() => setActiveLeftIcon("debug")}
-      >
-        <Play className="h-5 w-5" />
-      </button>
-      <button
-        className={`p-2 hover:bg-accent rounded-md mb-2 ${
-          activeLeftIcon === "extensions" ? "bg-accent/30" : ""
-        }`}
-        onClick={() => setActiveLeftIcon("extensions")}
-      >
-        <LayoutGrid className="h-5 w-5" />
-      </button>
-      <div className="mt-auto flex flex-col items-center">
-        <button className="p-2 hover:bg-accent rounded-md mb-2">
-          <Users className="h-5 w-5" />
-        </button>
-        <button className="p-2 hover:bg-accent rounded-md mb-2">
-          <Settings className="h-5 w-5" />
-        </button>
-      </div>
-    </>
+    <ActivityBar>
+      <ActivityBarGroup>
+        <ActivityBarItem
+          active={activeLeftIcon === "explorer"}
+          icon={<Folder className="h-5 w-5" />}
+          onClick={() => setActiveLeftIcon("explorer")}
+        />
+        <ActivityBarItem
+          active={activeLeftIcon === "search"}
+          icon={<Search className="h-5 w-5" />}
+          onClick={() => setActiveLeftIcon("search")}
+        />
+        <ActivityBarItem
+          active={activeLeftIcon === "git"}
+          icon={<GitBranch className="h-5 w-5" />}
+          onClick={() => setActiveLeftIcon("git")}
+        />
+        <ActivityBarItem
+          active={activeLeftIcon === "debug"}
+          icon={<Play className="h-5 w-5" />}
+          onClick={() => setActiveLeftIcon("debug")}
+        />
+        <ActivityBarItem
+          active={activeLeftIcon === "extensions"}
+          icon={<LayoutGrid className="h-5 w-5" />}
+          onClick={() => setActiveLeftIcon("extensions")}
+        />
+      </ActivityBarGroup>
+      <ActivityBarGroup className="mt-auto">
+        <ActivityBarItem icon={<Users className="h-5 w-5" />} />
+        <ActivityBarItem icon={<Settings className="h-5 w-5" />} />
+      </ActivityBarGroup>
+    </ActivityBar>
   );
 
   // 左侧边栏内容
   const leftSidebarContent = (
-    <div className="h-full flex flex-col border-r">
-      <div className="border-b p-2 flex justify-between items-center">
+    <Sidebar position="left" onToggle={leftSidebar.toggle}>
+      <SidebarHeader>
         <h3 className="font-semibold text-sm truncate">
           {activeLeftIcon === "explorer" && "资源管理器"}
           {activeLeftIcon === "search" && "搜索"}
@@ -88,80 +102,56 @@ export function VSCodeLayoutDemo() {
           {activeLeftIcon === "debug" && "运行和调试"}
           {activeLeftIcon === "extensions" && "扩展"}
         </h3>
-      </div>
-      <div className="flex-1 overflow-auto">
+      </SidebarHeader>
+      <SidebarContent>
         {activeLeftIcon === "explorer" && (
-          <div className="p-2">
-            <div className="mb-2">
-              <div className="flex items-center mb-1">
-                <ChevronDown className="h-3 w-3 mr-1 shrink-0" />
-                <span className="text-xs font-medium truncate">项目</span>
-              </div>
-              <div className="ml-4">
-                <div className="flex items-center py-1 text-xs hover:bg-accent rounded px-1 cursor-pointer">
-                  <Folder className="h-3 w-3 mr-1 text-muted-foreground shrink-0" />
-                  <span className="truncate">src</span>
-                </div>
+          <FileExplorer>
+            <FileExplorerGroup title="项目">
+              <FileExplorerFolder>src</FileExplorerFolder>
+              <div className="ml-2">
+                <FileExplorerFolder>components</FileExplorerFolder>
                 <div className="ml-2">
-                  <div className="flex items-center py-1 text-xs hover:bg-accent rounded px-1 cursor-pointer">
-                    <Folder className="h-3 w-3 mr-1 text-muted-foreground shrink-0" />
-                    <span className="truncate">components</span>
-                  </div>
-                  <div className="ml-2">
-                    <div
-                      className={`flex items-center py-1 text-xs rounded px-1 cursor-pointer ${
-                        activeFile === "button.tsx" ? "bg-accent" : "hover:bg-accent"
-                      }`}
-                      onClick={() => setActiveFile("button.tsx")}
-                    >
-                      <FileText className="h-3 w-3 mr-1 text-muted-foreground shrink-0" />
-                      <span className="truncate">button.tsx</span>
-                    </div>
-                    <div
-                      className={`flex items-center py-1 text-xs rounded px-1 cursor-pointer ${
-                        activeFile === "index.tsx" ? "bg-accent" : "hover:bg-accent"
-                      }`}
-                      onClick={() => setActiveFile("index.tsx")}
-                    >
-                      <FileText className="h-3 w-3 mr-1 text-muted-foreground shrink-0" />
-                      <span className="truncate">index.tsx</span>
-                    </div>
-                  </div>
+                  <FileExplorerItem
+                    active={activeFile === "button.tsx"}
+                    onClick={() => setActiveFile("button.tsx")}
+                  >
+                    button.tsx
+                  </FileExplorerItem>
+                  <FileExplorerItem
+                    active={activeFile === "index.tsx"}
+                    onClick={() => setActiveFile("index.tsx")}
+                  >
+                    index.tsx
+                  </FileExplorerItem>
                 </div>
               </div>
-            </div>
-          </div>
+            </FileExplorerGroup>
+          </FileExplorer>
         )}
-      </div>
-    </div>
+      </SidebarContent>
+    </Sidebar>
   );
 
   // 主内容区
   const mainContent = (
     <div className="flex h-full flex-col">
-      {/* 标签栏 */}
-      <div className="bg-muted/40 border-b flex">
-        <div
-          className={`px-3 py-1.5 text-xs border-r flex items-center ${
-            activeFile === "index.tsx" ? "bg-background" : ""
-          }`}
+      <EditorTabs>
+        <EditorTab
+          active={activeFile === "index.tsx"}
+          icon={<FileText className="h-3 w-3" />}
           onClick={() => setActiveFile("index.tsx")}
         >
-          <FileText className="h-3 w-3 mr-1.5" />
           index.tsx
-        </div>
-        <div
-          className={`px-3 py-1.5 text-xs border-r flex items-center ${
-            activeFile === "button.tsx" ? "bg-background" : ""
-          }`}
+        </EditorTab>
+        <EditorTab
+          active={activeFile === "button.tsx"}
+          icon={<FileText className="h-3 w-3" />}
           onClick={() => setActiveFile("button.tsx")}
         >
-          <FileText className="h-3 w-3 mr-1.5" />
           button.tsx
-        </div>
-      </div>
+        </EditorTab>
+      </EditorTabs>
 
-      {/* 编辑器内容 */}
       <div className="flex-1 overflow-auto p-4 bg-muted/10">
         {activeFile === "index.tsx" ? (
           <pre className="text-xs font-mono">
@@ -218,41 +208,33 @@ export function Button({
 
   // 底部面板内容
   const bottomPanelContent = (
-    <div className="flex h-full flex-col border-t">
-      <div className="bg-muted/40 border-b flex justify-between items-center">
-        <div className="flex">
-          <button
-            className={`px-3 py-1.5 text-xs border-r flex items-center ${
-              activeTab === "terminal" ? "bg-background" : ""
-            }`}
-            onClick={() => setActiveTab("terminal")}
-          >
-            <Terminal className="h-3 w-3 mr-1.5" />
-            终端
-          </button>
-          <button
-            className={`px-3 py-1.5 text-xs border-r flex items-center ${
-              activeTab === "output" ? "bg-background" : ""
-            }`}
-            onClick={() => setActiveTab("output")}
-          >
-            <Code className="h-3 w-3 mr-1.5" />
-            输出
-          </button>
-          <button
-            className={`px-3 py-1.5 text-xs border-r flex items-center ${
-              activeTab === "debug" ? "bg-background" : ""
-            }`}
-            onClick={() => setActiveTab("debug")}
-          >
-            <Play className="h-3 w-3 mr-1.5" />
-            调试
-          </button>
-        </div>
-      </div>
-      <div className="flex-1 overflow-auto bg-muted/10 p-2">
+    <BottomPanel>
+      <BottomPanelTabs>
+        <BottomPanelTab
+          active={activeTab === "terminal"}
+          icon={<Terminal className="h-3 w-3" />}
+          onClick={() => setActiveTab("terminal")}
+        >
+          终端
+        </BottomPanelTab>
+        <BottomPanelTab
+          active={activeTab === "output"}
+          icon={<Code className="h-3 w-3" />}
+          onClick={() => setActiveTab("output")}
+        >
+          输出
+        </BottomPanelTab>
+        <BottomPanelTab
+          active={activeTab === "debug"}
+          icon={<Play className="h-3 w-3" />}
+          onClick={() => setActiveTab("debug")}
+        >
+          调试
+        </BottomPanelTab>
+      </BottomPanelTabs>
+      <BottomPanelContent>
         {activeTab === "terminal" && (
-          <pre className="text-xs font-mono text-muted-foreground">
+          <pre className="text-xs font-mono text-muted-foreground p-2">
             {`$ npm start
 > my-app@0.1.0 start
 > react-scripts start
@@ -272,91 +254,38 @@ To create a production build, use npm run build.
 webpack compiled successfully`}
           </pre>
         )}
-      </div>
-    </div>
+      </BottomPanelContent>
+    </BottomPanel>
   );
 
   // 右侧边栏内容
   const rightSidebarContent = (
-    <div className="flex h-full">
-      <div className="flex-1 h-full flex flex-col border-l">
-        <div className="border-b p-2 flex justify-between items-center">
-          <h3 className="font-semibold text-sm truncate">
-            {activeRightIcon === "outline" && "大纲"}
-            {activeRightIcon === "problems" && "问题"}
-            {activeRightIcon === "docs" && "文档"}
-            {activeRightIcon === "help" && "帮助"}
-          </h3>
-        </div>
-
-        {/* 右侧活动栏图标 */}
-        <div className="border-b flex items-center justify-between py-1 px-2">
-          <div className="flex">
-            <button
-              className={`p-1 hover:bg-accent rounded-md mr-1 shrink-0 ${
-                activeRightIcon === "outline" ? "bg-accent/30" : ""
-              }`}
-              onClick={() => setActiveRightIcon("outline")}
-            >
-              <Code className="h-4 w-4" />
-            </button>
-            <button
-              className={`p-1 hover:bg-accent rounded-md mr-1 shrink-0 ${
-                activeRightIcon === "problems" ? "bg-accent/30" : ""
-              }`}
-              onClick={() => setActiveRightIcon("problems")}
-            >
-              <Info className="h-4 w-4" />
-            </button>
-            <button
-              className={`p-1 hover:bg-accent rounded-md mr-1 shrink-0 ${
-                activeRightIcon === "docs" ? "bg-accent/30" : ""
-              }`}
-              onClick={() => setActiveRightIcon("docs")}
-            >
-              <BookOpen className="h-4 w-4" />
-            </button>
-            <button
-              className={`p-1 hover:bg-accent rounded-md shrink-0 ${
-                activeRightIcon === "help" ? "bg-accent/30" : ""
-              }`}
-              onClick={() => setActiveRightIcon("help")}
-            >
-              <CircleHelp className="h-4 w-4" />
-            </button>
-          </div>
-        </div>
-
-        <div className="flex-1 overflow-auto">
-          {activeRightIcon === "outline" && (
-            <div className="p-2">
-              <div className="text-xs mb-2">
-                <div className="font-medium mb-1 truncate">大纲</div>
-                {activeFile === "index.tsx" ? (
-                  <div className="ml-2">
-                    <div className="flex items-center py-1 hover:bg-accent rounded px-1 cursor-pointer">
-                      <Code className="h-3 w-3 mr-1 text-muted-foreground shrink-0" />
-                      <span className="truncate">App (function)</span>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="ml-2">
-                    <div className="flex items-center py-1 hover:bg-accent rounded px-1 cursor-pointer">
-                      <Code className="h-3 w-3 mr-1 text-muted-foreground shrink-0" />
-                      <span className="truncate">ButtonProps (interface)</span>
-                    </div>
-                    <div className="flex items-center py-1 hover:bg-accent rounded px-1 cursor-pointer">
-                      <Code className="h-3 w-3 mr-1 text-muted-foreground shrink-0" />
-                      <span className="truncate">Button (function)</span>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
+    <Sidebar position="right" onToggle={rightSidebar.toggle}>
+      <SidebarHeader>
+        <h3 className="font-semibold text-sm truncate">
+          {activeRightIcon === "outline" && "大纲"}
+          {activeRightIcon === "problems" && "问题"}
+          {activeRightIcon === "docs" && "文档"}
+          {activeRightIcon === "help" && "帮助"}
+        </h3>
+      </SidebarHeader>
+      <SidebarContent>
+        {activeRightIcon === "outline" && (
+          <Outline>
+            <OutlineGroup title="大纲">
+              {activeFile === "index.tsx" ? (
+                <OutlineItem itemType="function">App</OutlineItem>
+              ) : (
+                <>
+                  <OutlineItem itemType="interface">ButtonProps</OutlineItem>
+                  <OutlineItem itemType="function">Button</OutlineItem>
+                </>
+              )}
+            </OutlineGroup>
+          </Outline>
+        )}
+      </SidebarContent>
+    </Sidebar>
   );
 
   return (
@@ -368,18 +297,27 @@ webpack compiled successfully`}
           defaultSize: 20,
           minSize: 15,
           maxSize: 30,
+          ref: leftSidebar.ref,
+          onExpand: leftSidebar.handleExpand,
+          onCollapse: leftSidebar.handleCollapse,
         }}
         mainContent={mainContent}
         bottomPanel={{
           content: bottomPanelContent,
           defaultSize: 30,
           minSize: 20,
+          ref: bottomPanel.ref,
+          onExpand: bottomPanel.handleExpand,
+          onCollapse: bottomPanel.handleCollapse,
         }}
         rightSidebar={{
           content: rightSidebarContent,
           defaultSize: 20,
           minSize: 15,
           maxSize: 30,
+          ref: rightSidebar.ref,
+          onExpand: rightSidebar.handleExpand,
+          onCollapse: rightSidebar.handleCollapse,
         }}
       />
     </div>
