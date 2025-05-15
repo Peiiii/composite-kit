@@ -13,6 +13,7 @@ import {
   Settings,
   Play,
   LayoutGrid,
+  X,
 } from "lucide-react";
 
 /**
@@ -33,6 +34,12 @@ export function VSCodeLayoutPureDemo() {
   const leftPanelRef = React.useRef<ImperativePanelHandle>(null);
   const rightPanelRef = React.useRef<ImperativePanelHandle>(null);
   const bottomPanelRef = React.useRef<ImperativePanelHandle>(null);
+  
+  // 添加打开的文件状态管理
+  const [openFiles, setOpenFiles] = React.useState([
+    { id: "file1", name: "index.tsx", content: "export default function Home() {\n  return <div>Hello World</div>;\n}" },
+    { id: "file2", name: "Button.tsx", content: "export function Button({ children }) {\n  return <button className=\"px-4 py-2 bg-blue-500 text-white rounded\">{children}</button>;\n}" },
+  ]);
   
   // 折叠/展开处理函数
   const collapseLeftPanel = React.useCallback(() => {
@@ -118,6 +125,42 @@ export function VSCodeLayoutPureDemo() {
     { id: "file3", name: "Card.tsx", content: "export function Card({ title, children }) {\n  return (\n    <div className=\"border rounded p-4\">\n      <h3 className=\"text-lg font-bold\">{title}</h3>\n      <div>{children}</div>\n    </div>\n  );\n}" },
   ];
   
+  // 打开文件处理函数
+  const openFile = React.useCallback((fileId: string) => {
+    const file = files.find(f => f.id === fileId);
+    if (!file) return;
+    
+    // 检查文件是否已打开，如果没有则添加到openFiles
+    if (!openFiles.some(f => f.id === fileId)) {
+      setOpenFiles(prev => [...prev, file]);
+    }
+    
+    // 设置为活动文件
+    setActiveFile(fileId);
+  }, [files, openFiles]);
+  
+  // 关闭文件处理函数
+  const closeFile = React.useCallback((fileId: string, e?: React.MouseEvent) => {
+    // 阻止事件冒泡，避免触发标签点击事件
+    if (e) {
+      e.stopPropagation();
+    }
+    
+    setOpenFiles(prev => {
+      const newOpenFiles = prev.filter(f => f.id !== fileId);
+      
+      // 如果关闭的是当前活动文件，则切换到另一个文件
+      if (fileId === activeFile && newOpenFiles.length > 0) {
+        setActiveFile(newOpenFiles[newOpenFiles.length - 1].id);
+      } else if (newOpenFiles.length === 0) {
+        // 如果没有打开的文件，清除活动文件
+        setActiveFile("");
+      }
+      
+      return newOpenFiles;
+    });
+  }, [activeFile]);
+  
   // 渲染文件列表
   const renderFiles = React.useCallback(() => {
     return files.map(file => (
@@ -127,7 +170,7 @@ export function VSCodeLayoutPureDemo() {
         onClick={() => {
           // 使用requestAnimationFrame延迟状态更新，避免立即触发布局变化
           requestAnimationFrame(() => {
-            setActiveFile(file.id);
+            openFile(file.id);
           });
         }}
       >
@@ -135,7 +178,7 @@ export function VSCodeLayoutPureDemo() {
         <span className="truncate">{file.name}</span>
       </button>
     ));
-  }, [activeFile]);
+  }, [activeFile, openFile]);
   
   // 渲染左侧边栏内容
   const renderSidebarContent = React.useCallback(() => {
@@ -327,25 +370,41 @@ export function VSCodeLayoutPureDemo() {
                 <Panel className="overflow-hidden">
                   <div className="h-full flex flex-col">
                     <div className="border-b bg-gray-50 flex">
-                      {files.map(file => (
+                      {openFiles.map(file => (
                         <button
                           key={file.id}
-                          className={`px-4 py-2 flex items-center gap-1 text-sm ${
+                          className={`px-3 py-2 flex items-center gap-1 text-sm relative group ${
                             activeFile === file.id
-                              ? 'bg-white border-b-2 border-blue-500'
+                              ? 'bg-white'
                               : 'hover:bg-gray-100'
                           }`}
                           onClick={() => setActiveFile(file.id)}
                         >
                           <FileText className="h-4 w-4" />
                           <span>{file.name}</span>
+                          <button
+                            className="ml-1 p-1 rounded-sm hover:bg-gray-200 opacity-60 group-hover:opacity-100"
+                            onClick={(e) => closeFile(file.id, e)}
+                            title="关闭"
+                          >
+                            <X className="h-3 w-3" />
+                          </button>
+                          {activeFile === file.id && (
+                            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-500" />
+                          )}
                         </button>
                       ))}
                     </div>
                     <div className="flex-1 p-4 overflow-auto">
-                      <pre className="text-sm font-mono">
-                        {files.find(f => f.id === activeFile)?.content}
-                      </pre>
+                      {activeFile ? (
+                        <pre className="text-sm font-mono">
+                          {openFiles.find(f => f.id === activeFile)?.content || files.find(f => f.id === activeFile)?.content}
+                        </pre>
+                      ) : (
+                        <div className="h-full flex items-center justify-center text-gray-400">
+                          <p>没有打开的文件</p>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </Panel>
