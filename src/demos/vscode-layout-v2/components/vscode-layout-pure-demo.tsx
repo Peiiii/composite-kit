@@ -20,10 +20,10 @@ import {
  * 包含活动栏、左侧边栏、编辑区域、右侧边栏和底部面板
  */
 export function VSCodeLayoutPureDemo() {
-  // 状态管理：各面板的可见性
-  const [leftSidebarVisible, setLeftSidebarVisible] = React.useState(true);
-  const [rightSidebarVisible, setRightSidebarVisible] = React.useState(true);
-  const [bottomPanelVisible, setBottomPanelVisible] = React.useState(true);
+  // 改为使用折叠状态代替可见性状态
+  const [isLeftSidebarCollapsed, setIsLeftSidebarCollapsed] = React.useState(false);
+  const [isRightSidebarCollapsed, setIsRightSidebarCollapsed] = React.useState(false);
+  const [isBottomPanelCollapsed, setIsBottomPanelCollapsed] = React.useState(false);
   
   // 状态管理：活动项
   const [activeFile, setActiveFile] = React.useState("file1");
@@ -34,37 +34,32 @@ export function VSCodeLayoutPureDemo() {
   const rightPanelRef = React.useRef<ImperativePanelHandle>(null);
   const bottomPanelRef = React.useRef<ImperativePanelHandle>(null);
   
-  // 面板折叠状态
-  const [isLeftPanelCollapsed, setIsLeftPanelCollapsed] = React.useState(false);
-  const [isRightPanelCollapsed, setIsRightPanelCollapsed] = React.useState(false);
-  const [isBottomPanelCollapsed, setIsBottomPanelCollapsed] = React.useState(false);
-  
   // 折叠/展开处理函数
   const collapseLeftPanel = React.useCallback(() => {
     if (leftPanelRef.current) {
       leftPanelRef.current.collapse();
-      setIsLeftPanelCollapsed(true);
+      setIsLeftSidebarCollapsed(true);
     }
   }, []);
   
   const expandLeftPanel = React.useCallback(() => {
     if (leftPanelRef.current) {
       leftPanelRef.current.expand();
-      setIsLeftPanelCollapsed(false);
+      setIsLeftSidebarCollapsed(false);
     }
   }, []);
   
   const collapseRightPanel = React.useCallback(() => {
     if (rightPanelRef.current) {
       rightPanelRef.current.collapse();
-      setIsRightPanelCollapsed(true);
+      setIsRightSidebarCollapsed(true);
     }
   }, []);
   
   const expandRightPanel = React.useCallback(() => {
     if (rightPanelRef.current) {
       rightPanelRef.current.expand();
-      setIsRightPanelCollapsed(false);
+      setIsRightSidebarCollapsed(false);
     }
   }, []);
   
@@ -82,18 +77,30 @@ export function VSCodeLayoutPureDemo() {
     }
   }, []);
   
-  // 切换面板可见性
+  // 切换面板可见性 - 使用折叠/展开代替显示/隐藏
   const toggleLeftSidebar = React.useCallback(() => {
-    setLeftSidebarVisible(prev => !prev);
-  }, []);
+    if (isLeftSidebarCollapsed) {
+      expandLeftPanel();
+    } else {
+      collapseLeftPanel();
+    }
+  }, [isLeftSidebarCollapsed, expandLeftPanel, collapseLeftPanel]);
   
   const toggleRightSidebar = React.useCallback(() => {
-    setRightSidebarVisible(prev => !prev);
-  }, []);
+    if (isRightSidebarCollapsed) {
+      expandRightPanel();
+    } else {
+      collapseRightPanel();
+    }
+  }, [isRightSidebarCollapsed, expandRightPanel, collapseRightPanel]);
   
   const toggleBottomPanel = React.useCallback(() => {
-    setBottomPanelVisible(prev => !prev);
-  }, []);
+    if (isBottomPanelCollapsed) {
+      expandBottomPanel();
+    } else {
+      collapseBottomPanel();
+    }
+  }, [isBottomPanelCollapsed, expandBottomPanel, collapseBottomPanel]);
   
   // 活动栏数据
   const activityItems = [
@@ -140,7 +147,7 @@ export function VSCodeLayoutPureDemo() {
               <span className="font-medium">资源管理器</span>
               <button 
                 className="p-1 rounded hover:bg-gray-200"
-                onClick={isLeftPanelCollapsed ? expandLeftPanel : collapseLeftPanel}
+                onClick={isLeftSidebarCollapsed ? expandLeftPanel : collapseLeftPanel}
               >
                 <ChevronLeft className="h-4 w-4" />
               </button>
@@ -165,7 +172,7 @@ export function VSCodeLayoutPureDemo() {
               <span className="font-medium">搜索</span>
               <button 
                 className="p-1 rounded hover:bg-gray-200"
-                onClick={isLeftPanelCollapsed ? expandLeftPanel : collapseLeftPanel}
+                onClick={isLeftSidebarCollapsed ? expandLeftPanel : collapseLeftPanel}
               >
                 <ChevronLeft className="h-4 w-4" />
               </button>
@@ -187,7 +194,7 @@ export function VSCodeLayoutPureDemo() {
               <span className="font-medium">源代码管理</span>
               <button 
                 className="p-1 rounded hover:bg-gray-200"
-                onClick={isLeftPanelCollapsed ? expandLeftPanel : collapseLeftPanel}
+                onClick={isLeftSidebarCollapsed ? expandLeftPanel : collapseLeftPanel}
               >
                 <ChevronLeft className="h-4 w-4" />
               </button>
@@ -204,7 +211,7 @@ export function VSCodeLayoutPureDemo() {
               <span className="font-medium">{activityItems.find(item => item.id === activeActivityItem)?.title || "侧边栏"}</span>
               <button 
                 className="p-1 rounded hover:bg-gray-200"
-                onClick={isLeftPanelCollapsed ? expandLeftPanel : collapseLeftPanel}
+                onClick={isLeftSidebarCollapsed ? expandLeftPanel : collapseLeftPanel}
               >
                 <ChevronLeft className="h-4 w-4" />
               </button>
@@ -217,7 +224,23 @@ export function VSCodeLayoutPureDemo() {
           </div>
         );
     }
-  }, [activeActivityItem, isLeftPanelCollapsed, expandLeftPanel, collapseLeftPanel, renderFiles]);
+  }, [activeActivityItem, isLeftSidebarCollapsed, expandLeftPanel, collapseLeftPanel, renderFiles]);
+  
+  // 设置初始状态
+  React.useEffect(() => {
+    // 组件初始化时执行，确保面板状态与实际显示一致
+    if (leftPanelRef.current && isLeftSidebarCollapsed) {
+      leftPanelRef.current.collapse();
+    }
+    
+    if (rightPanelRef.current && isRightSidebarCollapsed) {
+      rightPanelRef.current.collapse();
+    }
+    
+    if (bottomPanelRef.current && isBottomPanelCollapsed) {
+      bottomPanelRef.current.collapse();
+    }
+  }, [isLeftSidebarCollapsed, isRightSidebarCollapsed, isBottomPanelCollapsed]);
   
   return (
     <div className="h-full w-full border rounded-md bg-white overflow-hidden flex flex-col">
@@ -228,19 +251,19 @@ export function VSCodeLayoutPureDemo() {
             className="px-3 py-1 text-sm rounded hover:bg-gray-200"
             onClick={toggleLeftSidebar}
           >
-            {leftSidebarVisible ? "隐藏左侧栏" : "显示左侧栏"}
+            {isLeftSidebarCollapsed ? "显示左侧栏" : "隐藏左侧栏"}
           </button>
           <button 
             className="px-3 py-1 text-sm rounded hover:bg-gray-200"
             onClick={toggleRightSidebar}
           >
-            {rightSidebarVisible ? "隐藏右侧栏" : "显示右侧栏"}
+            {isRightSidebarCollapsed ? "显示右侧栏" : "隐藏右侧栏"}
           </button>
           <button 
             className="px-3 py-1 text-sm rounded hover:bg-gray-200"
             onClick={toggleBottomPanel}
           >
-            {bottomPanelVisible ? "隐藏底部面板" : "显示底部面板"}
+            {isBottomPanelCollapsed ? "显示底部面板" : "隐藏底部面板"}
           </button>
         </div>
       </div>
@@ -258,8 +281,8 @@ export function VSCodeLayoutPureDemo() {
               title={item.title}
               onClick={() => {
                 setActiveActivityItem(item.id);
-                if (!leftSidebarVisible) {
-                  setLeftSidebarVisible(true);
+                if (isLeftSidebarCollapsed) {
+                  expandLeftPanel();
                 }
               }}
             >
@@ -279,28 +302,24 @@ export function VSCodeLayoutPureDemo() {
         
         <div className="flex-1 overflow-hidden">
           <PanelGroup direction="horizontal" className="h-full">
-            {/* 左侧边栏 */}
-            {leftSidebarVisible && (
-              <>
-                <Panel 
-                  ref={leftPanelRef}
-                  defaultSize={20} 
-                  minSize={10}
-                  collapsible
-                  onCollapse={() => setIsLeftPanelCollapsed(true)}
-                  onExpand={() => setIsLeftPanelCollapsed(false)}
-                  className="overflow-hidden flex-shrink-0"
-                >
-                  <div className="h-full flex flex-col border-r">
-                    {renderSidebarContent()}
-                  </div>
-                </Panel>
-                
-                <PanelResizeHandle className="w-1 bg-gray-200 hover:bg-blue-500 relative group">
-                  <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 w-1 group-hover:bg-blue-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                </PanelResizeHandle>
-              </>
-            )}
+            {/* 左侧边栏 - 始终渲染，但可折叠 */}
+            <Panel 
+              ref={leftPanelRef}
+              defaultSize={20}
+              minSize={10}
+              collapsible={true}
+              onCollapse={() => setIsLeftSidebarCollapsed(true)}
+              onExpand={() => setIsLeftSidebarCollapsed(false)}
+              className="overflow-hidden flex-shrink-0"
+            >
+              <div className="h-full flex flex-col border-r">
+                {renderSidebarContent()}
+              </div>
+            </Panel>
+            
+            <PanelResizeHandle className="w-1 bg-gray-200 hover:bg-blue-500 relative group">
+              <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 w-1 group-hover:bg-blue-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            </PanelResizeHandle>
             
             {/* 主编辑区域 */}
             <Panel>
@@ -331,107 +350,99 @@ export function VSCodeLayoutPureDemo() {
                   </div>
                 </Panel>
                 
-                {/* 底部面板 */}
-                {bottomPanelVisible && (
-                  <>
-                    <PanelResizeHandle className="h-1 bg-gray-200 hover:bg-blue-500 relative group">
-                      <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-1 group-hover:bg-blue-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                    </PanelResizeHandle>
-                    
-                    <Panel 
-                      ref={bottomPanelRef}
-                      defaultSize={25} 
-                      minSize={10}
-                      collapsible
-                      onCollapse={() => setIsBottomPanelCollapsed(true)}
-                      onExpand={() => setIsBottomPanelCollapsed(false)}
-                      className="overflow-hidden"
-                    >
-                      <div className="h-full flex flex-col border-t">
-                        <div className="h-10 flex items-center justify-between px-4 bg-gray-50 border-b">
-                          <div className="flex items-center">
-                            <Terminal className="h-4 w-4 mr-2" />
-                            <span className="font-medium">终端</span>
-                          </div>
-                          <button 
-                            className="p-1 rounded hover:bg-gray-200"
-                            onClick={isBottomPanelCollapsed ? expandBottomPanel : collapseBottomPanel}
-                          >
-                            <ChevronDown className="h-4 w-4" />
-                          </button>
-                        </div>
-                        <div className="flex-1 p-2 overflow-auto bg-gray-900 text-gray-200">
-                          <pre className="text-sm font-mono">
-                            $ npm start{"\n"}
-                            {">"} project@0.1.0 start{"\n"}
-                            {">"} react-scripts start{"\n"}
-                            {"\n"}
-                            Starting the development server...{"\n"}
-                            Compiled successfully!{"\n"}
-                            {"\n"}
-                            You can now view project in the browser.{"\n"}
-                              Local:            http://localhost:3000
-                          </pre>
-                        </div>
-                      </div>
-                    </Panel>
-                  </>
-                )}
-              </PanelGroup>
-            </Panel>
-            
-            {/* 右侧边栏 */}
-            {rightSidebarVisible && (
-              <>
-                <PanelResizeHandle className="w-1 bg-gray-200 hover:bg-blue-500 relative group">
-                  <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 w-1 group-hover:bg-blue-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <PanelResizeHandle className="h-1 bg-gray-200 hover:bg-blue-500 relative group">
+                  <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-1 group-hover:bg-blue-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 </PanelResizeHandle>
                 
+                {/* 底部面板 - 始终渲染，但可折叠 */}
                 <Panel 
-                  ref={rightPanelRef}
-                  defaultSize={20} 
+                  ref={bottomPanelRef}
+                  defaultSize={25} 
                   minSize={10}
-                  collapsible
-                  onCollapse={() => setIsRightPanelCollapsed(true)}
-                  onExpand={() => setIsRightPanelCollapsed(false)}
-                  className="overflow-hidden flex-shrink-0"
+                  collapsible={true}
+                  onCollapse={() => setIsBottomPanelCollapsed(true)}
+                  onExpand={() => setIsBottomPanelCollapsed(false)}
+                  className="overflow-hidden"
                 >
-                  <div className="h-full flex flex-col border-l">
-                    <div className="h-10 flex items-center justify-between px-4 border-b bg-gray-50">
-                      <span className="font-medium">大纲</span>
+                  <div className="h-full flex flex-col border-t">
+                    <div className="h-10 flex items-center justify-between px-4 bg-gray-50 border-b">
+                      <div className="flex items-center">
+                        <Terminal className="h-4 w-4 mr-2" />
+                        <span className="font-medium">终端</span>
+                      </div>
                       <button 
                         className="p-1 rounded hover:bg-gray-200"
-                        onClick={isRightPanelCollapsed ? expandRightPanel : collapseRightPanel}
+                        onClick={isBottomPanelCollapsed ? expandBottomPanel : collapseBottomPanel}
                       >
-                        <ChevronRight className="h-4 w-4" />
+                        <ChevronDown className="h-4 w-4" />
                       </button>
                     </div>
-                    <div className="flex-1 overflow-auto p-2">
-                      <div className="mb-2">
-                        <div className="flex items-center mb-1">
-                          <ChevronDown className="h-3 w-3 mr-1" />
-                          <span className="text-sm font-medium">文件结构</span>
-                        </div>
-                        <div className="ml-4 flex flex-col gap-1">
-                          <div className="flex items-center text-sm text-purple-700">
-                            <span>function</span>
-                            <span className="ml-2">Button</span>
-                          </div>
-                          <div className="flex items-center text-sm text-blue-700">
-                            <span>interface</span>
-                            <span className="ml-2">ButtonProps</span>
-                          </div>
-                          <div className="flex items-center text-sm text-green-700">
-                            <span>variable</span>
-                            <span className="ml-2">styles</span>
-                          </div>
-                        </div>
-                      </div>
+                    <div className="flex-1 p-2 overflow-auto bg-gray-900 text-gray-200">
+                      <pre className="text-sm font-mono">
+                        $ npm start{"\n"}
+                        {">"} project@0.1.0 start{"\n"}
+                        {">"} react-scripts start{"\n"}
+                        {"\n"}
+                        Starting the development server...{"\n"}
+                        Compiled successfully!{"\n"}
+                        {"\n"}
+                        You can now view project in the browser.{"\n"}
+                          Local:            http://localhost:3000
+                      </pre>
                     </div>
                   </div>
                 </Panel>
-              </>
-            )}
+              </PanelGroup>
+            </Panel>
+            
+            <PanelResizeHandle className="w-1 bg-gray-200 hover:bg-blue-500 relative group">
+              <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 w-1 group-hover:bg-blue-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            </PanelResizeHandle>
+            
+            {/* 右侧边栏 - 始终渲染，但可折叠 */}
+            <Panel 
+              ref={rightPanelRef}
+              defaultSize={20} 
+              minSize={10}
+              collapsible={true}
+              onCollapse={() => setIsRightSidebarCollapsed(true)}
+              onExpand={() => setIsRightSidebarCollapsed(false)}
+              className="overflow-hidden flex-shrink-0"
+            >
+              <div className="h-full flex flex-col border-l">
+                <div className="h-10 flex items-center justify-between px-4 border-b bg-gray-50">
+                  <span className="font-medium">大纲</span>
+                  <button 
+                    className="p-1 rounded hover:bg-gray-200"
+                    onClick={isRightSidebarCollapsed ? expandRightPanel : collapseRightPanel}
+                  >
+                    <ChevronRight className="h-4 w-4" />
+                  </button>
+                </div>
+                <div className="flex-1 overflow-auto p-2">
+                  <div className="mb-2">
+                    <div className="flex items-center mb-1">
+                      <ChevronDown className="h-3 w-3 mr-1" />
+                      <span className="text-sm font-medium">文件结构</span>
+                    </div>
+                    <div className="ml-4 flex flex-col gap-1">
+                      <div className="flex items-center text-sm text-purple-700">
+                        <span>function</span>
+                        <span className="ml-2">Button</span>
+                      </div>
+                      <div className="flex items-center text-sm text-blue-700">
+                        <span>interface</span>
+                        <span className="ml-2">ButtonProps</span>
+                      </div>
+                      <div className="flex items-center text-sm text-green-700">
+                        <span>variable</span>
+                        <span className="ml-2">styles</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Panel>
           </PanelGroup>
         </div>
       </div>
