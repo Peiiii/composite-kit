@@ -14,6 +14,17 @@ import {
   Play,
   LayoutGrid,
   X,
+  GitBranch as BranchIcon,
+  AlertCircle,
+  CheckCircle,
+  Bell,
+  Wifi,
+  Command,
+  Check,
+  Paintbrush,
+  Save,
+  RefreshCw,
+  Eye,
 } from "lucide-react";
 
 /**
@@ -25,6 +36,21 @@ export function VSCodeLayoutPureDemo() {
   const [isLeftSidebarCollapsed, setIsLeftSidebarCollapsed] = React.useState(false);
   const [isRightSidebarCollapsed, setIsRightSidebarCollapsed] = React.useState(false);
   const [isBottomPanelCollapsed, setIsBottomPanelCollapsed] = React.useState(false);
+  
+  // 命令面板状态
+  const [isCommandPaletteOpen, setIsCommandPaletteOpen] = React.useState(false);
+  const [commandPaletteInput, setCommandPaletteInput] = React.useState("");
+  
+  // 提示对话框状态
+  const [promptDialog, setPromptDialog] = React.useState<{
+    type: "input" | "select";
+    title: string;
+    placeholder?: string;
+    options?: { id: string; label: string }[];
+    onConfirm: (value: string) => void;
+  } | null>(null);
+  const [promptValue, setPromptValue] = React.useState("");
+  const [selectedOption, setSelectedOption] = React.useState<string | null>(null);
   
   // 状态管理：活动项
   const [activeFile, setActiveFile] = React.useState("file1");
@@ -285,10 +311,145 @@ export function VSCodeLayoutPureDemo() {
     }
   }, [isLeftSidebarCollapsed, isRightSidebarCollapsed, isBottomPanelCollapsed]);
   
+  // 状态栏数据
+  const branchName = "main";
+  const isConnected = true;
+  const hasErrors = false;
+  const hasWarnings = true;
+  const warningsCount = 2;
+  
+  // 命令面板和快速搜索处理函数
+  const openCommandPalette = React.useCallback(() => {
+    setIsCommandPaletteOpen(true);
+    setCommandPaletteInput("");
+  }, []);
+  
+  const closeCommandPalette = React.useCallback(() => {
+    setIsCommandPaletteOpen(false);
+    setCommandPaletteInput("");
+  }, []);
+  
+  // 显示主题选择器
+  const showThemeSelector = React.useCallback(() => {
+    const themes = [
+      { id: "dark", label: "深色主题" },
+      { id: "light", label: "浅色主题" },
+      { id: "highContrast", label: "高对比度" },
+    ];
+    
+    setPromptDialog({
+      type: "select",
+      title: "选择颜色主题",
+      options: themes,
+      onConfirm: (value) => {
+        console.log(`设置主题为: ${value}`);
+        setPromptDialog(null);
+      }
+    });
+    setSelectedOption(themes[0].id);
+    closeCommandPalette();
+  }, [closeCommandPalette]);
+  
+  // 处理命令项点击
+  const handleCommandItemClick = React.useCallback((item: any) => {
+    if (item.type === "file") {
+      openFile(item.id);
+      closeCommandPalette();
+    } else if (item.type === "command" && item.action) {
+      item.action();
+      closeCommandPalette();
+    } else {
+      closeCommandPalette();
+    }
+  }, [openFile, closeCommandPalette]);
+  
+  // 处理键盘快捷键
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // 处理命令面板快捷键 (Cmd+P / Ctrl+P)
+      if ((e.metaKey || e.ctrlKey) && e.key === "p") {
+        e.preventDefault();
+        openCommandPalette();
+      }
+      
+      // ESC键关闭命令面板或提示对话框
+      if (e.key === "Escape") {
+        if (isCommandPaletteOpen) {
+          closeCommandPalette();
+        }
+        if (promptDialog) {
+          setPromptDialog(null);
+          setPromptValue("");
+          setSelectedOption(null);
+        }
+      }
+    };
+    
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isCommandPaletteOpen, openCommandPalette, closeCommandPalette, promptDialog]);
+  
+  // 命令和文件搜索结果
+  const getFilteredItems = React.useCallback(() => {
+    const input = commandPaletteInput.toLowerCase().trim();
+    
+    // 显示命令模式
+    if (input.startsWith(">")) {
+      const commandQuery = input.slice(1).trim();
+      
+      // 示例命令列表
+      const commands = [
+        { id: "cmd1", type: "command", name: "设置: 打开设置", icon: <Settings className="h-4 w-4" />, action: () => console.log("打开设置") },
+        { id: "cmd2", type: "command", name: "设置: 键盘快捷键", icon: <Command className="h-4 w-4" />, action: () => console.log("键盘快捷键") },
+        { id: "cmd3", type: "command", name: "重新加载窗口", icon: <RefreshCw className="h-4 w-4" />, action: () => console.log("重新加载窗口") },
+        { id: "cmd4", type: "command", name: "查看: 切换侧边栏", icon: <ChevronLeft className="h-4 w-4" />, action: () => toggleLeftSidebar() },
+        { id: "cmd5", type: "command", name: "查看: 切换终端", icon: <Terminal className="h-4 w-4" />, action: () => toggleBottomPanel() },
+        { id: "cmd6", type: "command", name: "文件: 保存", icon: <Save className="h-4 w-4" />, action: () => console.log("保存文件") },
+        { id: "cmd7", type: "command", name: "颜色主题", icon: <Paintbrush className="h-4 w-4" />, action: () => showThemeSelector() },
+        { id: "cmd8", type: "command", name: "查看: 切换全屏", icon: <Eye className="h-4 w-4" />, action: () => console.log("切换全屏") },
+      ];
+      
+      if (!commandQuery) {
+        return commands.map(cmd => ({
+          ...cmd,
+          name: cmd.name,
+        }));
+      }
+      
+      // 过滤命令
+      return commands
+        .filter(cmd => cmd.name.toLowerCase().includes(commandQuery))
+        .map(cmd => ({
+          ...cmd,
+          name: cmd.name,
+        }));
+    }
+    
+    // 默认文件搜索模式
+    if (!input) {
+      return [{
+        id: "default",
+        type: "info",
+        name: "输入 > 可执行命令, # 搜索符号, @ 查找定义",
+        icon: <Search className="h-4 w-4" />
+      }];
+    }
+    
+    // 过滤文件
+    return files
+      .filter(file => file.name.toLowerCase().includes(input))
+      .map(file => ({ 
+        id: file.id, 
+        type: "file", 
+        name: file.name,
+        icon: <FileText className="h-4 w-4" />
+      }));
+  }, [commandPaletteInput, files, toggleLeftSidebar, toggleBottomPanel, showThemeSelector]);
+  
   return (
     <div className="h-full w-full border rounded-md bg-white overflow-hidden flex flex-col">
       {/* 顶部控制栏 */}
-      <div className="flex items-center p-2 border-b bg-gray-50">
+      <div className="flex items-center p-2 border-b bg-gray-50 justify-between">
         <div className="flex space-x-2">
           <button 
             className="px-3 py-1 text-sm rounded hover:bg-gray-200"
@@ -307,6 +468,43 @@ export function VSCodeLayoutPureDemo() {
             onClick={toggleBottomPanel}
           >
             {isBottomPanelCollapsed ? "显示底部面板" : "隐藏底部面板"}
+          </button>
+        </div>
+        
+        <div className="flex space-x-2">
+          <button
+            className="px-3 py-1 text-sm rounded flex items-center gap-1 hover:bg-gray-200 text-gray-700"
+            onClick={openCommandPalette}
+            title="打开命令面板 (Ctrl+P)"
+          >
+            <Command className="h-3.5 w-3.5" />
+            <span>命令面板</span>
+          </button>
+          
+          <button
+            className="px-3 py-1 text-sm rounded flex items-center gap-1 hover:bg-gray-200 text-gray-700"
+            onClick={() => {
+              setPromptDialog({
+                type: "input",
+                title: "输入用户名",
+                placeholder: "请输入您的用户名",
+                onConfirm: (value) => {
+                  console.log(`输入的用户名: ${value}`);
+                }
+              });
+            }}
+            title="用户名输入示例"
+          >
+            <span>用户名输入</span>
+          </button>
+          
+          <button
+            className="px-3 py-1 text-sm rounded flex items-center gap-1 hover:bg-gray-200 text-gray-700"
+            onClick={showThemeSelector}
+            title="选择主题"
+          >
+            <Paintbrush className="h-3.5 w-3.5" />
+            <span>选择主题</span>
           </button>
         </div>
       </div>
@@ -470,7 +668,7 @@ export function VSCodeLayoutPureDemo() {
             >
               <div className="h-full flex flex-col border-l">
                 <div className="h-10 flex items-center justify-between px-4 border-b bg-gray-50">
-                  <span className="font-medium">大纲</span>
+                  <span className="font-medium truncate">大纲</span>
                   <button 
                     className="p-1 rounded hover:bg-gray-200"
                     onClick={isRightSidebarCollapsed ? expandRightPanel : collapseRightPanel}
@@ -482,7 +680,7 @@ export function VSCodeLayoutPureDemo() {
                   <div className="mb-2">
                     <div className="flex items-center mb-1">
                       <ChevronDown className="h-3 w-3 mr-1" />
-                      <span className="text-sm font-medium">文件结构</span>
+                      <span className="text-sm font-medium truncate">文件结构</span>
                     </div>
                     <div className="ml-4 flex flex-col gap-1">
                       <div className="flex items-center text-sm text-purple-700">
@@ -505,6 +703,144 @@ export function VSCodeLayoutPureDemo() {
           </PanelGroup>
         </div>
       </div>
+      
+      {/* 状态栏 - 更新为VSCode中性颜色 */}
+      <div className="h-6 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 text-xs flex items-center px-2 justify-between border-t border-gray-200 dark:border-gray-700 shrink-0">
+        <div className="flex items-center space-x-2">
+          <div className="flex items-center px-2 py-0.5 hover:bg-gray-200 dark:hover:bg-gray-700 rounded cursor-pointer">
+            <BranchIcon className="h-3.5 w-3.5 mr-1" />
+            <span>{branchName}</span>
+          </div>
+          
+          <div className="flex items-center px-2 py-0.5 hover:bg-gray-200 dark:hover:bg-gray-700 rounded cursor-pointer">
+            {hasErrors ? (
+              <AlertCircle className="h-3.5 w-3.5 mr-1 text-red-500" />
+            ) : hasWarnings ? (
+              <AlertCircle className="h-3.5 w-3.5 mr-1 text-yellow-500" />
+            ) : (
+              <CheckCircle className="h-3.5 w-3.5 mr-1 text-green-500" />
+            )}
+            <span>
+              {hasErrors ? "错误" : hasWarnings ? `${warningsCount} 警告` : "就绪"}
+            </span>
+          </div>
+        </div>
+        
+        <div className="flex items-center space-x-2">
+          <div className="px-2 py-0.5 hover:bg-gray-200 dark:hover:bg-gray-700 rounded cursor-pointer">
+            UTF-8
+          </div>
+          <div className="px-2 py-0.5 hover:bg-gray-200 dark:hover:bg-gray-700 rounded cursor-pointer">
+            TSX
+          </div>
+          <div className="px-2 py-0.5 hover:bg-gray-200 dark:hover:bg-gray-700 rounded cursor-pointer">
+            <Wifi className={`h-3.5 w-3.5 ${isConnected ? "text-green-500" : "text-red-500"}`} />
+          </div>
+          <div className="px-2 py-0.5 hover:bg-gray-200 dark:hover:bg-gray-700 rounded cursor-pointer">
+            <Bell className="h-3.5 w-3.5" />
+          </div>
+        </div>
+      </div>
+      
+      {/* 命令面板/搜索 */}
+      {isCommandPaletteOpen && (
+        <div className="fixed inset-0 bg-black/20 flex items-start justify-center pt-[10%] z-50">
+          <div className="w-[600px] max-w-[80%] bg-white rounded shadow-lg overflow-hidden">
+            <div className="bg-gray-100 p-2 flex items-center border-b">
+              <Command className="h-5 w-5 mr-2 text-gray-500" />
+              <input
+                type="text"
+                className="w-full bg-transparent border-none outline-none text-sm"
+                placeholder="输入命令或搜索文件..."
+                value={commandPaletteInput}
+                onChange={(e) => setCommandPaletteInput(e.target.value)}
+                autoFocus
+              />
+              <button
+                className="ml-2 p-1 rounded hover:bg-gray-200"
+                onClick={closeCommandPalette}
+              >
+                <X className="h-4 w-4 text-gray-500" />
+              </button>
+            </div>
+            <div className="max-h-[300px] overflow-y-auto">
+              {getFilteredItems().map((item) => (
+                <div 
+                  key={item.id} 
+                  className="px-4 py-2 flex items-center text-sm hover:bg-blue-50 cursor-pointer"
+                  onClick={() => handleCommandItemClick(item)}
+                >
+                  <span className="mr-2 text-gray-500">{item.icon}</span>
+                  <span>{item.name}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {/* 提示对话框 */}
+      {promptDialog && (
+        <div className="fixed inset-0 bg-black/20 flex items-center justify-center z-50">
+          <div className="w-[400px] max-w-[80%] bg-white rounded shadow-lg p-4">
+            <h3 className="text-base font-medium mb-4">{promptDialog.title}</h3>
+            
+            {promptDialog.type === "input" && (
+              <input
+                type="text"
+                className="w-full px-3 py-2 border rounded mb-4 text-sm"
+                placeholder={promptDialog.placeholder}
+                value={promptValue}
+                onChange={(e) => setPromptValue(e.target.value)}
+                autoFocus
+              />
+            )}
+            
+            {promptDialog.type === "select" && promptDialog.options && (
+              <div className="mb-4 max-h-[300px] overflow-y-auto">
+                {promptDialog.options.map(option => (
+                  <div 
+                    key={option.id} 
+                    className={`flex items-center p-2 rounded cursor-pointer ${selectedOption === option.id ? 'bg-blue-50' : 'hover:bg-gray-100'}`}
+                    onClick={() => setSelectedOption(option.id)}
+                  >
+                    <div className="w-4 h-4 mr-2 flex items-center justify-center">
+                      {selectedOption === option.id && (
+                        <Check className="w-4 h-4 text-blue-500" />
+                      )}
+                    </div>
+                    <span>{option.label}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+            
+            <div className="flex justify-end space-x-2">
+              <button 
+                className="px-3 py-1 border rounded hover:bg-gray-50 text-sm"
+                onClick={() => setPromptDialog(null)}
+              >
+                取消
+              </button>
+              <button 
+                className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm"
+                onClick={() => {
+                  if (promptDialog.type === "select" && selectedOption) {
+                    promptDialog.onConfirm(selectedOption);
+                  } else if (promptDialog.type === "input") {
+                    promptDialog.onConfirm(promptValue);
+                  }
+                  setPromptDialog(null);
+                  setPromptValue("");
+                  setSelectedOption(null);
+                }}
+              >
+                确定
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
-} 
+}
