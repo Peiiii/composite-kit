@@ -144,7 +144,7 @@ export function VSCodeLayoutPureDemo() {
         return (
           <div className="h-full flex flex-col">
             <div className="h-10 flex items-center justify-between px-4 border-b bg-gray-50">
-              <span className="font-medium">资源管理器</span>
+              <span className="font-medium truncate">资源管理器</span>
               <button 
                 className="p-1 rounded hover:bg-gray-200"
                 onClick={isLeftSidebarCollapsed ? expandLeftPanel : collapseLeftPanel}
@@ -156,7 +156,7 @@ export function VSCodeLayoutPureDemo() {
               <div className="mb-2">
                 <div className="flex items-center mb-1">
                   <ChevronDown className="h-3 w-3 mr-1" />
-                  <span className="text-sm font-medium">项目文件</span>
+                  <span className="text-sm font-medium truncate">项目文件</span>
                 </div>
                 <div className="ml-4">
                   {renderFiles()}

@@ -90,7 +90,7 @@ const App = React.memo(function App() {
               bodyProps={{
                 scrollable: true,
                 scrollDirection: "both",
-                contentHeight: "min-h-[600px]",
+                contentHeight: "min-h-[600px] h-[600px]",
               }}
             />
           </DemoGallery.Content>

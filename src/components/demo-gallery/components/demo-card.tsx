@@ -147,8 +147,8 @@ export const DemoCardBody = React.forwardRef<HTMLDivElement, DemoCardBodyProps>(
         )} 
         {...props}
       >
-        <div >
-          <div className="min-w-full">
+        <div className="h-full overflow-hidden">
+          <div className="min-w-full h-full">
             {isLoading ? (
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
