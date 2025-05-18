@@ -1,8 +1,26 @@
 import { useState, useCallback } from 'react';
 import { FileConfig } from '../config/layoutTypes';
 
-export function useFileManager(initialFiles: FileConfig[]) {
-  const [allAvailableFiles] = useState<FileConfig[]>(initialFiles);
+export interface FileManagerState {
+  allAvailableFiles: FileConfig[];
+  openFiles: FileConfig[];
+  activeFile: string;
+}
+
+export interface FileManagerActions {
+  openFile: (fileId: string) => void;
+  closeFile: (fileId: string) => void;
+  setActiveFile: (fileId: string) => void;
+  addFile: (file: FileConfig) => void;
+  removeFile: (fileId: string) => void;
+  updateFile: (fileId: string, content: string) => void;
+  getActiveFile: () => FileConfig | undefined;
+}
+
+export type UseFileManagerReturn = FileManagerState & FileManagerActions;
+
+export function useFileManager(initialFiles: FileConfig[]): UseFileManagerReturn {
+  const [allAvailableFiles, setAllAvailableFiles] = useState<FileConfig[]>(initialFiles);
   const [openFiles, setOpenFiles] = useState<FileConfig[]>(() => {
     if (initialFiles.length > 0) {
       return [initialFiles[0]];
@@ -42,6 +60,37 @@ export function useFileManager(initialFiles: FileConfig[]) {
     return openFiles.find(f => f.id === activeFile);
   }, [openFiles, activeFile]);
 
+  const addFile = useCallback((file: FileConfig) => {
+    setAllAvailableFiles(prev => {
+      if (prev.some(f => f.id === file.id)) {
+        return prev;
+      }
+      return [...prev, file];
+    });
+  }, []);
+
+  const removeFile = useCallback((fileId: string) => {
+    setAllAvailableFiles(prev => prev.filter(f => f.id !== fileId));
+    closeFile(fileId);
+  }, [closeFile]);
+
+  const updateFile = useCallback((fileId: string, content: string) => {
+    setAllAvailableFiles(prev => 
+      prev.map(file => 
+        file.id === fileId 
+          ? { ...file, content } 
+          : file
+      )
+    );
+    setOpenFiles(prev => 
+      prev.map(file => 
+        file.id === fileId 
+          ? { ...file, content } 
+          : file
+      )
+    );
+  }, []);
+
   return {
     allAvailableFiles,
     openFiles,
@@ -50,5 +99,8 @@ export function useFileManager(initialFiles: FileConfig[]) {
     openFile,
     closeFile,
     setActiveFile,
+    addFile,
+    removeFile,
+    updateFile,
   };
 } 

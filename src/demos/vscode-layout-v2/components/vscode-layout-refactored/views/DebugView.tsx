@@ -1,31 +1,27 @@
 import * as React from "react";
-import { ChevronLeft } from "lucide-react";
+import { SidebarHeader } from "../components/layout/SidebarHeader";
+import { DebugPanel } from "../components/features/DebugPanel";
 
-interface DebugViewProps {
-  isLeftSidebarCollapsed: boolean;
-  expandLeftPanel: () => void;
-  collapseLeftPanel: () => void;
+export interface DebugViewProps {
+  isCollapsed: boolean;
+  onToggle: () => void;
+  className?: string;
 }
 
 export const DebugView: React.FC<DebugViewProps> = ({
-  isLeftSidebarCollapsed,
-  expandLeftPanel,
-  collapseLeftPanel,
+  isCollapsed,
+  onToggle,
+  className = "",
 }) => {
   return (
-    <div className="h-full flex flex-col">
-      <div className="h-10 flex items-center justify-between px-4 border-b bg-gray-50">
-        <span className="font-medium truncate">运行和调试</span>
-        <button 
-          className="p-1 rounded hover:bg-gray-200"
-          onClick={isLeftSidebarCollapsed ? expandLeftPanel : collapseLeftPanel}
-          title={isLeftSidebarCollapsed ? "展开侧边栏" : "折叠侧边栏"}
-        >
-          <ChevronLeft className="h-4 w-4" />
-        </button>
-      </div>
-      <div className="flex-1 overflow-auto p-2 text-sm">
-        运行和调试内容区
+    <div className={`flex flex-col h-full ${className}`}>
+      <SidebarHeader
+        title="运行和调试"
+        isCollapsed={isCollapsed}
+        onToggle={onToggle}
+      />
+      <div className="flex-1 p-4">
+        <DebugPanel />
       </div>
     </div>
   );

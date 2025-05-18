@@ -1,4 +1,7 @@
-import * as React from "react";
+import React from 'react';
+import type { FileConfig as BaseFileConfig } from './file';
+import type { Theme as BaseTheme } from './theme';
+import type { KeyboardShortcut } from './keyboard';
 import type { ImperativePanelHandle } from 'react-resizable-panels';
 
 // --- Configuration Interfaces ---
@@ -34,7 +37,7 @@ export interface SidebarViewBaseProps {
 }
 
 export interface ExplorerViewProps extends SidebarViewBaseProps {
-  files: FileConfig[];
+  files: BaseFileConfig[];
   activeFile: string;
   openFile: (fileId: string) => void;
 }
@@ -45,17 +48,15 @@ export interface SearchViewProps extends SidebarViewBaseProps {
 
 export interface GitViewProps extends SidebarViewBaseProps {
   changes: Array<{
-    id: string;
-    name: string;
+    path: string;
     status: 'modified' | 'added' | 'deleted';
   }>;
 }
 
 export interface DebugViewProps extends SidebarViewBaseProps {
   breakpoints: Array<{
-    id: string;
-    file: string;
     line: number;
+    file: string;
   }>;
 }
 
@@ -63,8 +64,8 @@ export interface ExtensionsViewProps extends SidebarViewBaseProps {
   extensions: Array<{
     id: string;
     name: string;
-    description: string;
-    enabled: boolean;
+    version: string;
+    isEnabled: boolean;
   }>;
 }
 
@@ -126,27 +127,25 @@ export interface Theme {
     background: string;
     foreground: string;
     accent: string;
-    // ... 其他颜色定义
   };
 }
 
 // --- Layout Context Types ---
-export interface VSCodeLayoutContextValue {
+export interface LayoutState {
   activeActivityItem: string;
+  isLeftSidebarCollapsed: boolean;
+  isRightSidebarCollapsed: boolean;
+  isBottomPanelCollapsed: boolean;
+  theme: BaseTheme;
+  keyboardShortcuts: KeyboardShortcut[];
+}
+
+export interface LayoutContextValue extends LayoutState {
   setActiveActivityItem: (id: string) => void;
-  leftPanel: PanelState;
-  rightPanel: PanelState;
-  bottomPanel: PanelState;
-  files: {
-    all: FileConfig[];
-    open: FileConfig[];
-    active: string;
-    openFile: (id: string) => void;
-    closeFile: (id: string) => void;
-    setActive: (id: string) => void;
-  };
-  theme: {
-    current: Theme;
-    setTheme: (themeId: string) => void;
-  };
+  toggleLeftSidebar: () => void;
+  toggleRightSidebar: () => void;
+  toggleBottomPanel: () => void;
+  setTheme: (theme: BaseTheme) => void;
+  registerShortcut: (shortcut: KeyboardShortcut) => void;
+  unregisterShortcut: (shortcut: KeyboardShortcut) => void;
 } 

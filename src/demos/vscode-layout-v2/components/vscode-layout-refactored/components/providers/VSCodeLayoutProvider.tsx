@@ -1,8 +1,9 @@
 import * as React from "react";
-import { appConfig } from "../config/appConfig";
-import { useFileManager } from "../hooks/useFileManager";
-import { usePanelManager } from "../hooks/usePanelManager";
-import { VSCodeLayoutContextValue, Theme } from "../config/layoutTypes";
+import { appConfig } from "../../config/appConfig";
+import { useFileManager } from "../../hooks/useFileManager";
+import { usePanelManager } from "../../hooks/usePanelManager";
+import { VSCodeLayoutContextValue, Theme } from "../../config/layoutTypes";
+import { FileConfig } from "../../types/layout";
 
 export const VSCodeLayoutContext = React.createContext<VSCodeLayoutContextValue | null>(null);
 
@@ -16,9 +17,13 @@ export const useVSCodeLayout = () => {
 
 interface VSCodeLayoutProviderProps {
   children: React.ReactNode;
+  initialFiles?: FileConfig[];
 }
 
-export const VSCodeLayoutProvider: React.FC<VSCodeLayoutProviderProps> = ({ children }) => {
+export const VSCodeLayoutProvider: React.FC<VSCodeLayoutProviderProps> = ({ 
+  children,
+  initialFiles = appConfig.initialFiles,
+}) => {
   // 文件管理状态
   const {
     allAvailableFiles,
@@ -27,7 +32,7 @@ export const VSCodeLayoutProvider: React.FC<VSCodeLayoutProviderProps> = ({ chil
     openFile,
     closeFile,
     setActiveFile,
-  } = useFileManager(appConfig.initialFiles);
+  } = useFileManager(initialFiles);
 
   // 面板管理状态
   const {

@@ -2,7 +2,7 @@ import * as React from "react";
 import { Check } from "lucide-react";
 import { PromptDialogConfig } from "../../config/layoutTypes";
 
-interface PromptDialogProps {
+export interface PromptDialogProps {
   config: PromptDialogConfig;
   value: string;
   selectedOption: string | null;
@@ -10,6 +10,7 @@ interface PromptDialogProps {
   onOptionSelect: (optionId: string) => void;
   onConfirm: () => void;
   onCancel: () => void;
+  className?: string;
 }
 
 export const PromptDialog: React.FC<PromptDialogProps> = ({
@@ -20,9 +21,10 @@ export const PromptDialog: React.FC<PromptDialogProps> = ({
   onOptionSelect,
   onConfirm,
   onCancel,
+  className = "",
 }) => {
   return (
-    <div className="fixed inset-0 bg-black/20 flex items-center justify-center z-50">
+    <div className={`fixed inset-0 bg-black/20 flex items-center justify-center z-50 ${className}`}>
       <div className="w-[400px] max-w-[80%] bg-white rounded shadow-lg p-4">
         <h3 className="text-base font-medium mb-4">{config.title}</h3>
         {config.type === "input" && (

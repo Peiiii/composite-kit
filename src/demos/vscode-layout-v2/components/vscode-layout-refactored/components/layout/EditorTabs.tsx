@@ -2,11 +2,12 @@ import * as React from "react";
 import { FileText, X } from "lucide-react";
 import { FileConfig } from "../../config/layoutTypes";
 
-interface EditorTabsProps {
+export interface EditorTabsProps {
   files: FileConfig[];
   activeFileId: string;
   onFileSelect: (fileId: string) => void;
   onFileClose: (fileId: string, e?: React.MouseEvent) => void;
+  className?: string;
 }
 
 export const EditorTabs: React.FC<EditorTabsProps> = ({
@@ -14,9 +15,10 @@ export const EditorTabs: React.FC<EditorTabsProps> = ({
   activeFileId,
   onFileSelect,
   onFileClose,
+  className = "",
 }) => {
   return (
-    <div className="border-b bg-gray-50 flex">
+    <div className={`border-b bg-gray-50 flex ${className}`}>
       {files.map(file => (
         <button
           key={file.id}

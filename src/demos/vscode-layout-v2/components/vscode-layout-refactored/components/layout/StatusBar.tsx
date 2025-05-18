@@ -1,12 +1,13 @@
 import * as React from "react";
 import { GitBranch, AlertCircle, CheckCircle, Wifi, Bell } from "lucide-react";
 
-interface StatusBarProps {
+export interface StatusBarProps {
   branchName: string;
   hasErrors: boolean;
   hasWarnings: boolean;
   warningsCount: number;
   isConnected: boolean;
+  className?: string;
 }
 
 export const StatusBar: React.FC<StatusBarProps> = ({
@@ -15,9 +16,10 @@ export const StatusBar: React.FC<StatusBarProps> = ({
   hasWarnings,
   warningsCount,
   isConnected,
+  className = "",
 }) => {
   return (
-    <div className="h-6 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 text-xs flex items-center px-2 justify-between border-t border-gray-200 dark:border-gray-700 shrink-0">
+    <div className={`h-6 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 text-xs flex items-center px-2 justify-between border-t border-gray-200 dark:border-gray-700 shrink-0 ${className}`}>
       <div className="flex items-center space-x-2">
         <div className="flex items-center px-2 py-0.5 hover:bg-gray-200 dark:hover:bg-gray-700 rounded cursor-pointer">
           <GitBranch className="h-3.5 w-3.5 mr-1" />

@@ -1,13 +1,17 @@
 import * as React from "react";
 import { FileConfig } from "../../config/layoutTypes";
 
-interface EditorContentProps {
+export interface EditorContentProps {
   activeFile: FileConfig | undefined;
+  className?: string;
 }
 
-export const EditorContent: React.FC<EditorContentProps> = ({ activeFile }) => {
+export const EditorContent: React.FC<EditorContentProps> = ({ 
+  activeFile,
+  className = "",
+}) => {
   return (
-    <div className="flex-1 p-4 overflow-auto">
+    <div className={`flex-1 p-4 overflow-auto ${className}`}>
       {activeFile ? (
         <pre className="text-sm font-mono whitespace-pre-wrap break-all">
           {activeFile.content}

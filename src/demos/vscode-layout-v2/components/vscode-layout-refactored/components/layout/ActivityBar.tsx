@@ -1,19 +1,21 @@
 import * as React from "react";
 import { ActivityItemConfig } from "../../config/layoutTypes";
 
-interface ActivityBarProps {
+export interface ActivityBarProps {
   items: ActivityItemConfig[];
   activeItemId: string;
   onItemClick: (itemId: string) => void;
+  className?: string;
 }
 
 export const ActivityBar: React.FC<ActivityBarProps> = ({
   items,
   activeItemId,
   onItemClick,
+  className = "",
 }) => {
   return (
-    <div className="w-12 bg-gray-100 flex flex-col items-center py-2 border-r shrink-0">
+    <div className={`w-12 bg-gray-100 flex flex-col items-center py-2 border-r shrink-0 ${className}`}>
       {items.map(item => (
         <button
           key={item.id}
