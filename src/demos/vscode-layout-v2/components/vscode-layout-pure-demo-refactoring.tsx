@@ -350,7 +350,7 @@ export function VSCodeLayoutPureDemo() { // Original name kept, but it's the ref
       return newOpenFiles;
     });
   }, [activeFile]);
-
+  
   const renderSidebarContent = React.useCallback(() => {
     const currentActivityConfig = appConfig.activityItems.find(item => item.id === activeActivityItem);
     if (!currentActivityConfig) return <div>活动项 "{activeActivityItem}" 未找到配置</div>;
@@ -468,7 +468,7 @@ export function VSCodeLayoutPureDemo() { // Original name kept, but it's the ref
         { id: "cmd-toggle-terminal", type: "command", name: "查看: 切换终端", icon: <Terminal className="h-4 w-4" />, action: toggleBottomPanel },
         { id: "cmd-color-theme", type: "command", name: "颜色主题", icon: <Paintbrush className="h-4 w-4" />, action: showThemeSelector },
       ];
-
+      
       if (!commandQuery) return dynamicCommands;
       return dynamicCommands.filter(cmd => cmd.name.toLowerCase().includes(commandQuery));
     }
@@ -733,7 +733,7 @@ export function VSCodeLayoutPureDemo() { // Original name kept, but it's the ref
                       <span className="text-sm font-medium truncate">文件结构 (示例)</span>
                     </div>
                     {/* Static content for now */}
-                  </div>
+                      </div>
                 </div>
               </div>
             </Panel>
