@@ -7,13 +7,20 @@ import { LayoutControlsDemo } from "./components/layout-controls-demo";
 import { VSCodeLayoutPureDemo } from "./components/vscode-layout-pure-demo";
 import { VSCodeLayoutPureDemo as VSCodeLayoutPureDemoRefactoring } from "./components/vscode-layout-pure-demo-refactoring";
 import { VSCodeLayout } from "./components/vscode-layout-refactored";
-import { VSCodeLayoutCompoundComponentWorkingOnDemo } from "@/components/vscode-layout/examples/demo";
-
+import { VSCodeLayoutCompoundComponentNamespaceDemo } from "@/components/vscode-layout/examples/namespace-demo";
+import { VSCodeLayoutCompoundComponentBasicDemo } from "@/components/vscode-layout/examples/basic-demo";
 export const vscodeLayoutDemos = [
+  {
+    id: "vscode-layout-v2-compound-component-basic",
+    title: "VS Code 布局（复合组件）- 基础版",
+    component: <VSCodeLayoutCompoundComponentBasicDemo />,
+    description: "使用复合组件实现的 VS Code 布局，支持高度自定义和扩展",
+    category: "布局组件",
+  },
   {
     id: "vscode-layout-v2-compound-component-working-on",
     title: "VS Code 布局（复合组件）- 工作进行中",
-    component: <VSCodeLayoutCompoundComponentWorkingOnDemo />,
+    component: <VSCodeLayoutCompoundComponentNamespaceDemo />,
     description: "使用复合组件实现的 VS Code 布局，支持高度自定义和扩展",
     category: "布局组件",
   },

@@ -32,7 +32,7 @@ export function WorkspaceLayout({
   );
 }
 
-interface SidebarLayoutProps {
+export interface SidebarLayoutProps {
   children: React.ReactNode;
   defaultSize?: number;
   minSize?: number;
@@ -87,15 +87,37 @@ export function EditorLayout({ children, className = "" }: EditorLayoutProps) {
 interface ActivityBarProps {
   children: React.ReactNode;
   className?: string;
+  isExpanded?: boolean;
+  onToggle?: () => void;
+  expandable?: boolean;
 }
 
-export function ActivityBar({ children, className = "" }: ActivityBarProps) {
+export function ActivityBar({ 
+  children, 
+  className = "",
+  isExpanded = false,
+  onToggle,
+  expandable = false,
+}: ActivityBarProps) {
   return (
     <div
       data-testid="activity-bar"
-      className={`w-12 bg-gray-100 flex flex-col items-center py-2 border-r shrink-0 ${className}`}
+      className={`relative bg-gray-100 flex flex-col items-center py-3 border-r shrink-0 transition-all duration-300 ease-in-out ${
+        expandable && isExpanded ? 'w-52' : 'w-12'
+      } ${className}`}
     >
-      {children}
+      <div className="w-full flex flex-col items-center">
+        {children}
+      </div>
+      {expandable && onToggle && (
+        <button
+          data-testid="activity-bar-toggle"
+          className="absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-gray-100 border rounded-full flex items-center justify-center hover:bg-gray-200 transition-all duration-300 hover:scale-110"
+          onClick={onToggle}
+        >
+          <ChevronLeft className={`h-4 w-4 transform transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} />
+        </button>
+      )}
     </div>
   );
 }
@@ -106,6 +128,8 @@ interface ActivityItemProps {
   isActive?: boolean;
   onClick?: () => void;
   className?: string;
+  isExpanded?: boolean;
+  expandable?: boolean;
 }
 
 export function ActivityItem({
@@ -114,11 +138,13 @@ export function ActivityItem({
   isActive,
   onClick,
   className = "",
+  isExpanded = false,
+  expandable = false,
 }: ActivityItemProps) {
   return (
     <button
       data-testid="activity-item"
-      className={`w-10 h-10 mb-2 flex items-center justify-center rounded ${
+      className={`w-full mb-1.5 flex items-center rounded transition-all duration-300 ${
         isActive
           ? "bg-blue-50 text-blue-600 border-l-2 border-blue-600"
           : "text-gray-600 hover:bg-gray-200"
@@ -126,7 +152,22 @@ export function ActivityItem({
       title={title}
       onClick={onClick}
     >
-      {icon}
+      <div 
+        className={`flex items-center h-10 ${
+          expandable && isExpanded 
+            ? 'w-full px-3' 
+            : 'w-10 justify-center'
+        }`}
+      >
+        <div className={`flex-shrink-0 ${expandable && isExpanded ? 'w-5 h-5' : 'w-4 h-4'}`}>
+          {icon}
+        </div>
+        {expandable && isExpanded && (
+          <span className="ml-3 text-sm font-medium truncate transition-opacity duration-300">
+            {title}
+          </span>
+        )}
+      </div>
     </button>
   );
 }

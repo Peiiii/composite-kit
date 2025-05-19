@@ -13,38 +13,26 @@ import {
 } from "lucide-react";
 import * as React from "react";
 import {
-  ActivityBar,
-  ActivityItem,
-  EditorContent,
-  EditorHeader,
-  HorizontalLayout,
-  LayoutControls,
-  MainContent,
-  MainLayout,
-  PanelContent,
-  ResizablePanel,
-  ResizeHandle,
-  SidebarLayout,
-  StatusBar,
-  StatusBarGroup,
-  StatusBarIconItem,
-  StatusBarItem,
-  Tab,
-  usePanelControls,
-  VerticalLayout,
-  WorkspaceLayout,
-  WorkspacePanel,
-} from "../vscode-layout";
+  Activity,
+  Controls,
+  Editor,
+  Layout,
+  Panel,
+  Status,
+  Utils,
+  Workspace,
+} from "..";
 
-export function VSCodeLayoutCompoundComponentWorkingOnDemo() {
+export function VSCodeLayoutCompoundComponentNamespaceDemo() {
   // 使用 Hook 管理面板状态
-  const leftPanel = usePanelControls();
-  const rightPanel = usePanelControls();
-  const bottomPanel = usePanelControls();
+  const leftPanel = Utils.usePanelControls();
+  const rightPanel = Utils.usePanelControls();
+  const bottomPanel = Utils.usePanelControls();
 
   const [activeFile, setActiveFile] = React.useState("file1");
   const [activeActivityItem, setActiveActivityItem] =
     React.useState("explorer");
+  const [isActivityBarExpanded, setIsActivityBarExpanded] = React.useState(false);
 
   // 示例文件数据
   const files = [
@@ -80,8 +68,8 @@ export function VSCodeLayoutCompoundComponentWorkingOnDemo() {
   ];
 
   return (
-    <WorkspaceLayout>
-      <LayoutControls
+    <Workspace.Layout>
+      <Controls.Layout
         onToggleLeftSidebar={leftPanel.toggle}
         onToggleRightSidebar={rightPanel.toggle}
         onToggleBottomPanel={bottomPanel.toggle}
@@ -89,33 +77,39 @@ export function VSCodeLayoutCompoundComponentWorkingOnDemo() {
         isRightSidebarCollapsed={rightPanel.isCollapsed}
         isBottomPanelCollapsed={bottomPanel.isCollapsed}
       />
-      <MainLayout>
-        <ActivityBar>
+      <Layout.Main>
+        <Activity.Bar
+          isExpanded={isActivityBarExpanded}
+          onToggle={() => setIsActivityBarExpanded(!isActivityBarExpanded)}
+          expandable={true}
+        >
           {activityItems.map((item) => (
-            <ActivityItem
+            <Activity.Item
               key={item.id}
               icon={item.icon}
               title={item.title}
               isActive={activeActivityItem === item.id}
               onClick={() => setActiveActivityItem(item.id)}
+              isExpanded={isActivityBarExpanded}
+              expandable={true}
             />
           ))}
-        </ActivityBar>
+        </Activity.Bar>
 
-        <MainContent>
-          <HorizontalLayout>
-            <SidebarLayout
+        <Layout.MainContent>
+          <Layout.Horizontal>
+            <Layout.Sidebar
               ref={leftPanel.ref}
               onCollapse={leftPanel.collapse}
               onExpand={leftPanel.expand}
             >
-              <WorkspacePanel
+              <Workspace.Panel
                 title="资源管理器"
                 isCollapsed={leftPanel.isCollapsed}
                 onCollapse={leftPanel.collapse}
                 onExpand={leftPanel.expand}
               >
-                <PanelContent>
+                <Panel.Content>
                   {files.map((file) => (
                     <button
                       key={file.id}
@@ -130,19 +124,19 @@ export function VSCodeLayoutCompoundComponentWorkingOnDemo() {
                       <span className="truncate">{file.name}</span>
                     </button>
                   ))}
-                </PanelContent>
-              </WorkspacePanel>
-            </SidebarLayout>
+                </Panel.Content>
+              </Workspace.Panel>
+            </Layout.Sidebar>
 
-            <ResizeHandle />
+            <Layout.ResizeHandle />
 
-            <ResizablePanel>
-              <VerticalLayout>
-                <ResizablePanel>
-                  <WorkspacePanel>
-                    <EditorHeader>
+            <Panel.Resizable>
+              <Layout.Vertical>
+                <Panel.Resizable>
+                  <Workspace.Panel>
+                    <Editor.Header>
                       {files.map((file) => (
-                        <Tab
+                        <Editor.Tab
                           key={file.id}
                           title={file.name}
                           isActive={activeFile === file.id}
@@ -157,30 +151,30 @@ export function VSCodeLayoutCompoundComponentWorkingOnDemo() {
                           }}
                         />
                       ))}
-                    </EditorHeader>
-                    <EditorContent>
+                    </Editor.Header>
+                    <Editor.Content>
                       <pre className="text-sm font-mono">
                         {files.find((f) => f.id === activeFile)?.content}
                       </pre>
-                    </EditorContent>
-                  </WorkspacePanel>
-                </ResizablePanel>
+                    </Editor.Content>
+                  </Workspace.Panel>
+                </Panel.Resizable>
 
-                <ResizeHandle orientation="horizontal" />
+                <Layout.ResizeHandle orientation="horizontal" />
 
-                <SidebarLayout
+                <Layout.Sidebar
                   ref={bottomPanel.ref}
                   defaultSize={25}
                   onCollapse={bottomPanel.collapse}
                   onExpand={bottomPanel.expand}
                 >
-                  <WorkspacePanel
+                  <Workspace.Panel
                     title="终端"
                     isCollapsed={bottomPanel.isCollapsed}
                     onCollapse={bottomPanel.collapse}
                     onExpand={bottomPanel.expand}
                   >
-                    <PanelContent>
+                    <Panel.Content>
                       <div className="bg-gray-900 text-gray-200">
                         <pre className="text-sm font-mono">
                           $ npm start{"\n"}
@@ -194,26 +188,26 @@ export function VSCodeLayoutCompoundComponentWorkingOnDemo() {
                           Local: http://localhost:3000
                         </pre>
                       </div>
-                    </PanelContent>
-                  </WorkspacePanel>
-                </SidebarLayout>
-              </VerticalLayout>
-            </ResizablePanel>
+                    </Panel.Content>
+                  </Workspace.Panel>
+                </Layout.Sidebar>
+              </Layout.Vertical>
+            </Panel.Resizable>
 
-            <ResizeHandle />
+            <Layout.ResizeHandle />
 
-            <SidebarLayout
+            <Layout.Sidebar
               ref={rightPanel.ref}
               onCollapse={rightPanel.collapse}
               onExpand={rightPanel.expand}
             >
-              <WorkspacePanel
+              <Workspace.Panel
                 title="大纲"
                 isCollapsed={rightPanel.isCollapsed}
                 onCollapse={rightPanel.collapse}
                 onExpand={rightPanel.expand}
               >
-                <PanelContent>
+                <Panel.Content>
                   <div className="mb-2">
                     <div className="flex items-center mb-1">
                       <ChevronDown className="h-3 w-3 mr-1" />
@@ -232,35 +226,35 @@ export function VSCodeLayoutCompoundComponentWorkingOnDemo() {
                       </div>
                     </div>
                   </div>
-                </PanelContent>
-              </WorkspacePanel>
-            </SidebarLayout>
-          </HorizontalLayout>
-        </MainContent>
-      </MainLayout>
+                </Panel.Content>
+              </Workspace.Panel>
+            </Layout.Sidebar>
+          </Layout.Horizontal>
+        </Layout.MainContent>
+      </Layout.Main>
 
-      <StatusBar>
-        <StatusBarGroup>
-          <StatusBarIconItem
+      <Status.Bar>
+        <Status.Group>
+          <Status.IconItem
             icon={<BranchIcon className="h-3.5 w-3.5" />}
             label="main"
           />
-          <StatusBarIconItem
+          <Status.IconItem
             icon={<CheckCircle className="h-3.5 w-3.5 text-green-500" />}
             label="就绪"
           />
-        </StatusBarGroup>
-        <StatusBarGroup>
-          <StatusBarItem>UTF-8</StatusBarItem>
-          <StatusBarItem>TSX</StatusBarItem>
-          <StatusBarItem>
+        </Status.Group>
+        <Status.Group>
+          <Status.Item>UTF-8</Status.Item>
+          <Status.Item>TSX</Status.Item>
+          <Status.Item>
             <Wifi className="h-3.5 w-3.5 text-green-500" />
-          </StatusBarItem>
-          <StatusBarItem>
+          </Status.Item>
+          <Status.Item>
             <Bell className="h-3.5 w-3.5" />
-          </StatusBarItem>
-        </StatusBarGroup>
-      </StatusBar>
-    </WorkspaceLayout>
+          </Status.Item>
+        </Status.Group>
+      </Status.Bar>
+    </Workspace.Layout>
   );
 }
