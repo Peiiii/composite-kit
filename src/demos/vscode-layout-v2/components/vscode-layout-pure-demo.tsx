@@ -1,31 +1,30 @@
-import * as React from "react";
-import { Panel, PanelGroup, PanelResizeHandle, ImperativePanelHandle } from "react-resizable-panels";
 import {
+  AlertCircle,
+  Bell,
+  GitBranch as BranchIcon,
+  Check,
+  CheckCircle,
   ChevronDown,
   ChevronLeft,
   ChevronRight,
-  ChevronUp,
+  Command,
+  Eye,
   FileText,
   Folder,
-  Terminal,
-  Search,
   GitBranch,
-  Settings,
-  Play,
   LayoutGrid,
-  X,
-  GitBranch as BranchIcon,
-  AlertCircle,
-  CheckCircle,
-  Bell,
-  Wifi,
-  Command,
-  Check,
   Paintbrush,
-  Save,
+  Play,
   RefreshCw,
-  Eye,
+  Save,
+  Search,
+  Settings,
+  Terminal,
+  Wifi,
+  X
 } from "lucide-react";
+import * as React from "react";
+import { ImperativePanelHandle, Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 
 /**
  * 简化版VSCode布局Demo，仅使用react-resizable-panels实现
