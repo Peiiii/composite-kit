@@ -159,7 +159,7 @@ export function ActivityItem({
             : 'w-10 justify-center'
         }`}
       >
-        <div className={`flex-shrink-0 ${expandable && isExpanded ? 'w-5 h-5' : 'w-4 h-4'}`}>
+        <div className={`flex-shrink-0 ${expandable && isExpanded ? 'w-5 h-5' : 'w-4 h-5'}`}>
           {icon}
         </div>
         {expandable && isExpanded && (
