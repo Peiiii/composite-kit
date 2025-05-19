@@ -7,7 +7,7 @@ import { LayoutControlsDemo } from "./components/layout-controls-demo";
 import { VSCodeLayoutPureDemo } from "./components/vscode-layout-pure-demo";
 import { VSCodeLayoutPureDemo as VSCodeLayoutPureDemoRefactoring } from "./components/vscode-layout-pure-demo-refactoring";
 import { VSCodeLayout } from "./components/vscode-layout-refactored";
-import { VSCodeLayoutCompoundComponentWorkingOnDemo } from "@/components/vscode-layout/vscode-layout";
+import { VSCodeLayoutCompoundComponentWorkingOnDemo } from "@/components/vscode-layout/examples/demo";
 
 export const vscodeLayoutDemos = [
   {

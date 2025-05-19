@@ -1,19 +1,9 @@
 import {
-    Bell,
-    GitBranch as BranchIcon,
-    CheckCircle,
-    ChevronDown,
-    ChevronLeft,
-    FileText,
-    Folder,
-    GitBranch,
-    LayoutGrid,
-    Play,
-    Search,
-    Wifi,
-  X,
-  } from "lucide-react";
-  import * as React from "react";
+  ChevronLeft,
+  FileText,
+  X
+} from "lucide-react";
+import * as React from "react";
 import {
   ImperativePanelHandle,
   Panel,
@@ -179,6 +169,42 @@ export function WorkspacePanel({
           );
 }
 
+interface ResizablePanelProps {
+  children: React.ReactNode;
+  className?: string;
+  defaultSize?: number;
+  minSize?: number;
+  maxSize?: number;
+  collapsible?: boolean;
+  onCollapse?: () => void;
+  onExpand?: () => void;
+}
+
+export function ResizablePanel({
+  children,
+  className = "",
+  defaultSize,
+  minSize,
+  maxSize,
+  collapsible,
+  onCollapse,
+  onExpand,
+}: ResizablePanelProps) {
+  return (
+    <Panel
+      className={`overflow-hidden ${className}`}
+      defaultSize={defaultSize}
+      minSize={minSize}
+      maxSize={maxSize}
+      collapsible={collapsible}
+      onCollapse={onCollapse}
+      onExpand={onExpand}
+    >
+      {children}
+    </Panel>
+  );
+}
+
 // =============== 编辑器组件 ===============
 
 interface TabsProps {
@@ -261,6 +287,68 @@ export function StatusBar({ children, className = "" }: StatusBarProps) {
     <div
       className={`h-6 bg-gray-100 text-gray-600 text-xs flex items-center px-2 justify-between border-t border-gray-200 shrink-0 ${className}`}
     >
+      {children}
+    </div>
+  );
+}
+
+// =============== 状态栏子组件 ===============
+
+interface StatusBarItemProps {
+  children: React.ReactNode;
+  className?: string;
+  onClick?: () => void;
+}
+
+export function StatusBarItem({
+  children,
+  className = "",
+  onClick,
+}: StatusBarItemProps) {
+  return (
+    <div 
+      className={`px-2 py-0.5 hover:bg-gray-200 rounded cursor-pointer ${className}`}
+      onClick={onClick}
+    >
+      {children}
+    </div>
+  );
+}
+
+interface StatusBarIconItemProps {
+  icon: React.ReactNode;
+  label: string;
+  className?: string;
+  onClick?: () => void;
+}
+
+export function StatusBarIconItem({
+  icon,
+  label,
+  className = "",
+  onClick,
+}: StatusBarIconItemProps) {
+  return (
+    <StatusBarItem className={className} onClick={onClick}>
+      <div className="flex items-center">
+        {icon}
+        <span className="ml-1">{label}</span>
+      </div>
+    </StatusBarItem>
+  );
+}
+
+interface StatusBarGroupProps {
+  children: React.ReactNode;
+  className?: string;
+}
+
+export function StatusBarGroup({
+  children,
+  className = "",
+}: StatusBarGroupProps) {
+  return (
+    <div className={`flex items-center space-x-2 ${className}`}>
       {children}
     </div>
   );
@@ -496,230 +584,86 @@ export function ResizeHandle({
   );
 }
 
-// =============== 示例使用 ===============
+// =============== 主布局组件 ===============
 
-export function VSCodeLayoutCompoundComponentWorkingOnDemo() {
-  // 使用 Hook 管理面板状态
-  const leftPanel = usePanelControls();
-  const rightPanel = usePanelControls();
-  const bottomPanel = usePanelControls();
+interface MainLayoutProps {
+  children: React.ReactNode;
+  className?: string;
+}
 
-  const [activeFile, setActiveFile] = React.useState("file1");
-  const [activeActivityItem, setActiveActivityItem] = React.useState("explorer");
-
-  // 示例文件数据
-  const files = [
-    {
-      id: "file1",
-      name: "index.tsx",
-      content: "export default function Home() {\n  return <div>Hello World</div>;\n}",
-    },
-    {
-      id: "file2",
-      name: "Button.tsx",
-      content: 'export function Button({ children }) {\n  return <button className="px-4 py-2 bg-blue-500 text-white rounded">{children}</button>;\n}',
-    },
-  ];
-
-  // 活动栏数据
-  const activityItems = [
-    {
-      id: "explorer",
-      icon: <Folder className="h-5 w-5" />,
-      title: "资源管理器",
-    },
-    { id: "search", icon: <Search className="h-5 w-5" />, title: "搜索" },
-    { id: "git", icon: <GitBranch className="h-5 w-5" />, title: "源代码管理" },
-    { id: "debug", icon: <Play className="h-5 w-5" />, title: "运行和调试" },
-    {
-      id: "extensions",
-      icon: <LayoutGrid className="h-5 w-5" />,
-      title: "扩展",
-    },
-  ];
-
+export function MainLayout({
+  children,
+  className = "",
+}: MainLayoutProps) {
   return (
-    <WorkspaceLayout>
-      <LayoutControls
-        onToggleLeftSidebar={leftPanel.toggle}
-        onToggleRightSidebar={rightPanel.toggle}
-        onToggleBottomPanel={bottomPanel.toggle}
-        isLeftSidebarCollapsed={leftPanel.isCollapsed}
-        isRightSidebarCollapsed={rightPanel.isCollapsed}
-        isBottomPanelCollapsed={bottomPanel.isCollapsed}
-      />
-      <div className="flex-1 flex overflow-hidden">
-        <ActivityBar>
-          {activityItems.map((item) => (
-            <ActivityItem
-              key={item.id}
-              icon={item.icon}
-              title={item.title}
-              isActive={activeActivityItem === item.id}
-              onClick={() => setActiveActivityItem(item.id)}
-            />
-          ))}
-        </ActivityBar>
-          
-        <div className="flex-1 overflow-hidden">
-          <PanelGroup direction="horizontal" className="h-full">
-            <SidebarLayout
-              ref={leftPanel.ref}
-              onCollapse={leftPanel.collapse}
-              onExpand={leftPanel.expand}
-            >
-              <WorkspacePanel
-                title="资源管理器"
-                isCollapsed={leftPanel.isCollapsed}
-                onCollapse={leftPanel.collapse}
-                onExpand={leftPanel.expand}
-              >
-                <PanelContent>
-                  {files.map((file) => (
-                    <button
-                      key={file.id}
-                      className={`flex items-center w-full text-sm px-2 py-1 text-left ${
-                        activeFile === file.id
-                          ? "bg-blue-100 text-blue-800"
-                          : "hover:bg-gray-100"
-                      }`}
-                      onClick={() => setActiveFile(file.id)}
-                    >
-                      <FileText className="h-4 w-4 mr-2 flex-shrink-0" />
-                      <span className="truncate">{file.name}</span>
-                    </button>
-                  ))}
-                </PanelContent>
-              </WorkspacePanel>
-            </SidebarLayout>
-              
-            <ResizeHandle />
-              
-            <Panel className="overflow-hidden">
-              <PanelGroup direction="vertical" className="h-full">
-                <Panel className="overflow-hidden">
-                  <WorkspacePanel>
-                    <EditorHeader>
-                      {files.map((file) => (
-                        <Tab
-                          key={file.id}
-                          title={file.name}
-                          isActive={activeFile === file.id}
-                          onClick={() => setActiveFile(file.id)}
-                          onClose={() => {
-                            if (files.length > 1) {
-                              const nextFile = files.find((f) => f.id !== file.id);
-                              if (nextFile) setActiveFile(nextFile.id);
-                            }
-                          }}
-                        />
-                      ))}
-                    </EditorHeader>
-                    <EditorContent>
-                      <pre className="text-sm font-mono">
-                        {files.find((f) => f.id === activeFile)?.content}
-                      </pre>
-                    </EditorContent>
-                  </WorkspacePanel>
-                </Panel>
-                  
-                <ResizeHandle orientation="horizontal" />
-                  
-                <SidebarLayout
-                  ref={bottomPanel.ref}
-                  defaultSize={25} 
-                  onCollapse={bottomPanel.collapse}
-                  onExpand={bottomPanel.expand}
-                >
-                  <WorkspacePanel
-                    title="终端"
-                    isCollapsed={bottomPanel.isCollapsed}
-                    onCollapse={bottomPanel.collapse}
-                    onExpand={bottomPanel.expand}
-                  >
-                    <PanelContent>
-                      <div className="bg-gray-900 text-gray-200">
-                        <pre className="text-sm font-mono">
-                          $ npm start{"\n"}
-                          {">"} project@0.1.0 start{"\n"}
-                          {">"} react-scripts start{"\n"}
-                          {"\n"}
-                          Starting the development server...{"\n"}
-                          Compiled successfully!{"\n"}
-                          {"\n"}
-                          You can now view project in the browser.{"\n"}
-                          Local: http://localhost:3000
-                        </pre>
-                      </div>
-                    </PanelContent>
-                  </WorkspacePanel>
-                </SidebarLayout>
-              </PanelGroup>
-            </Panel>
-              
-            <ResizeHandle />
-              
-            <SidebarLayout
-              ref={rightPanel.ref}
-              onCollapse={rightPanel.collapse}
-              onExpand={rightPanel.expand}
-            >
-              <WorkspacePanel
-                title="大纲"
-                isCollapsed={rightPanel.isCollapsed}
-                onCollapse={rightPanel.collapse}
-                onExpand={rightPanel.expand}
-              >
-                <PanelContent>
-                  <div className="mb-2">
-                    <div className="flex items-center mb-1">
-                      <ChevronDown className="h-3 w-3 mr-1" />
-                      <span className="text-sm font-medium truncate">文件结构</span>
-                    </div>
-                    <div className="ml-4 flex flex-col gap-1">
-                      <div className="flex items-center text-sm text-purple-700">
-                        <span>function</span>
-                        <span className="ml-2">Button</span>
-                      </div>
-                      <div className="flex items-center text-sm text-blue-700">
-                        <span>interface</span>
-                        <span className="ml-2">ButtonProps</span>
-                      </div>
-                    </div>
-                  </div>
-                </PanelContent>
-              </WorkspacePanel>
-            </SidebarLayout>
-          </PanelGroup>
-        </div>
-      </div>
-        
-      <StatusBar>
-        <div className="flex items-center space-x-2">
-          <div className="flex items-center px-2 py-0.5 hover:bg-gray-200 rounded cursor-pointer">
-            <BranchIcon className="h-3.5 w-3.5 mr-1" />
-            <span>main</span>
-          </div>
-          <div className="flex items-center px-2 py-0.5 hover:bg-gray-200 rounded cursor-pointer">
-            <CheckCircle className="h-3.5 w-3.5 mr-1 text-green-500" />
-            <span>就绪</span>
-          </div>
-        </div>
-        <div className="flex items-center space-x-2">
-          <div className="px-2 py-0.5 hover:bg-gray-200 rounded cursor-pointer">
-            UTF-8
-          </div>
-          <div className="px-2 py-0.5 hover:bg-gray-200 rounded cursor-pointer">
-            TSX
-          </div>
-          <div className="px-2 py-0.5 hover:bg-gray-200 rounded cursor-pointer">
-            <Wifi className="h-3.5 w-3.5 text-green-500" />
-          </div>
-          <div className="px-2 py-0.5 hover:bg-gray-200 rounded cursor-pointer">
-            <Bell className="h-3.5 w-3.5" />
-          </div>
-        </div>
-      </StatusBar>
-    </WorkspaceLayout>
+    <div className={`flex-1 flex overflow-hidden ${className}`}>
+      {children}
+    </div>
+  );
+}
+
+interface MainContentProps {
+  children: React.ReactNode;
+  className?: string;
+}
+
+export function MainContent({
+  children,
+  className = "",
+}: MainContentProps) {
+  return (
+    <div className={`flex-1 overflow-hidden ${className}`}>
+      {children}
+    </div>
+  );
+}
+
+interface HorizontalLayoutProps {
+  children: React.ReactNode;
+  className?: string;
+  onLayout?: (sizes: number[]) => void;
+  autoSaveId?: string;
+}
+
+export function HorizontalLayout({
+  children,
+  className = "",
+  onLayout,
+  autoSaveId,
+}: HorizontalLayoutProps) {
+  return (
+    <PanelGroup 
+      direction="horizontal" 
+      className={`h-full ${className}`}
+      onLayout={onLayout}
+      autoSaveId={autoSaveId}
+    >
+      {children}
+    </PanelGroup>
+  );
+}
+
+interface VerticalLayoutProps {
+  children: React.ReactNode;
+  className?: string;
+  onLayout?: (sizes: number[]) => void;
+  autoSaveId?: string;
+}
+
+export function VerticalLayout({
+  children,
+  className = "",
+  onLayout,
+  autoSaveId,
+}: VerticalLayoutProps) {
+  return (
+    <PanelGroup 
+      direction="vertical" 
+      className={`h-full ${className}`}
+      onLayout={onLayout}
+      autoSaveId={autoSaveId}
+    >
+      {children}
+    </PanelGroup>
   );
 }
