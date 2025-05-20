@@ -1,8 +1,4 @@
-import {
-  ChevronLeft,
-  FileText,
-  X
-} from "lucide-react";
+import { ChevronLeft, FileText, X } from "lucide-react";
 import * as React from "react";
 import {
   ImperativePanelHandle,
@@ -10,6 +6,8 @@ import {
   PanelGroup,
   PanelResizeHandle,
 } from "react-resizable-panels";
+import { cva, type VariantProps } from "class-variance-authority";
+import { cn } from "@/lib/utils";
 
 // =============== 基础布局组件 ===============
 
@@ -42,30 +40,38 @@ export interface SidebarLayoutProps {
   onExpand?: () => void;
 }
 
-export const SidebarLayout = React.forwardRef<ImperativePanelHandle, SidebarLayoutProps>(({
-  children,
-  defaultSize = 20,
-  minSize = 10,
-  className = "",
-  collapsible = true,
-  onCollapse,
-  onExpand,
-}, ref) => {
-  return (
-    <Panel
-      ref={ref}
-      data-testid="sidebar-layout"
-      defaultSize={defaultSize}
-      minSize={minSize}
-      collapsible={collapsible}
-      onCollapse={onCollapse}
-      onExpand={onExpand}
-      className={`overflow-hidden flex-shrink-0 ${className}`}
-    >
-      {children}
-    </Panel>
-  );
-});
+export const SidebarLayout = React.forwardRef<
+  ImperativePanelHandle,
+  SidebarLayoutProps
+>(
+  (
+    {
+      children,
+      defaultSize = 20,
+      minSize = 10,
+      className = "",
+      collapsible = true,
+      onCollapse,
+      onExpand,
+    },
+    ref
+  ) => {
+    return (
+      <Panel
+        ref={ref}
+        data-testid="sidebar-layout"
+        defaultSize={defaultSize}
+        minSize={minSize}
+        collapsible={collapsible}
+        onCollapse={onCollapse}
+        onExpand={onExpand}
+        className={`overflow-hidden flex-shrink-0 ${className}`}
+      >
+        {children}
+      </Panel>
+    );
+  }
+);
 
 interface EditorLayoutProps {
   children: React.ReactNode;
@@ -74,7 +80,10 @@ interface EditorLayoutProps {
 
 export function EditorLayout({ children, className = "" }: EditorLayoutProps) {
   return (
-    <Panel data-testid="editor-layout" className={`overflow-hidden ${className}`}>
+    <Panel
+      data-testid="editor-layout"
+      className={`overflow-hidden ${className}`}
+    >
       <PanelGroup direction="vertical" className="h-full">
         {children}
       </PanelGroup>
@@ -92,8 +101,8 @@ interface ActivityBarProps {
   expandable?: boolean;
 }
 
-export function ActivityBar({ 
-  children, 
+export function ActivityBar({
+  children,
   className = "",
   isExpanded = false,
   onToggle,
@@ -103,26 +112,45 @@ export function ActivityBar({
     <div
       data-testid="activity-bar"
       className={`relative bg-gray-100 flex flex-col items-center py-3 border-r shrink-0 transition-all duration-300 ease-in-out ${
-        expandable && isExpanded ? 'w-52' : 'w-12'
+        expandable && isExpanded ? "w-52" : "w-12"
       } ${className}`}
     >
-      <div className="w-full flex flex-col items-center">
-        {children}
-      </div>
+      <div className="w-full flex flex-col items-center">{children}</div>
       {expandable && onToggle && (
         <button
           data-testid="activity-bar-toggle"
           className="absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-gray-100 border rounded-full flex items-center justify-center hover:bg-gray-200 transition-all duration-300 hover:scale-110"
           onClick={onToggle}
         >
-          <ChevronLeft className={`h-4 w-4 transform transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} />
+          <ChevronLeft
+            className={`h-4 w-4 transform transition-transform duration-300 ${
+              isExpanded ? "rotate-180" : ""
+            }`}
+          />
         </button>
       )}
     </div>
   );
 }
 
-interface ActivityItemProps {
+const activityItemVariants = cva(
+  "flex items-center rounded-md outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 transition-all duration-200 ease-in-out cursor-pointer",
+  {
+    variants: {
+      active: {
+        true: "bg-accent text-accent-foreground",
+        false: "text-muted-foreground hover:bg-muted/50 hover:text-foreground",
+      },
+    },
+    defaultVariants: {
+      active: false,
+    },
+  },
+);
+
+interface ActivityItemProps
+  extends React.HTMLAttributes<HTMLDivElement>,
+    VariantProps<typeof activityItemVariants> {
   icon: React.ReactNode;
   title: string;
   isActive?: boolean;
@@ -130,45 +158,81 @@ interface ActivityItemProps {
   className?: string;
   isExpanded?: boolean;
   expandable?: boolean;
+  disabled?: boolean;
+  badge?: React.ReactNode;
 }
 
 export function ActivityItem({
   icon,
   title,
-  isActive,
+  isActive = false,
   onClick,
   className = "",
   isExpanded = false,
   expandable = false,
+  disabled = false,
+  badge,
+  ...props
 }: ActivityItemProps) {
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (disabled) return;
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      onClick?.();
+    }
+  };
+
+  const renderBadge = React.useCallback(() => {
+    if (!badge) return null;
+    if (React.isValidElement(badge)) {
+      const element = badge as React.ReactElement<{ className?: string }>;
+      return React.cloneElement(element, {
+        className: cn("h-5 px-1.5 text-xs font-medium", element.props.className),
+      });
+    }
+    return (
+      <span className="h-5 px-1.5 text-xs font-medium bg-gray-100 rounded">
+        {badge}
+      </span>
+    );
+  }, [badge]);
+
   return (
-    <button
+    <div
       data-testid="activity-item"
-      className={`w-full mb-1.5 flex items-center rounded transition-all duration-300 ${
-        isActive
-          ? "bg-blue-50 text-blue-600 border-l-2 border-blue-600"
-          : "text-gray-600 hover:bg-gray-200"
-      } ${className}`}
-      title={title}
+      className={cn(
+        activityItemVariants({ active: isActive }),
+        expandable && isExpanded ? "px-3 py-2 mx-2 self-stretch" : "p-2 mx-3",
+        "group",
+        disabled && "opacity-50 pointer-events-none",
+        className
+      )}
       onClick={onClick}
+      role="button"
+      tabIndex={disabled ? -1 : 0}
+      aria-disabled={disabled}
+      aria-selected={isActive}
+      onKeyDown={handleKeyDown}
+      {...props}
     >
-      <div 
-        className={`flex items-center h-10 ${
-          expandable && isExpanded 
-            ? 'w-full px-3' 
-            : 'w-10 justify-center'
-        }`}
-      >
-        <div className={`flex-shrink-0 ${expandable && isExpanded ? 'w-5 h-5' : 'w-4 h-5'}`}>
-          {icon}
-        </div>
-        {expandable && isExpanded && (
-          <span className="ml-3 text-sm font-medium truncate transition-opacity duration-300">
-            {title}
-          </span>
-        )}
+      <div className={cn("flex-shrink-0 transition-all duration-200 ease-in-out", expandable && isExpanded ? "" : "mx-auto")}>
+        {React.cloneElement(icon as React.ReactElement<React.SVGProps<SVGSVGElement>>, {
+          className: cn(
+            "h-5 w-5 transition-colors duration-150",
+            isActive ? "text-current" : "text-muted-foreground group-hover:text-foreground"
+          ),
+        })}
       </div>
-    </button>
+      <div
+        className={cn(
+          "flex flex-1 items-center justify-between min-w-0 transition-all duration-200 ease-in-out",
+          expandable && isExpanded ? "opacity-100 w-auto ml-3" : "opacity-0 w-0 overflow-hidden ml-0"
+        )}
+      >
+        <span className="text-sm font-medium truncate min-w-0">{title}</span>
+        {badge && <div className="ml-auto pl-2 flex-shrink-0">{renderBadge()}</div>}
+      </div>
+    </div>
   );
 }
 
@@ -194,13 +258,16 @@ export function WorkspacePanel({
   isCollapsed,
 }: WorkspacePanelProps) {
   return (
-    <div data-testid="workspace-panel" className={`h-full flex flex-col ${className}`}>
+    <div
+      data-testid="workspace-panel"
+      className={`h-full flex flex-col ${className}`}
+    >
       {header ||
         (title && (
           <div className="h-10 flex items-center justify-between px-4 border-b bg-gray-50">
             <span className="font-medium truncate">{title}</span>
             {(onCollapse || onExpand) && (
-              <button 
+              <button
                 data-testid="workspace-panel-toggle"
                 className="p-1 rounded hover:bg-gray-200"
                 onClick={isCollapsed ? onExpand : onCollapse}
@@ -261,7 +328,9 @@ interface TabsProps {
 
 export function Tabs({ children, className = "" }: TabsProps) {
   return (
-    <div data-testid="tabs" className={`border-b bg-gray-50 flex ${className}`}>{children}</div>
+    <div data-testid="tabs" className={`border-b bg-gray-50 flex ${className}`}>
+      {children}
+    </div>
   );
 }
 
@@ -281,7 +350,7 @@ export function Tab({
   className = "",
 }: TabProps) {
   return (
-    <button 
+    <button
       data-testid="tab"
       className={`px-3 py-2 flex items-center gap-1 text-sm relative group ${
         isActive ? "bg-white" : "hover:bg-gray-100"
@@ -291,7 +360,7 @@ export function Tab({
       <FileText className="h-4 w-4" />
       <span>{title}</span>
       {onClose && (
-        <button 
+        <button
           data-testid="tab-close"
           className="ml-1 p-1 rounded-sm hover:bg-gray-200 opacity-60 group-hover:opacity-100"
           onClick={(e) => {
@@ -320,7 +389,12 @@ export function EditorContent({
   className = "",
 }: EditorContentProps) {
   return (
-    <div data-testid="editor-content" className={`flex-1 p-4 overflow-auto ${className}`}>{children}</div>
+    <div
+      data-testid="editor-content"
+      className={`flex-1 p-4 overflow-auto ${className}`}
+    >
+      {children}
+    </div>
   );
 }
 
@@ -356,7 +430,7 @@ export function StatusBarItem({
   onClick,
 }: StatusBarItemProps) {
   return (
-    <div 
+    <div
       data-testid="status-bar-item"
       className={`px-2 py-0.5 hover:bg-gray-200 rounded cursor-pointer ${className}`}
       onClick={onClick}
@@ -380,7 +454,11 @@ export function StatusBarIconItem({
   onClick,
 }: StatusBarIconItemProps) {
   return (
-    <StatusBarItem data-testid="status-bar-icon-item" className={className} onClick={onClick}>
+    <StatusBarItem
+      data-testid="status-bar-icon-item"
+      className={className}
+      onClick={onClick}
+    >
       <div className="flex items-center">
         {icon}
         <span className="ml-1">{label}</span>
@@ -399,7 +477,10 @@ export function StatusBarGroup({
   className = "",
 }: StatusBarGroupProps) {
   return (
-    <div data-testid="status-bar-group" className={`flex items-center space-x-2 ${className}`}>
+    <div
+      data-testid="status-bar-group"
+      className={`flex items-center space-x-2 ${className}`}
+    >
       {children}
     </div>
   );
@@ -427,10 +508,13 @@ export function LayoutControls({
   className = "",
 }: LayoutControlsProps) {
   return (
-    <div data-testid="layout-controls" className={`flex items-center p-2 border-b bg-gray-50 justify-between ${className}`}>
+    <div
+      data-testid="layout-controls"
+      className={`flex items-center p-2 border-b bg-gray-50 justify-between ${className}`}
+    >
       <div className="flex space-x-2">
         {onToggleLeftSidebar && (
-          <button 
+          <button
             data-testid="toggle-left-sidebar"
             className="px-3 py-1 text-sm rounded hover:bg-gray-200"
             onClick={onToggleLeftSidebar}
@@ -439,7 +523,7 @@ export function LayoutControls({
           </button>
         )}
         {onToggleRightSidebar && (
-          <button 
+          <button
             data-testid="toggle-right-sidebar"
             className="px-3 py-1 text-sm rounded hover:bg-gray-200"
             onClick={onToggleRightSidebar}
@@ -448,7 +532,7 @@ export function LayoutControls({
           </button>
         )}
         {onToggleBottomPanel && (
-          <button 
+          <button
             data-testid="toggle-bottom-panel"
             className="px-3 py-1 text-sm rounded hover:bg-gray-200"
             onClick={onToggleBottomPanel}
@@ -522,12 +606,15 @@ export function PanelHeader({
   isCollapsed,
 }: PanelHeaderProps) {
   return (
-    <div data-testid="panel-header" className={`h-10 flex items-center justify-between px-4 border-b bg-gray-50 ${className}`}>
+    <div
+      data-testid="panel-header"
+      className={`h-10 flex items-center justify-between px-4 border-b bg-gray-50 ${className}`}
+    >
       {children || (
         <>
           <span className="font-medium truncate">{title}</span>
           {(onCollapse || onExpand) && (
-            <button 
+            <button
               data-testid="panel-header-toggle"
               className="p-1 rounded hover:bg-gray-200"
               onClick={isCollapsed ? onExpand : onCollapse}
@@ -553,7 +640,10 @@ export function PanelContent({
   padding = true,
 }: PanelContentProps) {
   return (
-    <div data-testid="panel-content" className={`flex-1 overflow-auto ${padding ? 'p-4' : ''} ${className}`}>
+    <div
+      data-testid="panel-content"
+      className={`flex-1 overflow-auto ${padding ? "p-4" : ""} ${className}`}
+    >
       {children}
     </div>
   );
@@ -564,12 +654,12 @@ interface PanelFooterProps {
   className?: string;
 }
 
-export function PanelFooter({
-  children,
-  className = "",
-}: PanelFooterProps) {
+export function PanelFooter({ children, className = "" }: PanelFooterProps) {
   return (
-    <div data-testid="panel-footer" className={`h-10 border-t bg-gray-50 flex items-center px-4 ${className}`}>
+    <div
+      data-testid="panel-footer"
+      className={`h-10 border-t bg-gray-50 flex items-center px-4 ${className}`}
+    >
       {children}
     </div>
   );
@@ -582,12 +672,12 @@ interface EditorHeaderProps {
   className?: string;
 }
 
-export function EditorHeader({
-  children,
-  className = "",
-}: EditorHeaderProps) {
+export function EditorHeader({ children, className = "" }: EditorHeaderProps) {
   return (
-    <div data-testid="editor-header" className={`border-b bg-gray-50 flex ${className}`}>
+    <div
+      data-testid="editor-header"
+      className={`border-b bg-gray-50 flex ${className}`}
+    >
       {children}
     </div>
   );
@@ -598,12 +688,12 @@ interface EditorFooterProps {
   className?: string;
 }
 
-export function EditorFooter({
-  children,
-  className = "",
-}: EditorFooterProps) {
+export function EditorFooter({ children, className = "" }: EditorFooterProps) {
   return (
-    <div data-testid="editor-footer" className={`h-6 border-t bg-gray-50 flex items-center px-4 ${className}`}>
+    <div
+      data-testid="editor-footer"
+      className={`h-6 border-t bg-gray-50 flex items-center px-4 ${className}`}
+    >
       {children}
     </div>
   );
@@ -612,28 +702,26 @@ export function EditorFooter({
 // =============== 布局工具组件 ===============
 
 interface ResizeHandleProps {
-  orientation?: 'horizontal' | 'vertical';
+  orientation?: "horizontal" | "vertical";
   className?: string;
 }
 
 export function ResizeHandle({
-  orientation = 'vertical',
+  orientation = "vertical",
   className = "",
 }: ResizeHandleProps) {
   return (
-    <PanelResizeHandle 
+    <PanelResizeHandle
       data-testid="resize-handle"
       className={`${
-        orientation === 'vertical' 
-          ? 'w-1' 
-          : 'h-1'
+        orientation === "vertical" ? "w-1" : "h-1"
       } bg-gray-200 hover:bg-blue-500 relative group ${className}`}
     >
-      <div 
+      <div
         className={`absolute ${
-          orientation === 'vertical'
-            ? 'inset-y-0 left-1/2 -translate-x-1/2 w-1'
-            : 'inset-x-0 top-1/2 -translate-y-1/2 h-1'
+          orientation === "vertical"
+            ? "inset-y-0 left-1/2 -translate-x-1/2 w-1"
+            : "inset-x-0 top-1/2 -translate-y-1/2 h-1"
         } group-hover:bg-blue-500 opacity-0 group-hover:opacity-100 transition-opacity`}
       />
     </PanelResizeHandle>
@@ -647,12 +735,12 @@ interface MainLayoutProps {
   className?: string;
 }
 
-export function MainLayout({
-  children,
-  className = "",
-}: MainLayoutProps) {
+export function MainLayout({ children, className = "" }: MainLayoutProps) {
   return (
-    <div data-testid="main-layout" className={`flex-1 flex overflow-hidden ${className}`}>
+    <div
+      data-testid="main-layout"
+      className={`flex-1 flex overflow-hidden ${className}`}
+    >
       {children}
     </div>
   );
@@ -663,12 +751,12 @@ interface MainContentProps {
   className?: string;
 }
 
-export function MainContent({
-  children,
-  className = "",
-}: MainContentProps) {
+export function MainContent({ children, className = "" }: MainContentProps) {
   return (
-    <div data-testid="main-content" className={`flex-1 overflow-hidden ${className}`}>
+    <div
+      data-testid="main-content"
+      className={`flex-1 overflow-hidden ${className}`}
+    >
       {children}
     </div>
   );
@@ -688,9 +776,9 @@ export function HorizontalLayout({
   autoSaveId,
 }: HorizontalLayoutProps) {
   return (
-    <PanelGroup 
+    <PanelGroup
       data-testid="horizontal-layout"
-      direction="horizontal" 
+      direction="horizontal"
       className={`h-full ${className}`}
       onLayout={onLayout}
       autoSaveId={autoSaveId}
@@ -714,9 +802,9 @@ export function VerticalLayout({
   autoSaveId,
 }: VerticalLayoutProps) {
   return (
-    <PanelGroup 
+    <PanelGroup
       data-testid="vertical-layout"
-      direction="vertical" 
+      direction="vertical"
       className={`h-full ${className}`}
       onLayout={onLayout}
       autoSaveId={autoSaveId}
