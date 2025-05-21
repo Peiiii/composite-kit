@@ -272,7 +272,7 @@ export function WorkspacePanel({
                 className="p-1 rounded hover:bg-muted"
                 onClick={isCollapsed ? onExpand : onCollapse}
               >
-                <ChevronLeft className="h-4 w-4" />
+                <ChevronLeft className={`h-4 w-4 transform ${isCollapsed ? "" : "rotate-180"}`} />
               </button>
             )}
           </div>
