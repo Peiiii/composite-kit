@@ -279,6 +279,19 @@ const mockMessages: Message[] = [
   },
 ];
 
+const mockContacts = [
+  { id: "1", name: "张三", avatar: "张", type: 'private' },
+  { id: "2", name: "李四", avatar: "李", type: 'private' },
+  { id: "3", name: "产品研发群", avatar: "产", type: 'group' },
+  { id: "4", name: "前端开发群", avatar: "前", type: 'group' },
+  { id: "5", name: "UI设计群", avatar: "U", type: 'group' },
+  { id: "6", name: "测试团队", avatar: "测", type: 'group' },
+  { id: "7", name: "运维团队", avatar: "运", type: 'group' },
+  { id: "8", name: "腾讯科技", avatar: "腾", type: 'official' },
+  { id: "9", name: "微信团队", avatar: "微", type: 'official' },
+  { id: "10", name: "微信支付", avatar: "支", type: 'official' },
+];
+
 const navItems = [
   { id: "chat", icon: <MessageSquare className="h-5 w-5" />, label: "聊天" },
   { id: "contacts", icon: <Users className="h-5 w-5" />, label: "通讯录" },
@@ -313,6 +326,7 @@ export default function WechatLayout() {
   const [showMiniPrograms, setShowMiniPrograms] = React.useState(false);
   const [showProfile, setShowProfile] = React.useState(false);
   const [windows, setWindows] = React.useState<Window[]>([]);
+  const [selectedContact, setSelectedContact] = React.useState<string | null>(null);
   const messagesEndRef = React.useRef<HTMLDivElement>(null);
   const menuRef = React.useRef<HTMLDivElement>(null);
   const miniProgramsRef = React.useRef<HTMLDivElement>(null);
@@ -430,13 +444,249 @@ export default function WechatLayout() {
     setWindows(prev => prev.filter(w => w.id !== id));
   };
 
+  const handleBackdropClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) {
+      setWindows([]);
+    }
+  };
+
+  const renderRightContent = () => {
+    switch (activeNav) {
+      case "chat":
+        return (
+          <div className="flex-1 flex flex-col">
+            <div className="h-14 border-b border-border flex items-center justify-between px-4">
+              <div className="flex items-center">
+                <span className="font-medium">{mockChats.find(c => c.id === activeChat)?.name}</span>
+              </div>
+              <div className="flex items-center gap-4">
+                <button className="p-2 rounded-full text-muted-foreground hover:text-primary hover:bg-muted transition-colors">
+                  <Phone className="h-5 w-5" />
+                </button>
+                <button className="p-2 rounded-full text-muted-foreground hover:text-primary hover:bg-muted transition-colors">
+                  <Video className="h-5 w-5" />
+                </button>
+                <button className="p-2 rounded-full text-muted-foreground hover:text-primary hover:bg-muted transition-colors">
+                  <MoreVertical className="h-5 w-5" />
+                </button>
+              </div>
+            </div>
+
+            <div className="flex-1 overflow-y-auto p-4 bg-muted/50">
+              <div className="space-y-4">
+                {mockMessages.map((message) => (
+                  <div
+                    key={message.id}
+                    className={`flex ${message.isSelf ? "justify-end" : "justify-start"}`}
+                  >
+                    <div
+                      className={`max-w-[70%] rounded-lg p-3 ${
+                        message.isSelf
+                          ? "bg-primary text-primary-foreground"
+                          : "bg-background"
+                      }`}
+                    >
+                      {message.type === 'text' ? (
+                        <p className="text-sm">{message.content}</p>
+                      ) : (
+                        <div className="w-48 h-32 bg-muted rounded flex items-center justify-center">
+                          <ImageIcon className="h-8 w-8 text-muted-foreground" />
+                        </div>
+                      )}
+                      <span className="text-xs opacity-70 mt-1 block">
+                        {message.time}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+                <div ref={messagesEndRef} />
+              </div>
+            </div>
+
+            <div className="h-14 border-t border-border flex items-center px-4 gap-2">
+              <button className="p-2 rounded-full text-muted-foreground hover:text-primary hover:bg-muted transition-colors">
+                <Plus className="h-5 w-5" />
+              </button>
+              <input
+                type="text"
+                placeholder="输入消息..."
+                className="flex-1 bg-muted rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
+              />
+              <button className="p-2 rounded-full text-primary hover:bg-primary/10 transition-colors">
+                <MessageSquare className="h-5 w-5" />
+              </button>
+            </div>
+          </div>
+        );
+      case "contacts":
+        return (
+          <>
+            <div className="w-80 border-r border-border flex flex-col">
+              <div className="h-14 border-b border-border flex items-center justify-between px-4">
+                <div className="flex items-center">
+                  <span className="font-medium">通讯录</span>
+                </div>
+                <div className="flex items-center gap-4">
+                  <button className="p-2 rounded-full text-muted-foreground hover:text-primary hover:bg-muted transition-colors">
+                    <Plus className="h-5 w-5" />
+                  </button>
+                  <button className="p-2 rounded-full text-muted-foreground hover:text-primary hover:bg-muted transition-colors">
+                    <Search className="h-5 w-5" />
+                  </button>
+                </div>
+              </div>
+
+              <div className="flex-1 overflow-y-auto">
+                {mockContacts.map((contact) => (
+                  <div
+                    key={contact.id}
+                    className={`flex items-center p-4 hover:bg-muted cursor-pointer ${
+                      selectedContact === contact.id ? "bg-muted" : ""
+                    }`}
+                    onClick={() => setSelectedContact(contact.id)}
+                  >
+                    <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mr-3">
+                      {contact.avatar}
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-1">
+                        <span className="font-medium">{contact.name}</span>
+                        {contact.type === 'official' && (
+                          <span className="text-xs text-blue-500">公众号</span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex-1 flex flex-col">
+              {selectedContact ? (
+                <>
+                  <div className="h-14 border-b border-border flex items-center justify-between px-4">
+                    <div className="flex items-center">
+                      <span className="font-medium">详细资料</span>
+                    </div>
+                  </div>
+
+                  <div className="flex-1 overflow-y-auto">
+                    <div className="p-4 border-b border-border">
+                      <div className="flex items-center gap-4 mb-4">
+                        <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center">
+                          <span className="text-2xl">{mockContacts.find(c => c.id === selectedContact)?.avatar}</span>
+                        </div>
+                        <div>
+                          <h3 className="text-xl font-medium mb-1">
+                            {mockContacts.find(c => c.id === selectedContact)?.name}
+                          </h3>
+                          <p className="text-sm text-muted-foreground">微信号：wxid_{selectedContact}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <span>备注：</span>
+                        <span className="text-foreground">未设置</span>
+                      </div>
+                    </div>
+
+                    <div className="p-4 border-b border-border">
+                      <div className="flex items-center justify-between mb-2">
+                        <h4 className="text-sm font-medium">朋友圈</h4>
+                        <button 
+                          className="text-xs text-primary hover:text-primary/80"
+                          onClick={() => handleNavClick("moments")}
+                        >
+                          查看全部
+                        </button>
+                      </div>
+                      <div className="grid grid-cols-3 gap-2">
+                        {[1, 2, 3].map((i) => (
+                          <div 
+                            key={i}
+                            className="aspect-square bg-muted rounded cursor-pointer hover:opacity-80 transition-opacity"
+                            onClick={() => handleNavClick("moments")}
+                          >
+                            <Image className="h-full w-full object-cover rounded" />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="p-4 border-b border-border">
+                      <div className="flex items-center justify-between">
+                        <h4 className="text-sm font-medium">共同群聊</h4>
+                        <span className="text-sm text-muted-foreground">3个</span>
+                      </div>
+                    </div>
+
+                    <div className="p-4 flex items-center justify-center gap-8">
+                      <button className="flex flex-col items-center gap-1 text-muted-foreground hover:text-primary">
+                        <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                          <MessageSquare className="h-6 w-6" />
+                        </div>
+                        <span className="text-xs">发消息</span>
+                      </button>
+                      <button className="flex flex-col items-center gap-1 text-muted-foreground hover:text-primary">
+                        <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                          <Phone className="h-6 w-6" />
+                        </div>
+                        <span className="text-xs">语音通话</span>
+                      </button>
+                      <button className="flex flex-col items-center gap-1 text-muted-foreground hover:text-primary">
+                        <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                          <Video className="h-6 w-6" />
+                        </div>
+                        <span className="text-xs">视频通话</span>
+                      </button>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <div className="flex-1 flex items-center justify-center text-muted-foreground">
+                  请选择一个联系人查看详情
+                </div>
+              )}
+            </div>
+          </>
+        );
+      case "favorites":
+        return (
+          <div className="flex-1 flex flex-col">
+            <div className="h-14 border-b border-border flex items-center justify-between px-4">
+              <div className="flex items-center">
+                <span className="font-medium">收藏</span>
+              </div>
+            </div>
+            <div className="flex-1 flex items-center justify-center text-muted-foreground">
+              暂无收藏内容
+            </div>
+          </div>
+        );
+      case "files":
+        return (
+          <div className="flex-1 flex flex-col">
+            <div className="h-14 border-b border-border flex items-center justify-between px-4">
+              <div className="flex items-center">
+                <span className="font-medium">文件传输助手</span>
+              </div>
+            </div>
+            <div className="flex-1 flex items-center justify-center text-muted-foreground">
+              暂无文件
+            </div>
+          </div>
+        );
+      default:
+        return null;
+    }
+  };
+
   return (
     <div className="flex h-full bg-background">
-      {/* 独立窗口 */}
       {windows.map((window) => (
         <div
           key={window.id}
           className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center"
+          onClick={handleBackdropClick}
         >
           <div className="w-[480px] h-[640px] bg-background rounded-lg shadow-lg flex flex-col">
             {window.content}
@@ -444,9 +694,7 @@ export default function WechatLayout() {
         </div>
       ))}
 
-      {/* 最左侧导航栏 */}
       <div className="w-16 border-r border-border flex flex-col items-center py-4">
-        {/* 头像按钮 */}
         <button 
           className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-4 hover:bg-primary/20 transition-colors"
           onClick={() => setShowProfile(!showProfile)}
@@ -454,7 +702,6 @@ export default function WechatLayout() {
           <User className="h-6 w-6 text-primary" />
         </button>
 
-        {/* 个人信息面板 */}
         {showProfile && (
           <div 
             ref={profileRef}
@@ -470,7 +717,6 @@ export default function WechatLayout() {
               </div>
             </div>
 
-            {/* 朋友圈预览 */}
             <div className="mb-4">
               <div className="flex items-center justify-between mb-2">
                 <h4 className="text-sm font-medium">朋友圈</h4>
@@ -494,7 +740,6 @@ export default function WechatLayout() {
               </div>
             </div>
 
-            {/* 发消息按钮 */}
             <button 
               className="w-full py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
               onClick={() => {
@@ -532,7 +777,6 @@ export default function WechatLayout() {
           <Menu className="h-5 w-5" />
         </button>
 
-        {/* 汉堡菜单面板 */}
         {showMenu && (
           <div 
             ref={menuRef}
@@ -551,7 +795,6 @@ export default function WechatLayout() {
           </div>
         )}
 
-        {/* 小程序面板 */}
         {showMiniPrograms && (
           <div 
             ref={miniProgramsRef}
@@ -600,135 +843,68 @@ export default function WechatLayout() {
         )}
       </div>
 
-      {/* 左侧聊天列表 */}
-      <div className="w-80 border-r border-border flex flex-col">
-        {/* 顶部搜索栏 */}
-        <div className="p-4 border-b border-border">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <input
-              type="text"
-              placeholder="搜索"
-              className="w-full pl-9 pr-4 py-2 bg-muted rounded-lg text-sm"
-            />
+      {activeNav === "chat" && (
+        <div className="w-80 border-r border-border flex flex-col">
+          <div className="p-4 border-b border-border">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <input
+                type="text"
+                placeholder="搜索"
+                className="w-full pl-9 pr-4 py-2 bg-muted rounded-lg text-sm"
+              />
+            </div>
           </div>
-        </div>
 
-        {/* 聊天列表 */}
-        <div className="flex-1 overflow-y-auto">
-          {mockChats.map((chat) => (
-            <div
-              key={chat.id}
-              className={`flex items-center p-4 cursor-pointer hover:bg-muted ${
-                activeChat === chat.id ? "bg-muted" : ""
-              }`}
-              onClick={() => setActiveChat(chat.id)}
-            >
-              <div className="relative">
-                <div className={`w-12 h-12 rounded-full flex items-center justify-center mr-3 ${
-                  chat.type === 'official' || chat.type === 'subscription' || chat.type === 'official-articles'
-                    ? 'bg-blue-100 text-blue-600' 
-                    : 'bg-primary/10'
-                }`}>
-                  {getChatIcon(chat) || chat.name[0]}
+          <div className="flex-1 overflow-y-auto">
+            {mockChats.map((chat) => (
+              <div
+                key={chat.id}
+                className={`flex items-center p-4 cursor-pointer hover:bg-muted ${
+                  activeChat === chat.id ? "bg-muted" : ""
+                }`}
+                onClick={() => setActiveChat(chat.id)}
+              >
+                <div className="relative">
+                  <div className={`w-12 h-12 rounded-full flex items-center justify-center mr-3 ${
+                    chat.type === 'official' || chat.type === 'subscription' || chat.type === 'official-articles'
+                      ? 'bg-blue-100 text-blue-600' 
+                      : 'bg-primary/10'
+                  }`}>
+                    {getChatIcon(chat) || chat.name[0]}
+                  </div>
                 </div>
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="flex justify-between items-center mb-1">
-                  <div className="flex items-center gap-1">
-                    <span className="font-medium truncate">{chat.name}</span>
-                    {chat.type === 'official' && (
-                      <span className="text-xs text-blue-500">公众号</span>
-                    )}
-                    {chat.type === 'subscription' && (
-                      <span className="text-xs text-green-500">订阅号</span>
+                <div className="flex-1 min-w-0">
+                  <div className="flex justify-between items-center mb-1">
+                    <div className="flex items-center gap-1">
+                      <span className="font-medium truncate">{chat.name}</span>
+                      {chat.type === 'official' && (
+                        <span className="text-xs text-blue-500">公众号</span>
+                      )}
+                      {chat.type === 'subscription' && (
+                        <span className="text-xs text-green-500">订阅号</span>
+                      )}
+                    </div>
+                    <span className="text-xs text-muted-foreground">{chat.time}</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-muted-foreground truncate">
+                      {chat.lastMessage}
+                    </span>
+                    {chat.unread && (
+                      <span className="ml-2 px-1.5 py-0.5 bg-primary text-primary-foreground text-xs rounded-full">
+                        {chat.unread}
+                      </span>
                     )}
                   </div>
-                  <span className="text-xs text-muted-foreground">{chat.time}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-muted-foreground truncate">
-                    {chat.lastMessage}
-                  </span>
-                  {chat.unread && (
-                    <span className="ml-2 px-1.5 py-0.5 bg-primary text-primary-foreground text-xs rounded-full">
-                      {chat.unread}
-                    </span>
-                  )}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* 右侧聊天内容 */}
-      <div className="flex-1 flex flex-col">
-        {/* 聊天头部 */}
-        <div className="h-14 border-b border-border flex items-center justify-between px-4">
-          <div className="flex items-center">
-            <span className="font-medium">{mockChats.find(c => c.id === activeChat)?.name}</span>
-          </div>
-          <div className="flex items-center gap-4">
-            <button className="p-2 rounded-full text-muted-foreground hover:text-primary hover:bg-muted transition-colors">
-              <Phone className="h-5 w-5" />
-            </button>
-            <button className="p-2 rounded-full text-muted-foreground hover:text-primary hover:bg-muted transition-colors">
-              <Video className="h-5 w-5" />
-            </button>
-            <button className="p-2 rounded-full text-muted-foreground hover:text-primary hover:bg-muted transition-colors">
-              <MoreVertical className="h-5 w-5" />
-            </button>
-          </div>
-        </div>
-
-        {/* 聊天内容区域 */}
-        <div className="flex-1 overflow-y-auto p-4 bg-muted/50">
-          <div className="space-y-4">
-            {mockMessages.map((message) => (
-              <div
-                key={message.id}
-                className={`flex ${message.isSelf ? "justify-end" : "justify-start"}`}
-              >
-                <div
-                  className={`max-w-[70%] rounded-lg p-3 ${
-                    message.isSelf
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-background"
-                  }`}
-                >
-                  {message.type === 'text' ? (
-                    <p className="text-sm">{message.content}</p>
-                  ) : (
-                    <div className="w-48 h-32 bg-muted rounded flex items-center justify-center">
-                      <ImageIcon className="h-8 w-8 text-muted-foreground" />
-                    </div>
-                  )}
-                  <span className="text-xs opacity-70 mt-1 block">
-                    {message.time}
-                  </span>
                 </div>
               </div>
             ))}
-            <div ref={messagesEndRef} />
           </div>
         </div>
+      )}
 
-        {/* 底部输入区域 */}
-        <div className="h-14 border-t border-border flex items-center px-4 gap-2">
-          <button className="p-2 rounded-full text-muted-foreground hover:text-primary hover:bg-muted transition-colors">
-            <Plus className="h-5 w-5" />
-          </button>
-          <input
-            type="text"
-            placeholder="输入消息..."
-            className="flex-1 bg-muted rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
-          />
-          <button className="p-2 rounded-full text-primary hover:bg-primary/10 transition-colors">
-            <MessageSquare className="h-5 w-5" />
-          </button>
-        </div>
-      </div>
+      {renderRightContent()}
     </div>
   );
 } 
