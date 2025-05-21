@@ -115,7 +115,7 @@ export function ActivityBar({
         expandable && isExpanded ? "w-52" : "w-12"
       } ${className}`}
     >
-      <div className="w-full flex flex-col items-center">{children}</div>
+      <div className="w-full flex flex-col items-center gap-1">{children}</div>
       {expandable && onToggle && (
         <button
           data-testid="activity-bar-toggle"
@@ -139,7 +139,7 @@ const activityItemVariants = cva(
     variants: {
       active: {
         true: "bg-accent text-accent-foreground",
-        false: "text-muted-foreground hover:bg-muted/50 hover:text-foreground",
+        false: "text-muted-foreground hover:text-foreground",
       },
     },
     defaultVariants: {
@@ -203,7 +203,7 @@ export function ActivityItem({
       className={cn(
         activityItemVariants({ active: isActive }),
         expandable && isExpanded ? "px-3 py-2 mx-2 self-stretch" : "p-2 mx-3",
-        "group",
+        "group relative",
         disabled && "opacity-50 pointer-events-none",
         className
       )}
