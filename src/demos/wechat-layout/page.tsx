@@ -20,10 +20,14 @@ import {
   User,
   HelpCircle,
   Camera,
-  QrCode,
   Heart,
-  Settings,
-  Shield
+  ChevronLeft,
+  Image,
+  ThumbsUp,
+  MessageCircle,
+  Share2,
+  RefreshCw,
+  Bell as BellIcon
 } from "lucide-react";
 
 interface ChatItem {
@@ -63,6 +67,12 @@ interface ProfileMenuItem {
   icon: React.ReactNode;
   label: string;
   onClick?: () => void;
+}
+
+interface Window {
+  id: string;
+  title: string;
+  content: React.ReactNode;
 }
 
 const mockChats: ChatItem[] = [
@@ -272,6 +282,7 @@ const mockMessages: Message[] = [
 const navItems = [
   { id: "chat", icon: <MessageSquare className="h-5 w-5" />, label: "聊天" },
   { id: "contacts", icon: <Users className="h-5 w-5" />, label: "通讯录" },
+  { id: "moments", icon: <Heart className="h-5 w-5" />, label: "朋友圈" },
   { id: "favorites", icon: <Star className="h-5 w-5" />, label: "收藏" },
   { id: "files", icon: <FileText className="h-5 w-5" />, label: "文件传输助手" },
 ];
@@ -295,21 +306,13 @@ const myMiniPrograms: MiniProgram[] = [
   { id: "mp7", name: "腾讯视频", icon: "🎬" },
 ];
 
-const profileMenuItems: ProfileMenuItem[] = [
-  { id: "profile", icon: <User className="h-4 w-4" />, label: "个人信息" },
-  { id: "moments", icon: <Heart className="h-4 w-4" />, label: "朋友圈" },
-  { id: "qrcode", icon: <QrCode className="h-4 w-4" />, label: "我的二维码" },
-  { id: "camera", icon: <Camera className="h-4 w-4" />, label: "扫一扫" },
-  { id: "settings", icon: <Settings className="h-4 w-4" />, label: "设置" },
-  { id: "privacy", icon: <Shield className="h-4 w-4" />, label: "隐私" },
-];
-
 export default function WechatLayout() {
   const [activeChat, setActiveChat] = React.useState<string>("1");
   const [activeNav, setActiveNav] = React.useState<string>("chat");
   const [showMenu, setShowMenu] = React.useState(false);
   const [showMiniPrograms, setShowMiniPrograms] = React.useState(false);
   const [showProfile, setShowProfile] = React.useState(false);
+  const [windows, setWindows] = React.useState<Window[]>([]);
   const messagesEndRef = React.useRef<HTMLDivElement>(null);
   const menuRef = React.useRef<HTMLDivElement>(null);
   const miniProgramsRef = React.useRef<HTMLDivElement>(null);
@@ -350,8 +353,97 @@ export default function WechatLayout() {
     }
   };
 
+  const handleNavClick = (id: string) => {
+    if (id === "moments") {
+      setWindows(prev => [...prev, {
+        id: "moments",
+        title: "朋友圈",
+        content: (
+          <div className="h-full flex flex-col">
+            <div className="h-14 border-b border-border flex items-center justify-between px-4">
+              <div className="flex items-center gap-2">
+                <button 
+                  className="p-2 rounded-full text-muted-foreground hover:text-primary hover:bg-muted transition-colors"
+                  onClick={() => closeWindow("moments")}
+                >
+                  <ChevronLeft className="h-5 w-5" />
+                </button>
+                <h3 className="font-medium">朋友圈</h3>
+              </div>
+              <div className="flex items-center gap-4">
+                <button className="p-2 rounded-full text-muted-foreground hover:text-primary hover:bg-muted transition-colors">
+                  <RefreshCw className="h-5 w-5" />
+                </button>
+                <button className="p-2 rounded-full text-muted-foreground hover:text-primary hover:bg-muted transition-colors">
+                  <BellIcon className="h-5 w-5" />
+                </button>
+                <button className="p-2 rounded-full text-muted-foreground hover:text-primary hover:bg-muted transition-colors">
+                  <Camera className="h-5 w-5" />
+                </button>
+              </div>
+            </div>
+            <div className="flex-1 overflow-y-auto p-4 space-y-4">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="bg-background rounded-lg p-4">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                      <User className="h-5 w-5 text-primary" />
+                    </div>
+                    <div>
+                      <h4 className="font-medium">用户{i}</h4>
+                      <p className="text-xs text-muted-foreground">2小时前</p>
+                    </div>
+                  </div>
+                  <p className="text-sm mb-3">这是一条朋友圈内容 #{i}</p>
+                  <div className="grid grid-cols-3 gap-2 mb-3">
+                    {[1, 2, 3].map((j) => (
+                      <div key={j} className="aspect-square bg-muted rounded flex items-center justify-center">
+                        <Image className="h-6 w-6 text-muted-foreground" />
+                      </div>
+                    ))}
+                  </div>
+                  <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                    <button className="flex items-center gap-1 hover:text-primary">
+                      <ThumbsUp className="h-4 w-4" />
+                      <span>点赞</span>
+                    </button>
+                    <button className="flex items-center gap-1 hover:text-primary">
+                      <MessageCircle className="h-4 w-4" />
+                      <span>评论</span>
+                    </button>
+                    <button className="flex items-center gap-1 hover:text-primary">
+                      <Share2 className="h-4 w-4" />
+                      <span>分享</span>
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )
+      }]);
+    }
+    setActiveNav(id);
+  };
+
+  const closeWindow = (id: string) => {
+    setWindows(prev => prev.filter(w => w.id !== id));
+  };
+
   return (
     <div className="flex h-full bg-background">
+      {/* 独立窗口 */}
+      {windows.map((window) => (
+        <div
+          key={window.id}
+          className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center"
+        >
+          <div className="w-[480px] h-[640px] bg-background rounded-lg shadow-lg flex flex-col">
+            {window.content}
+          </div>
+        </div>
+      ))}
+
       {/* 最左侧导航栏 */}
       <div className="w-16 border-r border-border flex flex-col items-center py-4">
         {/* 头像按钮 */}
@@ -377,18 +469,41 @@ export default function WechatLayout() {
                 <p className="text-sm text-muted-foreground">微信号：wxid_123456</p>
               </div>
             </div>
-            <div className="space-y-1">
-              {profileMenuItems.map((item) => (
-                <button
-                  key={item.id}
-                  className="w-full px-4 py-2 flex items-center gap-2 text-sm hover:bg-muted rounded-md"
-                  onClick={item.onClick}
+
+            {/* 朋友圈预览 */}
+            <div className="mb-4">
+              <div className="flex items-center justify-between mb-2">
+                <h4 className="text-sm font-medium">朋友圈</h4>
+                <button 
+                  className="text-xs text-primary hover:text-primary/80"
+                  onClick={() => handleNavClick("moments")}
                 >
-                  {item.icon}
-                  <span>{item.label}</span>
+                  查看全部
                 </button>
-              ))}
+              </div>
+              <div className="grid grid-cols-3 gap-2">
+                {[1, 2, 3].map((i) => (
+                  <div 
+                    key={i}
+                    className="aspect-square bg-muted rounded cursor-pointer hover:opacity-80 transition-opacity"
+                    onClick={() => handleNavClick("moments")}
+                  >
+                    <Image className="h-full w-full object-cover rounded" />
+                  </div>
+                ))}
+              </div>
             </div>
+
+            {/* 发消息按钮 */}
+            <button 
+              className="w-full py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
+              onClick={() => {
+                setShowProfile(false);
+                setActiveNav("chat");
+              }}
+            >
+              发消息
+            </button>
           </div>
         )}
 
@@ -398,7 +513,7 @@ export default function WechatLayout() {
             className={`w-12 h-12 rounded-lg flex items-center justify-center mb-2 ${
               activeNav === item.id ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-muted"
             }`}
-            onClick={() => setActiveNav(item.id)}
+            onClick={() => handleNavClick(item.id)}
           >
             {item.icon}
           </button>
