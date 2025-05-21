@@ -1,4 +1,4 @@
-import { ThemeProvider, VSCodeLayout } from "composite-kit";
+import { ThemeProvider, VSCodeLayout, ThemeSwitcher } from "composite-kit";
 import {
   Bell,
   CheckCircle,
@@ -41,6 +41,47 @@ function App() {
       content:
         'export function Button({ children }) {\n  return <button className="px-4 py-2 bg-blue-500 text-white rounded">{children}</button>;\n}',
     },
+    {
+      id: "file3",
+      name: "ThemeSwitcher.tsx",
+      content: (
+        <ThemeSwitcher
+          themes={[
+            "light",
+            "dark",
+            "material",
+            "nord",
+            "dracula",
+            "one-dark",
+            "tokyo-night",
+            "catppuccin",
+            "wechat",
+            "telegram",
+            "github",
+            "twitter",
+            "discord",
+            "notion",
+            "monokai-pro",
+            "gruvbox",
+            "solarized",
+            "aurora",
+            "forest",
+            "ocean",
+            "starlight",
+            "desert",
+            "neon",
+            "ink-wash",
+            "sakura",
+            "moonlight",
+            "bamboo",
+            "landscape",
+            "autumn",
+          ]}
+        >
+          <ThemeSwitcher.Grid />
+        </ThemeSwitcher>
+      ),
+    },
   ];
 
   // 活动栏数据
@@ -74,7 +115,7 @@ function App() {
   ];
 
   return (
-    <ThemeProvider defaultTheme="light">
+    <ThemeProvider defaultTheme="dracula">
       <div className="h-screen">
         <Workspace.Layout>
           <Controls.Layout
