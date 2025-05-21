@@ -124,7 +124,7 @@ export function ActivityBar({
         >
           <ChevronLeft
             className={`h-4 w-4 transform transition-transform duration-300 ${
-              isExpanded ? "rotate-180" : ""
+              isExpanded ? "" : "rotate-180"
             }`}
           />
         </button>
@@ -272,7 +272,7 @@ export function WorkspacePanel({
                 className="p-1 rounded hover:bg-muted"
                 onClick={isCollapsed ? onExpand : onCollapse}
               >
-                <ChevronLeft className={`h-4 w-4 transform ${isCollapsed ? "" : "rotate-180"}`} />
+                <ChevronLeft className="h-4 w-4" />
               </button>
             )}
           </div>
