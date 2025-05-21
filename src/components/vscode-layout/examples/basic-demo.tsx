@@ -121,8 +121,8 @@ export function VSCodeLayoutCompoundComponentBasicDemo() {
                       key={file.id}
                       className={`flex items-center w-full text-sm px-2 py-1 text-left ${
                         activeFile === file.id
-                          ? "bg-blue-100 text-blue-800"
-                          : "hover:bg-gray-100"
+                          ? "bg-accent text-accent-foreground"
+                          : "hover:bg-muted"
                       }`}
                       onClick={() => setActiveFile(file.id)}
                     >
@@ -181,7 +181,7 @@ export function VSCodeLayoutCompoundComponentBasicDemo() {
                     onExpand={bottomPanel.expand}
                   >
                     <PanelContent>
-                      <div className="bg-gray-900 text-gray-200">
+                      <div className="bg-muted text-muted-foreground">
                         <pre className="text-sm font-mono">
                           $ npm start{"\n"}
                           {">"} project@0.1.0 start{"\n"}
@@ -222,11 +222,11 @@ export function VSCodeLayoutCompoundComponentBasicDemo() {
                       </span>
                     </div>
                     <div className="ml-4 flex flex-col gap-1">
-                      <div className="flex items-center text-sm text-purple-700">
+                      <div className="flex items-center text-sm text-primary">
                         <span>function</span>
                         <span className="ml-2">Button</span>
                       </div>
-                      <div className="flex items-center text-sm text-blue-700">
+                      <div className="flex items-center text-sm text-primary">
                         <span>interface</span>
                         <span className="ml-2">ButtonProps</span>
                       </div>

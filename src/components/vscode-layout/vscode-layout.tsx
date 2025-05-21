@@ -23,7 +23,7 @@ export function WorkspaceLayout({
   return (
     <div
       data-testid="workspace-layout"
-      className={`h-full w-full border rounded-md bg-white overflow-hidden flex flex-col ${className}`}
+      className={`h-full w-full border rounded-md bg-background overflow-hidden flex flex-col ${className}`}
     >
       {children}
     </div>
@@ -111,7 +111,7 @@ export function ActivityBar({
   return (
     <div
       data-testid="activity-bar"
-      className={`relative bg-gray-100 flex flex-col items-center py-3 border-r shrink-0 transition-all duration-300 ease-in-out ${
+      className={`relative bg-muted flex flex-col items-center py-3 border-r shrink-0 transition-all duration-300 ease-in-out ${
         expandable && isExpanded ? "w-52" : "w-12"
       } ${className}`}
     >
@@ -119,7 +119,7 @@ export function ActivityBar({
       {expandable && onToggle && (
         <button
           data-testid="activity-bar-toggle"
-          className="absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-gray-100 border rounded-full flex items-center justify-center hover:bg-gray-200 transition-all duration-300 hover:scale-110"
+          className="absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-muted border rounded-full flex items-center justify-center hover:bg-muted/80 transition-all duration-300 hover:scale-110"
           onClick={onToggle}
         >
           <ChevronLeft
@@ -191,7 +191,7 @@ export function ActivityItem({
       });
     }
     return (
-      <span className="h-5 px-1.5 text-xs font-medium bg-gray-100 rounded">
+      <span className="h-5 px-1.5 text-xs font-medium bg-muted rounded">
         {badge}
       </span>
     );
@@ -264,12 +264,12 @@ export function WorkspacePanel({
     >
       {header ||
         (title && (
-          <div className="h-10 flex items-center justify-between px-4 border-b bg-gray-50">
+          <div className="h-10 flex items-center justify-between px-4 border-b bg-muted/50">
             <span className="font-medium truncate">{title}</span>
             {(onCollapse || onExpand) && (
               <button
                 data-testid="workspace-panel-toggle"
-                className="p-1 rounded hover:bg-gray-200"
+                className="p-1 rounded hover:bg-muted"
                 onClick={isCollapsed ? onExpand : onCollapse}
               >
                 <ChevronLeft className="h-4 w-4" />
@@ -328,7 +328,7 @@ interface TabsProps {
 
 export function Tabs({ children, className = "" }: TabsProps) {
   return (
-    <div data-testid="tabs" className={`border-b bg-gray-50 flex ${className}`}>
+    <div data-testid="tabs" className={`border-b bg-muted/50 flex ${className}`}>
       {children}
     </div>
   );
@@ -353,7 +353,7 @@ export function Tab({
     <button
       data-testid="tab"
       className={`px-3 py-2 flex items-center gap-1 text-sm relative group ${
-        isActive ? "bg-white" : "hover:bg-gray-100"
+        isActive ? "bg-background" : "hover:bg-muted"
       } ${className}`}
       onClick={onClick}
     >
@@ -362,7 +362,7 @@ export function Tab({
       {onClose && (
         <button
           data-testid="tab-close"
-          className="ml-1 p-1 rounded-sm hover:bg-gray-200 opacity-60 group-hover:opacity-100"
+          className="ml-1 p-1 rounded-sm hover:bg-muted opacity-60 group-hover:opacity-100"
           onClick={(e) => {
             e.stopPropagation();
             onClose();
@@ -373,7 +373,7 @@ export function Tab({
         </button>
       )}
       {isActive && (
-        <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-500" />
+        <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary" />
       )}
     </button>
   );
@@ -409,7 +409,7 @@ export function StatusBar({ children, className = "" }: StatusBarProps) {
   return (
     <div
       data-testid="status-bar"
-      className={`h-6 bg-gray-100 text-gray-600 text-xs flex items-center px-2 justify-between border-t border-gray-200 shrink-0 ${className}`}
+      className={`h-6 bg-muted text-muted-foreground text-xs flex items-center px-2 justify-between border-t border-border shrink-0 ${className}`}
     >
       {children}
     </div>
@@ -432,7 +432,7 @@ export function StatusBarItem({
   return (
     <div
       data-testid="status-bar-item"
-      className={`px-2 py-0.5 hover:bg-gray-200 rounded cursor-pointer ${className}`}
+      className={`px-2 py-0.5 hover:bg-muted/80 rounded cursor-pointer ${className}`}
       onClick={onClick}
     >
       {children}
@@ -510,13 +510,13 @@ export function LayoutControls({
   return (
     <div
       data-testid="layout-controls"
-      className={`flex items-center p-2 border-b bg-gray-50 justify-between ${className}`}
+      className={`flex items-center p-2 border-b bg-muted/50 justify-between ${className}`}
     >
       <div className="flex space-x-2">
         {onToggleLeftSidebar && (
           <button
             data-testid="toggle-left-sidebar"
-            className="px-3 py-1 text-sm rounded hover:bg-gray-200"
+            className="px-3 py-1 text-sm rounded hover:bg-muted"
             onClick={onToggleLeftSidebar}
           >
             {isLeftSidebarCollapsed ? "显示左侧栏" : "隐藏左侧栏"}
@@ -525,7 +525,7 @@ export function LayoutControls({
         {onToggleRightSidebar && (
           <button
             data-testid="toggle-right-sidebar"
-            className="px-3 py-1 text-sm rounded hover:bg-gray-200"
+            className="px-3 py-1 text-sm rounded hover:bg-muted"
             onClick={onToggleRightSidebar}
           >
             {isRightSidebarCollapsed ? "显示右侧栏" : "隐藏右侧栏"}
@@ -534,7 +534,7 @@ export function LayoutControls({
         {onToggleBottomPanel && (
           <button
             data-testid="toggle-bottom-panel"
-            className="px-3 py-1 text-sm rounded hover:bg-gray-200"
+            className="px-3 py-1 text-sm rounded hover:bg-muted"
             onClick={onToggleBottomPanel}
           >
             {isBottomPanelCollapsed ? "显示底部面板" : "隐藏底部面板"}
@@ -608,7 +608,7 @@ export function PanelHeader({
   return (
     <div
       data-testid="panel-header"
-      className={`h-10 flex items-center justify-between px-4 border-b bg-gray-50 ${className}`}
+      className={`h-10 flex items-center justify-between px-4 border-b bg-muted/50 ${className}`}
     >
       {children || (
         <>
@@ -616,7 +616,7 @@ export function PanelHeader({
           {(onCollapse || onExpand) && (
             <button
               data-testid="panel-header-toggle"
-              className="p-1 rounded hover:bg-gray-200"
+              className="p-1 rounded hover:bg-muted"
               onClick={isCollapsed ? onExpand : onCollapse}
             >
               <ChevronLeft className="h-4 w-4" />
@@ -658,7 +658,7 @@ export function PanelFooter({ children, className = "" }: PanelFooterProps) {
   return (
     <div
       data-testid="panel-footer"
-      className={`h-10 border-t bg-gray-50 flex items-center px-4 ${className}`}
+      className={`h-10 border-t bg-muted/50 flex items-center px-4 ${className}`}
     >
       {children}
     </div>
@@ -676,7 +676,7 @@ export function EditorHeader({ children, className = "" }: EditorHeaderProps) {
   return (
     <div
       data-testid="editor-header"
-      className={`border-b bg-gray-50 flex ${className}`}
+      className={`border-b bg-muted/50 flex ${className}`}
     >
       {children}
     </div>
@@ -692,7 +692,7 @@ export function EditorFooter({ children, className = "" }: EditorFooterProps) {
   return (
     <div
       data-testid="editor-footer"
-      className={`h-6 border-t bg-gray-50 flex items-center px-4 ${className}`}
+      className={`h-6 border-t bg-muted/50 flex items-center px-4 ${className}`}
     >
       {children}
     </div>
@@ -715,14 +715,14 @@ export function ResizeHandle({
       data-testid="resize-handle"
       className={`${
         orientation === "vertical" ? "w-1" : "h-1"
-      } bg-gray-200 hover:bg-blue-500 relative group ${className}`}
+      } bg-border hover:bg-primary relative group ${className}`}
     >
       <div
         className={`absolute ${
           orientation === "vertical"
             ? "inset-y-0 left-1/2 -translate-x-1/2 w-1"
             : "inset-x-0 top-1/2 -translate-y-1/2 h-1"
-        } group-hover:bg-blue-500 opacity-0 group-hover:opacity-100 transition-opacity`}
+        } group-hover:bg-primary opacity-0 group-hover:opacity-100 transition-opacity`}
       />
     </PanelResizeHandle>
   );
