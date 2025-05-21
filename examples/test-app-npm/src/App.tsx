@@ -116,7 +116,7 @@ function App() {
 
   return (
     <ThemeProvider defaultTheme="dracula">
-      <div className="h-screen">
+      <div className="h-full">
         <Workspace.Layout>
           <Controls.Layout
             onToggleLeftSidebar={leftPanel.toggle}

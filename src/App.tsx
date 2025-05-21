@@ -8,9 +8,11 @@ import { resizablePanelDemos } from "./demos/resizable-panel-composite/demos";
 import { activityBarDemos } from "./demos/activity-bar-composite/demos";
 import { demoGalleryDemos } from "./demos/demo-gallery-composite/demos";
 import { vscodeLayoutDemos } from "./demos/vscode-layout-v2/demos";
+import { wechatLayoutDemos } from "./demos/wechat-layout/demos";
 
 // 所有 demo 的配置
 const demos = [
+  ...wechatLayoutDemos,
   ...vscodeLayoutDemos,
   ...resizablePanelDemos,
   ...activityBarDemos,
