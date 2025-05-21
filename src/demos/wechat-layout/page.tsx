@@ -780,7 +780,7 @@ export default function WechatLayout() {
         {showMenu && (
           <div 
             ref={menuRef}
-            className="absolute left-16 bottom-16 w-48 bg-popover border border-border rounded-lg shadow-lg py-2 z-50"
+            className="absolute left-16 bottom-0 w-48 bg-popover border border-border rounded-lg shadow-lg py-2 z-50"
           >
             {menuItems.map((item) => (
               <button
@@ -798,7 +798,7 @@ export default function WechatLayout() {
         {showMiniPrograms && (
           <div 
             ref={miniProgramsRef}
-            className="absolute left-16 bottom-32 w-64 bg-popover border border-border rounded-lg shadow-lg p-4 z-50"
+            className="absolute left-16 bottom-0 w-64 bg-popover border border-border rounded-lg shadow-lg p-4 z-50"
           >
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-medium">小程序</h3>
@@ -816,10 +816,10 @@ export default function WechatLayout() {
                 {recentMiniPrograms.map((mp) => (
                   <button
                     key={mp.id}
-                    className="flex flex-col items-center gap-1 p-2 hover:bg-muted rounded"
+                    className="flex flex-col items-center gap-1 p-2 rounded-lg hover:bg-muted transition-colors"
                   >
                     <span className="text-2xl">{mp.icon}</span>
-                    <span className="text-xs truncate w-full text-center">{mp.name}</span>
+                    <span className="text-xs w-14 text-center truncate">{mp.name}</span>
                   </button>
                 ))}
               </div>
@@ -831,10 +831,10 @@ export default function WechatLayout() {
                 {myMiniPrograms.map((mp) => (
                   <button
                     key={mp.id}
-                    className="flex flex-col items-center gap-1 p-2 hover:bg-muted rounded"
+                    className="flex flex-col items-center gap-1 p-2 rounded-lg hover:bg-muted transition-colors"
                   >
                     <span className="text-2xl">{mp.icon}</span>
-                    <span className="text-xs truncate w-full text-center">{mp.name}</span>
+                    <span className="text-xs w-14 text-center truncate">{mp.name}</span>
                   </button>
                 ))}
               </div>
