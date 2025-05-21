@@ -101,6 +101,7 @@ export {
 };
 
 export const VSCodeLayout = {
+  Layout,
   Workspace,
   Activity,
   Editor,
