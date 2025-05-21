@@ -113,7 +113,7 @@ export function VSCodeLayoutCompoundComponentNamespaceDemo() {
                   {files.map((file) => (
                     <button
                       key={file.id}
-                      className={`flex items-center w-full text-sm px-2 py-1 text-left ${
+                      className={`flex items-center w-full text-sm px-2 py-1 text-left rounded-md ${
                         activeFile === file.id
                           ? "bg-accent text-accent-foreground"
                           : "hover:bg-muted"
