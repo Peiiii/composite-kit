@@ -129,13 +129,13 @@ export default function ThemeSwitcherDemo() {
 
   return (
     <ThemeProvider defaultTheme={config.theme.defaultTheme}>
-      <div className="min-h-full bg-background text-foreground">
+      <div className="h-full flex bg-background text-foreground overflow-hidden">
         <ConfigurableActivityBar
           config={config}
           className="border-b"
         />
         
-        <main className="container mx-auto px-4 py-8 max-w-6xl">
+        <main className="container mx-auto px-4 py-8 max-w-6xl overflow-y-auto">
           <div className="space-y-8">
             {/* 主题切换器 */}
             <section>

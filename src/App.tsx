@@ -12,11 +12,6 @@ import { wechatLayoutDemos } from "./demos/wechat-layout/demos";
 
 // 所有 demo 的配置
 const demos = [
-  ...wechatLayoutDemos,
-  ...vscodeLayoutDemos,
-  ...resizablePanelDemos,
-  ...activityBarDemos,
-  ...demoGalleryDemos,
   {
     id: "theme-switcher",
     title: "主题切换器",
@@ -25,6 +20,11 @@ const demos = [
     category: "主题系统",
     tags: ["theme", "主题切换", "material-design"],
   },
+  ...wechatLayoutDemos,
+  ...vscodeLayoutDemos,
+  ...resizablePanelDemos,
+  ...activityBarDemos,
+  ...demoGalleryDemos,
   {
     id: "mobile-nav-composite",
     title: "移动端导航 (复合组件模式)",
