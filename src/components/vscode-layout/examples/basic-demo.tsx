@@ -116,20 +116,22 @@ export function VSCodeLayoutCompoundComponentBasicDemo() {
                 onExpand={leftPanel.expand}
               >
                 <PanelContent>
-                  {files.map((file) => (
-                    <button
-                      key={file.id}
-                      className={`flex items-center w-full text-sm px-2 py-1 text-left ${
-                        activeFile === file.id
-                          ? "bg-accent text-accent-foreground"
-                          : "hover:bg-muted"
-                      }`}
-                      onClick={() => setActiveFile(file.id)}
-                    >
-                      <FileText className="h-4 w-4 mr-2 flex-shrink-0" />
-                      <span className="truncate">{file.name}</span>
-                    </button>
-                  ))}
+                  <div className="flex flex-col gap-1">
+                    {files.map((file) => (
+                      <button
+                        key={file.id}
+                        className={`flex items-center w-full text-sm px-2 py-1 text-left ${
+                          activeFile === file.id
+                            ? "bg-accent text-accent-foreground"
+                            : "hover:bg-muted"
+                        }`}
+                        onClick={() => setActiveFile(file.id)}
+                      >
+                        <FileText className="h-4 w-4 mr-2 flex-shrink-0" />
+                        <span className="truncate">{file.name}</span>
+                      </button>
+                    ))}
+                  </div>
                 </PanelContent>
               </WorkspacePanel>
             </SidebarLayout>
