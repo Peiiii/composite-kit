@@ -1,4 +1,4 @@
-import { ThemeProvider, VSCodeLayout, Layout } from "composite-kit";
+import { ThemeProvider, VSCodeLayout } from "composite-kit";
 import {
   Bell,
   CheckCircle,
