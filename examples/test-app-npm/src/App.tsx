@@ -8,12 +8,12 @@ import {
   LayoutGrid,
   Play,
   Search,
-  Wifi
+  Wifi,
 } from "lucide-react";
 import * as React from "react";
 
 // 从 VSCodeLayout 中解构出需要的组件
-const { Workspace, Activity, Editor, Panel, Status, Controls, Utils } =
+const { Workspace, Activity, Editor, Panel, Status, Controls, Utils, Layout } =
   VSCodeLayout;
 
 function App() {
@@ -85,26 +85,26 @@ function App() {
             isRightSidebarCollapsed={rightPanel.isCollapsed}
             isBottomPanelCollapsed={bottomPanel.isCollapsed}
           />
-          <Activity.Bar
-            isExpanded={isActivityBarExpanded}
-            onToggle={() => setIsActivityBarExpanded(!isActivityBarExpanded)}
-            expandable={true}
-          >
-            {activityItems.map((item) => (
-              <Activity.Item
-                key={item.id}
-                icon={item.icon}
-                title={item.title}
-                isActive={activeSection === item.id}
-                onClick={() => setActiveSection(item.id)}
-                isExpanded={isActivityBarExpanded}
-                expandable={true}
-                badge={item.badge}
-              />
-            ))}
-          </Activity.Bar>
-
           <Layout.Main>
+            <Activity.Bar
+              isExpanded={isActivityBarExpanded}
+              onToggle={() => setIsActivityBarExpanded(!isActivityBarExpanded)}
+              expandable={true}
+            >
+              {activityItems.map((item) => (
+                <Activity.Item
+                  key={item.id}
+                  icon={item.icon}
+                  title={item.title}
+                  isActive={activeSection === item.id}
+                  onClick={() => setActiveSection(item.id)}
+                  isExpanded={isActivityBarExpanded}
+                  expandable={true}
+                  badge={item.badge}
+                />
+              ))}
+            </Activity.Bar>
+
             <Layout.MainContent>
               <Layout.Horizontal>
                 <Layout.Sidebar
