@@ -1,4 +1,3 @@
-import * as React from "react";
 import { 
   FileExplorer as FileExplorerPrimitive,
   FileExplorerGroup,

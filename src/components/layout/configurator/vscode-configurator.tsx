@@ -156,9 +156,19 @@ export function VSCodeConfigurator({
   }, [bottomPanel]);
 
   // 使用Hook管理可调整大小的面板
-  const leftPanelState = layoutState ? { ref: layoutState.leftSidebarRef, toggle: layoutState.isLeftSidebarCollapsed ? layoutState.expandLeftSidebar : layoutState.collapseLeftSidebar } : useResizablePanel();
-  const rightPanelState = layoutState ? { ref: layoutState.rightSidebarRef, toggle: layoutState.isRightSidebarCollapsed ? layoutState.expandRightSidebar : layoutState.collapseRightSidebar } : useResizablePanel();
-  const bottomPanelState = layoutState ? { ref: layoutState.bottomPanelRef, toggle: layoutState.isBottomPanelCollapsed ? layoutState.expandBottomPanel : layoutState.collapseBottomPanel } : useResizablePanel();
+  const leftPanelHook = useResizablePanel();
+  const rightPanelHook = useResizablePanel();
+  const bottomPanelHook = useResizablePanel();
+
+  const leftPanelState = layoutState 
+    ? { ref: layoutState.leftSidebarRef, toggle: layoutState.isLeftSidebarCollapsed ? layoutState.expandLeftSidebar : layoutState.collapseLeftSidebar } 
+    : leftPanelHook;
+  const rightPanelState = layoutState 
+    ? { ref: layoutState.rightSidebarRef, toggle: layoutState.isRightSidebarCollapsed ? layoutState.expandRightSidebar : layoutState.collapseRightSidebar } 
+    : rightPanelHook;
+  const bottomPanelState = layoutState 
+    ? { ref: layoutState.bottomPanelRef, toggle: layoutState.isBottomPanelCollapsed ? layoutState.expandBottomPanel : layoutState.collapseBottomPanel } 
+    : bottomPanelHook;
 
   // 渲染文件树
   const renderFileTree = React.useCallback((files: FileItemConfig[], depth = 0) => {

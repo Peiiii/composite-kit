@@ -5,7 +5,7 @@ import {
   ConfigurableActivityBar,
   VSCodeLayout
 } from "composite-kit";
-import { Home, Settings, FileText, HelpCircle, GitBranch, Search, Terminal, PanelLeft } from "lucide-react";
+import { Home, Settings, FileText, HelpCircle, GitBranch, Search, Terminal } from "lucide-react";
 
 function App() {
   const [activeSection, setActiveSection] = React.useState("explorer");

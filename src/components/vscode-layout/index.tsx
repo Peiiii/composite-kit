@@ -99,3 +99,27 @@ export {
   MainContent,
   Tab,
 };
+
+export const VSCodeLayout = {
+  WorkspaceLayout,
+  LayoutControls,
+  MainLayout,
+  ActivityBar,
+  ActivityItem,
+  usePanelControls,
+  SidebarLayout,
+  WorkspacePanel,
+  PanelContent,
+  EditorHeader,
+  EditorContent,
+  StatusBar,
+  StatusBarGroup,
+  StatusBarItem,
+  StatusBarIconItem,
+  HorizontalLayout,
+  VerticalLayout,
+  ResizablePanel,
+  ResizeHandle,
+  MainContent,
+  Tab,
+} as const;

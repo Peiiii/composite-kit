@@ -54,10 +54,10 @@ interface ExplorerViewSpecificProps extends SidebarViewSharedProps {
   openFile: (fileId: string) => void;
 }
 
-interface SearchViewSpecificProps extends SidebarViewSharedProps {}
-interface GitViewSpecificProps extends SidebarViewSharedProps {}
-interface DebugViewSpecificProps extends SidebarViewSharedProps {}
-interface ExtensionsViewSpecificProps extends SidebarViewSharedProps {}
+type SearchViewSpecificProps = SidebarViewSharedProps
+type GitViewSpecificProps = SidebarViewSharedProps
+type DebugViewSpecificProps = SidebarViewSharedProps
+type ExtensionsViewSpecificProps = SidebarViewSharedProps
 
 
 // Union type for all possible sidebar view props
@@ -362,7 +362,7 @@ export function VSCodeLayoutPureDemo() { // Original name kept, but it's the ref
     
     // Prepare props for the specific view component
     // This is a bit manual; a more advanced system might use a prop mapping or context
-    let componentProps: SidebarViewProps = {
+    const componentProps: SidebarViewProps = {
         isLeftSidebarCollapsed,
         expandLeftPanel,
         collapseLeftPanel,

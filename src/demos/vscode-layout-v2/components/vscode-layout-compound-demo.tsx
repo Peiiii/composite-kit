@@ -3,7 +3,6 @@ import { VSCodeLayout } from "@/components/layout/compound";
 
 // 从原始组件库导入
 import {
-  ActivityBar,
   ActivityBarItem,
   ActivityBarGroup,
   Sidebar,
@@ -28,14 +27,10 @@ import {
 import { useResizablePanel } from "@/components/layout/hooks";
 
 import {
-  BookOpen,
-  ChevronDown,
-  CircleHelp,
   Code,
   FileText,
   Folder,
   GitBranch,
-  Info,
   LayoutGrid,
   Play,
   Search,

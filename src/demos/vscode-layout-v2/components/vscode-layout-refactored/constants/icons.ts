@@ -17,7 +17,6 @@ import {
   Code,
   Type,
   FileJson,
-  FileCode,
   FileImage,
   FileVideo,
   FileAudio,

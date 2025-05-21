@@ -22,14 +22,10 @@ import {
 } from "@/components/layout/primitive";
 import { useResizablePanel } from "@/components/layout/hooks";
 import {
-  BookOpen,
-  ChevronDown,
-  CircleHelp,
   Code,
   FileText,
   Folder,
   GitBranch,
-  Info,
   LayoutGrid,
   Play,
   Search,

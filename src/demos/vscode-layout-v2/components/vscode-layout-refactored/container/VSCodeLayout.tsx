@@ -16,7 +16,6 @@ import {
   usePanelManager,
   usePromptDialog,
 } from "../hooks";
-import type { FileConfig } from "../types/file";
 import type { 
   SidebarViewProps, 
   ExplorerViewProps,

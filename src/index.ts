@@ -5,10 +5,9 @@ import "./index.css";
 export * from "./components/activity-bar";
 export * from "./components/demo-gallery";
 export * from "./components/theme";
-export * from "./components/layout";
 export * from "./components/resizable-panel";
 export * from "./components/mobile-nav";
-
+export { VSCodeLayout } from "./components/vscode-layout";
 // 导出类型
 export type { DemoConfig } from "./components/demo-gallery";
 export type {

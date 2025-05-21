@@ -1,4 +1,3 @@
-import * as React from "react";
 import {
     Outline as OutlinePrimitive,
     OutlineGroup,
