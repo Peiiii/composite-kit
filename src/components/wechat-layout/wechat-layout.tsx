@@ -68,22 +68,39 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 );
 Button.displayName = "Button";
 
-interface IconButtonProps extends Omit<ButtonProps, 'children'> {
+interface IconButtonProps extends Omit<ButtonProps, 'children' | 'size' | 'variant'> {
   icon: React.ReactNode;
   label?: string;
+  variant?: 'default' | 'primary' | 'ghost' | 'link' | 'nav';
+  size?: 'sm' | 'md' | 'lg' | 'nav';
 }
 
 const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
-  ({ icon, label, className = '', ...props }, ref) => {
+  ({ icon, label, variant = 'default', size = 'md', className = '', ...props }, ref) => {
+    const baseStyles = "inline-flex items-center justify-center transition-colors focus:outline-none focus:ring-2 focus:ring-primary/20";
+    const variantStyles = {
+      default: "bg-background text-foreground hover:bg-muted",
+      primary: "bg-primary text-primary-foreground hover:bg-primary/90",
+      ghost: "hover:bg-muted text-muted-foreground",
+      link: "text-primary hover:underline",
+      nav: "text-muted-foreground hover:bg-muted"
+    };
+    const sizeStyles = {
+      sm: "h-8 w-8 p-2 rounded-full",
+      md: "h-10 w-10 p-2 rounded-full",
+      lg: "h-12 w-12 p-2 rounded-full",
+      nav: "w-12 h-12 rounded-lg"
+    };
+
     return (
-      <Button
+      <button
         ref={ref}
-        className={`p-2 rounded-full ${className}`}
+        className={`${baseStyles} ${variantStyles[variant]} ${sizeStyles[size]} ${className}`}
         {...props}
       >
         {icon}
         {label && <span className="sr-only">{label}</span>}
-      </Button>
+      </button>
     );
   }
 );
@@ -1182,8 +1199,10 @@ export default function WechatLayout() {
           <IconButton
             key={item.id}
             icon={item.icon}
-            className={`w-12 h-12 rounded-lg mb-2 ${
-              activeNav === item.id ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-muted"
+            variant="nav"
+            size="nav"
+            className={`mb-2 ${
+              activeNav === item.id ? "bg-primary text-primary-foreground" : ""
             }`}
             onClick={() => handleNavClick(item.id)}
           />
@@ -1191,12 +1210,15 @@ export default function WechatLayout() {
         <div className="flex-1" />
         <IconButton
           icon={<Grid className="h-5 w-5" />}
-          className="w-12 h-12 rounded-lg text-muted-foreground hover:bg-muted mb-2"
+          variant="nav"
+          size="nav"
+          className="mb-2"
           onClick={() => setShowMiniPrograms(!showMiniPrograms)}
         />
         <IconButton
           icon={<Menu className="h-5 w-5" />}
-          className="w-12 h-12 rounded-lg text-muted-foreground hover:bg-muted"
+          variant="nav"
+          size="nav"
           onClick={() => setShowMenu(!showMenu)}
         />
 
