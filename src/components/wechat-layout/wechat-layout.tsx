@@ -182,6 +182,186 @@ const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
 );
 Badge.displayName = "Badge";
 
+interface TooltipProps {
+  content: React.ReactNode;
+  children: React.ReactNode;
+  className?: string;
+  position?: 'top' | 'bottom' | 'left' | 'right';
+}
+
+const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>(
+  ({ content, children, className = '', position = 'top' }, ref) => {
+    const [isVisible, setIsVisible] = React.useState(false);
+
+    const positionStyles = {
+      top: 'bottom-full left-1/2 -translate-x-1/2 mb-2',
+      bottom: 'top-full left-1/2 -translate-x-1/2 mt-2',
+      left: 'right-full top-1/2 -translate-y-1/2 mr-2',
+      right: 'left-full top-1/2 -translate-y-1/2 ml-2'
+    };
+
+    return (
+      <div
+        ref={ref}
+        className="relative inline-block"
+        onMouseEnter={() => setIsVisible(true)}
+        onMouseLeave={() => setIsVisible(false)}
+      >
+        {children}
+        {isVisible && (
+          <div
+            className={`absolute ${positionStyles[position]} bg-popover text-popover-foreground px-2 py-1 rounded text-sm shadow-lg z-50 whitespace-nowrap ${className}`}
+          >
+            {content}
+          </div>
+        )}
+      </div>
+    );
+  }
+);
+Tooltip.displayName = "Tooltip";
+
+interface ModalProps {
+  isOpen: boolean;
+  onClose?: () => void;
+  title?: React.ReactNode;
+  children?: React.ReactNode;
+  className?: string;
+  size?: 'sm' | 'md' | 'lg';
+}
+
+const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
+  ({ isOpen, onClose, title, children, className = '', size = 'md' }, ref) => {
+    if (!isOpen) return null;
+
+    const sizeStyles = {
+      sm: 'w-[320px]',
+      md: 'w-[480px]',
+      lg: 'w-[640px]'
+    };
+
+    return (
+      <Backdrop onClick={onClose}>
+        <div
+          ref={ref}
+          className={`${sizeStyles[size]} bg-background rounded-lg shadow-lg flex flex-col ${className}`}
+          onClick={e => e.stopPropagation()}
+        >
+          {title && (
+            <Header
+              title={title}
+              right={
+                onClose && (
+                  <IconButton
+                    icon={<X className="h-5 w-5" />}
+                    variant="ghost"
+                    onClick={onClose}
+                  />
+                )
+              }
+            />
+          )}
+          {children}
+        </div>
+      </Backdrop>
+    );
+  }
+);
+Modal.displayName = "Modal";
+
+interface TabsProps {
+  value: string;
+  onChange: (value: string) => void;
+  children?: React.ReactNode;
+  className?: string;
+}
+
+const Tabs = React.forwardRef<HTMLDivElement, TabsProps>(
+  ({ value, onChange, children, className = '' }, ref) => {
+    return (
+      <div
+        ref={ref}
+        className={`flex border-b border-border ${className}`}
+      >
+        {children}
+      </div>
+    );
+  }
+);
+Tabs.displayName = "Tabs";
+
+interface TabProps {
+  value: string;
+  label: React.ReactNode;
+  isActive?: boolean;
+  onClick?: () => void;
+  className?: string;
+}
+
+const Tab = React.forwardRef<HTMLButtonElement, TabProps>(
+  ({ value, label, isActive, onClick, className = '' }, ref) => {
+    return (
+      <button
+        ref={ref}
+        className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+          isActive
+            ? 'border-primary text-primary'
+            : 'border-transparent text-muted-foreground hover:text-foreground'
+        } ${className}`}
+        onClick={onClick}
+      >
+        {label}
+      </button>
+    );
+  }
+);
+Tab.displayName = "Tab";
+
+interface DropdownProps {
+  trigger: React.ReactNode;
+  items: {
+    label: React.ReactNode;
+    onClick?: () => void;
+    icon?: React.ReactNode;
+  }[];
+  isOpen: boolean;
+  onClose?: () => void;
+  className?: string;
+}
+
+const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
+  ({ trigger, items, isOpen, onClose, className = '' }, ref) => {
+    return (
+      <div
+        ref={ref}
+        className="relative inline-block"
+      >
+        {trigger}
+        {isOpen && (
+          <div
+            className={`absolute right-0 mt-2 w-48 bg-popover border border-border rounded-lg shadow-lg py-1 z-50 ${className}`}
+          >
+            {items.map((item, index) => (
+              <button
+                key={index}
+                className="w-full px-4 py-2 flex items-center gap-2 text-sm hover:bg-muted"
+                onClick={() => {
+                  item.onClick?.();
+                  onClose?.();
+                }}
+              >
+                {item.icon}
+                {item.label}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  }
+);
+Dropdown.displayName = "Dropdown";
+
 interface ChatItem {
   id: string;
   name: string;
@@ -516,9 +696,7 @@ const ChatListItem = React.forwardRef<HTMLDivElement, ChatListItemProps>(
               {chat.lastMessage}
             </span>
             {chat.unread && (
-              <span className="ml-2 px-1.5 py-0.5 bg-primary text-primary-foreground text-xs rounded-full">
-                {chat.unread}
-              </span>
+              <Badge count={chat.unread} />
             )}
           </div>
         </div>
@@ -952,7 +1130,7 @@ interface ProfilePopoverProps {
   className?: string;
 }
 
-// 修改 ProfilePopover 使用 GridLayout
+// 修改 ProfilePopover 组件，添加 ref 支持
 const ProfilePopover = React.forwardRef<HTMLDivElement, ProfilePopoverProps>(
   ({ isOpen, onClose, onNavClick, className = '' }, ref) => {
     return (
@@ -1503,6 +1681,7 @@ export default function WechatLayout() {
         <ProfileAvatar onClick={() => setShowProfile(!showProfile)} />
 
         <ProfilePopover
+          ref={profileRef}
           isOpen={showProfile}
           onClose={() => setShowProfile(false)}
           onNavClick={handleNavClick}
