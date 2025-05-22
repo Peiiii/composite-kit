@@ -1,22 +1,19 @@
 import {
-    Bell,
     ChevronLeft,
     FileText,
-    Grid,
+    Grid as GridIcon,
     Heart,
     HelpCircle,
     Image,
     Image as ImageIcon,
     LogOut,
-    Mail,
     Menu,
     MessageCircle,
     MessageSquare,
     MoreVertical,
-    Newspaper,
     Phone,
     Plus,
-    Search,
+    Search as SearchIcon,
     Share2,
     Star,
     ThumbsUp,
@@ -26,6 +23,81 @@ import {
     X
 } from "lucide-react";
 import * as React from "react";
+
+interface BaseProps {
+  className?: string;
+  style?: React.CSSProperties;
+}
+
+interface LayoutProps extends BaseProps {
+  children: React.ReactNode;
+}
+
+interface NavItemProps extends BaseProps {
+  icon: React.ReactNode;
+  label: string;
+  isActive?: boolean;
+  onClick?: () => void;
+  badge?: number;
+  badgeStyle?: string;
+}
+
+interface ChatItemProps extends BaseProps {
+  avatar?: React.ReactNode;
+  name: string;
+  lastMessage: string;
+  time: string;
+  unread?: number;
+  isActive?: boolean;
+  onClick?: () => void;
+  type?: string;
+  typeLabel?: string;
+  typeStyle?: string;
+  badgeStyle?: string;
+}
+
+interface MessageProps extends BaseProps {
+  content: string;
+  time: string;
+  isSelf: boolean;
+  type: 'text' | 'image';
+  imageComponent?: React.ReactNode;
+}
+
+interface ContactItemProps extends BaseProps {
+  avatar: React.ReactNode;
+  name: string;
+  type?: string;
+  typeLabel?: string;
+  typeStyle?: string;
+  isSelected?: boolean;
+  onClick?: () => void;
+}
+
+interface ContactDetailProps extends BaseProps {
+  avatar: React.ReactNode;
+  name: string;
+  id?: string;
+  idPrefix?: string;
+  sections?: Array<{
+    title: string;
+    content: React.ReactNode;
+  }>;
+  actions?: Array<{
+    icon: React.ReactNode;
+    label: string;
+    onClick: () => void;
+  }>;
+}
+
+interface PopupProps extends BaseProps {
+  isOpen: boolean;
+  onClose: () => void;
+  title?: string;
+  children: React.ReactNode;
+  width?: string;
+  height?: string;
+}
 
 interface ChatItem {
   id: string;
@@ -76,6 +148,89 @@ interface Window {
   id: string;
   title: string;
   content: React.ReactNode;
+}
+
+interface NavMenuProps extends BaseProps {
+  items: Array<{
+    id: string;
+    icon: React.ReactNode;
+    label: string;
+    onClick?: () => void;
+  }>;
+  isOpen: boolean;
+  onClose: () => void;
+  position?: {
+    left?: string;
+    right?: string;
+    top?: string;
+    bottom?: string;
+  };
+  width?: string;
+}
+
+interface ChatInputProps extends BaseProps {
+  onSend: (message: string) => void;
+  placeholder?: string;
+  leftButton?: {
+    icon: React.ReactNode;
+    onClick: () => void;
+  };
+  rightButton?: {
+    icon: React.ReactNode;
+    onClick: () => void;
+  };
+  inputStyle?: string;
+  buttonStyle?: string;
+}
+
+interface SearchInputProps extends BaseProps {
+  placeholder?: string;
+  value?: string;
+  onChange?: (value: string) => void;
+  onSearch?: (value: string) => void;
+  icon?: React.ReactNode;
+  iconPosition?: 'left' | 'right';
+  inputStyle?: string;
+  iconStyle?: string;
+}
+
+interface ActionButtonProps extends BaseProps {
+  icon: React.ReactNode;
+  onClick?: () => void;
+  variant?: 'default' | 'primary' | 'ghost';
+  size?: 'sm' | 'md' | 'lg';
+  badge?: number;
+  badgeStyle?: string;
+  tooltip?: string;
+}
+
+interface ActionGroupProps extends BaseProps {
+  actions: Array<{
+    icon: React.ReactNode;
+    onClick?: () => void;
+    variant?: 'default' | 'primary' | 'ghost';
+    size?: 'sm' | 'md' | 'lg';
+    badge?: number;
+    badgeStyle?: string;
+    tooltip?: string;
+  }>;
+  variant?: 'default' | 'primary' | 'ghost';
+  size?: 'sm' | 'md' | 'lg';
+  gap?: string;
+}
+
+interface GridProps extends BaseProps {
+  items: Array<{
+    id: string;
+    icon: React.ReactNode;
+    label: string;
+    onClick?: () => void;
+  }>;
+  columns?: number;
+  gap?: string;
+  itemStyle?: string;
+  iconStyle?: string;
+  labelStyle?: string;
 }
 
 const mockChats: ChatItem[] = [
@@ -327,101 +482,120 @@ const myMiniPrograms: MiniProgram[] = [
 ];
 
 const Layout = {
-  App: ({ children }: { children: React.ReactNode }) => (
-    <div className="flex h-full bg-background">{children}</div>
-  ),
-
-  Split: ({ children }: { children: React.ReactNode }) => (
-    <div className="flex-1 flex">{children}</div>
-  ),
-
-  Sidebar: ({ children }: { children: React.ReactNode }) => (
-    <div className="w-80 border-r border-border flex flex-col">{children}</div>
-  ),
-
-  Main: ({ children }: { children: React.ReactNode }) => (
-    <div className="flex-1 flex flex-col">{children}</div>
-  ),
-
-  Header: ({ children }: { children: React.ReactNode }) => (
-    <div className="h-14 border-b border-border flex items-center justify-between px-4">
+  App: ({ children, className, style }: LayoutProps) => (
+    <div className={`flex h-full bg-background ${className || ''}`} style={style}>
       {children}
     </div>
   ),
 
-  Content: ({ children }: { children: React.ReactNode }) => (
-    <div className="flex-1 overflow-y-auto">{children}</div>
+  Split: ({ children, className, style }: LayoutProps) => (
+    <div className={`flex-1 flex ${className || ''}`} style={style}>
+      {children}
+    </div>
   ),
 
-  Footer: ({ children }: { children: React.ReactNode }) => (
-    <div className="h-14 border-t border-border flex items-center px-4 gap-2">
+  Sidebar: ({ children, className, style }: LayoutProps) => (
+    <div className={`w-80 border-r border-border flex flex-col ${className || ''}`} style={style}>
+      {children}
+    </div>
+  ),
+
+  Main: ({ children, className, style }: LayoutProps) => (
+    <div className={`flex-1 flex flex-col ${className || ''}`} style={style}>
+      {children}
+    </div>
+  ),
+
+  Header: ({ children, className, style }: LayoutProps) => (
+    <div className={`h-14 border-b border-border flex items-center justify-between px-4 ${className || ''}`} style={style}>
+      {children}
+    </div>
+  ),
+
+  Content: ({ children, className, style }: LayoutProps) => (
+    <div className={`flex-1 overflow-y-auto ${className || ''}`} style={style}>
+      {children}
+    </div>
+  ),
+
+  Footer: ({ children, className, style }: LayoutProps) => (
+    <div className={`h-14 border-t border-border flex items-center px-4 gap-2 ${className || ''}`} style={style}>
       {children}
     </div>
   ),
 };
 
 const Nav = {
-  Bar: ({ children }: { children: React.ReactNode }) => (
-    <div className="w-16 border-r border-border flex flex-col items-center py-4">
+  Bar: ({ children, className, style }: LayoutProps) => (
+    <div className={`w-16 border-r border-border flex flex-col items-center py-4 ${className || ''}`} style={style}>
       {children}
     </div>
   ),
 
-  Item: ({
-    icon,
-    label,
-    isActive,
-    onClick,
-  }: {
-    icon: React.ReactNode;
-    label: string;
-    isActive?: boolean;
-    onClick?: () => void;
-  }) => (
+  Item: ({ 
+    icon, 
+    label, 
+    isActive, 
+    onClick, 
+    badge, 
+    badgeStyle,
+    className, 
+    style 
+  }: NavItemProps) => (
     <button
-      className={`w-12 h-12 rounded-lg flex items-center justify-center mb-2 ${
+      className={`w-12 h-12 rounded-lg flex items-center justify-center mb-2 relative ${
         isActive
           ? "bg-primary text-primary-foreground"
           : "text-muted-foreground hover:bg-muted"
-      }`}
+      } ${className || ''}`}
       onClick={onClick}
+      style={style}
     >
       {icon}
+      {badge && (
+        <span className={`absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center ${badgeStyle || ''}`}>
+          {badge}
+        </span>
+      )}
     </button>
   ),
 
-  Menu: ({
-    items,
-    isOpen,
-    onClose,
-  }: {
-    items: MenuItem[];
-    isOpen: boolean;
-    onClose: () => void;
-  }) => {
+  Menu: ({ 
+    items, 
+    isOpen, 
+    onClose, 
+    position,
+    width,
+    className, 
+    style 
+  }: NavMenuProps) => {
     const menuRef = React.useRef<HTMLDivElement>(null);
 
     React.useEffect(() => {
       const handleClickOutside = (event: MouseEvent) => {
-        if (
-          menuRef.current &&
-          !menuRef.current.contains(event.target as Node)
-        ) {
+        if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
           onClose();
         }
       };
 
       document.addEventListener("mousedown", handleClickOutside);
-      return () =>
-        document.removeEventListener("mousedown", handleClickOutside);
+      return () => document.removeEventListener("mousedown", handleClickOutside);
     }, [onClose]);
 
     if (!isOpen) return null;
 
+    const positionStyle = {
+      left: position?.left,
+      right: position?.right,
+      top: position?.top,
+      bottom: position?.bottom,
+    };
+
     return (
       <div
         ref={menuRef}
-        className="absolute left-16 bottom-0 w-48 bg-popover border border-border rounded-lg shadow-lg py-2 z-50"
+        className={`absolute bg-popover border border-border rounded-lg shadow-lg py-2 z-50 ${className || ''}`}
+        style={{ ...positionStyle, width: width || '12rem', ...style }}
       >
         {items.map((item) => (
           <button
@@ -439,116 +613,126 @@ const Nav = {
 };
 
 const Chat = {
-  List: ({ children }: { children: React.ReactNode }) => (
-    <div className="flex-1 overflow-y-auto">{children}</div>
+  List: ({ children, className, style }: LayoutProps) => (
+    <div className={`flex-1 overflow-y-auto ${className || ''}`} style={style}>
+      {children}
+    </div>
   ),
 
-  Item: ({
-    chat,
-    isActive,
-    onClick,
-  }: {
-    chat: ChatItem;
-    isActive: boolean;
-    onClick: () => void;
-  }) => {
-    const getChatIcon = (chat: ChatItem) => {
-      switch (chat.type) {
-        case "official":
-        case "official-articles":
-          return <Newspaper className="h-5 w-5" />;
-        case "subscription":
-          return <Mail className="h-5 w-5" />;
-        case "system":
-          return <Bell className="h-5 w-5" />;
-        default:
-          return null;
-      }
-    };
-
-    return (
-      <div
-        className={`flex items-center p-4 cursor-pointer hover:bg-muted ${
-          isActive ? "bg-muted" : ""
-        }`}
-        onClick={onClick}
-      >
-        <div className="relative">
-          <div
-            className={`w-12 h-12 rounded-full flex items-center justify-center mr-3 ${
-              chat.type === "official" ||
-              chat.type === "subscription" ||
-              chat.type === "official-articles"
-                ? "bg-blue-100 text-blue-600"
-                : "bg-primary/10"
-            }`}
-          >
-            {getChatIcon(chat) || chat.name[0]}
-          </div>
-        </div>
-        <div className="flex-1 min-w-0">
-          <div className="flex justify-between items-center mb-1">
-            <div className="flex items-center gap-1">
-              <span className="font-medium truncate">{chat.name}</span>
-              {chat.type === "official" && (
-                <span className="text-xs text-blue-500">公众号</span>
-              )}
-              {chat.type === "subscription" && (
-                <span className="text-xs text-green-500">订阅号</span>
-              )}
-            </div>
-            <span className="text-xs text-muted-foreground">{chat.time}</span>
-          </div>
-          <div className="flex justify-between items-center">
-            <span className="text-sm text-muted-foreground truncate">
-              {chat.lastMessage}
-            </span>
-            {chat.unread && (
-              <span className="ml-2 px-1.5 py-0.5 bg-primary text-primary-foreground text-xs rounded-full">
-                {chat.unread}
-              </span>
-            )}
-          </div>
+  Item: ({ 
+    avatar, 
+    name, 
+    lastMessage, 
+    time, 
+    unread, 
+    isActive, 
+    onClick, 
+    type,
+    typeLabel,
+    typeStyle,
+    badgeStyle,
+    className, 
+    style 
+  }: ChatItemProps) => (
+    <div
+      className={`flex items-center p-4 cursor-pointer hover:bg-muted ${
+        isActive ? "bg-muted" : ""
+      } ${className || ''}`}
+      onClick={onClick}
+      style={style}
+    >
+      <div className="relative">
+        <div className={`w-12 h-12 rounded-full flex items-center justify-center mr-3 ${typeStyle || 'bg-primary/10'}`}>
+          {avatar}
         </div>
       </div>
-    );
-  },
-
-  Message: ({ message }: { message: Message }) => (
-    <div className={`flex ${message.isSelf ? "justify-end" : "justify-start"}`}>
-      <div
-        className={`max-w-[70%] rounded-lg p-3 ${
-          message.isSelf
-            ? "bg-primary text-primary-foreground"
-            : "bg-background"
-        }`}
-      >
-        {message.type === "text" ? (
-          <p className="text-sm">{message.content}</p>
-        ) : (
-          <div className="w-48 h-32 bg-muted rounded flex items-center justify-center">
-            <ImageIcon className="h-8 w-8 text-muted-foreground" />
+      <div className="flex-1 min-w-0">
+        <div className="flex justify-between items-center mb-1">
+          <div className="flex items-center gap-1">
+            <span className="font-medium truncate">{name}</span>
+            {typeLabel && (
+              <span className={`text-xs ${typeStyle || ''}`}>{typeLabel}</span>
+            )}
           </div>
-        )}
-        <span className="text-xs opacity-70 mt-1 block">{message.time}</span>
+          <span className="text-xs text-muted-foreground">{time}</span>
+        </div>
+        <div className="flex justify-between items-center">
+          <span className="text-sm text-muted-foreground truncate">
+            {lastMessage}
+          </span>
+          {unread && (
+            <span className={`ml-2 px-1.5 py-0.5 bg-primary text-primary-foreground text-xs rounded-full ${badgeStyle || ''}`}>
+              {unread}
+            </span>
+          )}
+        </div>
       </div>
     </div>
   ),
 
-  Input: ({ onSend }: { onSend: (message: string) => void }) => {
+  Message: ({ 
+    content, 
+    time, 
+    isSelf, 
+    type, 
+    imageComponent,
+    className, 
+    style 
+  }: MessageProps) => (
+    <div className={`flex ${isSelf ? "justify-end" : "justify-start"} ${className || ''}`} style={style}>
+      <div
+        className={`max-w-[70%] rounded-lg p-3 ${
+          isSelf
+            ? "bg-primary text-primary-foreground"
+            : "bg-background"
+        }`}
+      >
+        {type === "text" ? (
+          <p className="text-sm">{content}</p>
+        ) : (
+          imageComponent || (
+            <div className="w-48 h-32 bg-muted rounded flex items-center justify-center">
+              <ImageIcon className="h-8 w-8 text-muted-foreground" />
+            </div>
+          )
+        )}
+        <span className="text-xs opacity-70 mt-1 block">{time}</span>
+      </div>
+    </div>
+  ),
+
+  Input: ({ 
+    onSend, 
+    placeholder,
+    leftButton,
+    rightButton,
+    inputStyle,
+    buttonStyle,
+    className, 
+    style 
+  }: ChatInputProps) => {
     const [message, setMessage] = React.useState("");
 
     return (
-      <div className="flex items-center gap-2 w-full">
-        <button className="p-2 rounded-full text-muted-foreground hover:text-primary hover:bg-muted transition-colors">
-          <Plus className="h-5 w-5" />
-        </button>
+      <div className={`flex items-center gap-2 w-full ${className || ''}`} style={style}>
+        {leftButton ? (
+          <button 
+            className={`p-2 rounded-full text-muted-foreground hover:text-primary hover:bg-muted transition-colors ${buttonStyle || ''}`}
+            onClick={leftButton.onClick}
+          >
+            {leftButton.icon}
+          </button>
+        ) : (
+          <button className={`p-2 rounded-full text-muted-foreground hover:text-primary hover:bg-muted transition-colors ${buttonStyle || ''}`}>
+            <Plus className="h-5 w-5" />
+          </button>
+        )}
         <input
           type="text"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          placeholder="输入消息..."
-          className="flex-1 bg-muted rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
+          placeholder={placeholder || "输入消息..."}
+          className={`flex-1 bg-muted rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 ${inputStyle || ''}`}
           onKeyPress={(e) => {
             if (e.key === "Enter" && message.trim()) {
               onSend(message);
@@ -556,149 +740,155 @@ const Chat = {
             }
           }}
         />
-        <button
-          className="p-2 rounded-full text-primary hover:bg-primary/10 transition-colors"
-          onClick={() => {
-            if (message.trim()) {
-              onSend(message);
-              setMessage("");
-            }
-          }}
-        >
-          <MessageSquare className="h-5 w-5" />
-        </button>
+        {rightButton ? (
+          <button
+            className={`p-2 rounded-full text-primary hover:bg-primary/10 transition-colors ${buttonStyle || ''}`}
+            onClick={() => {
+              if (message.trim()) {
+                onSend(message);
+                setMessage("");
+              }
+              rightButton.onClick();
+            }}
+          >
+            {rightButton.icon}
+          </button>
+        ) : (
+          <button
+            className={`p-2 rounded-full text-primary hover:bg-primary/10 transition-colors ${buttonStyle || ''}`}
+            onClick={() => {
+              if (message.trim()) {
+                onSend(message);
+                setMessage("");
+              }
+            }}
+          >
+            <MessageSquare className="h-5 w-5" />
+          </button>
+        )}
       </div>
     );
   },
 };
 
 const Contact = {
-  List: ({ children }: { children: React.ReactNode }) => (
-    <div className="flex-1 overflow-y-auto">{children}</div>
+  List: ({ children, className, style }: LayoutProps) => (
+    <div className={`flex-1 overflow-y-auto ${className || ''}`} style={style}>
+      {children}
+    </div>
   ),
 
-  Item: ({
-    contact,
-    isSelected,
-    onClick,
-  }: {
-    contact: { id: string; name: string; avatar: string; type: string };
-    isSelected: boolean;
-    onClick: () => void;
-  }) => (
+  Item: ({ 
+    avatar, 
+    name, 
+    type,
+    typeLabel,
+    typeStyle,
+    isSelected, 
+    onClick, 
+    className, 
+    style 
+  }: ContactItemProps) => (
     <div
       className={`flex items-center p-4 hover:bg-muted cursor-pointer ${
         isSelected ? "bg-muted" : ""
-      }`}
+      } ${className || ''}`}
       onClick={onClick}
+      style={style}
     >
       <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mr-3">
-        {contact.avatar}
+        {avatar}
       </div>
       <div className="flex-1">
         <div className="flex items-center gap-1">
-          <span className="font-medium">{contact.name}</span>
-          {contact.type === "official" && (
-            <span className="text-xs text-blue-500">公众号</span>
+          <span className="font-medium">{name}</span>
+          {typeLabel && (
+            <span className={`text-xs ${typeStyle || ''}`}>{typeLabel}</span>
           )}
         </div>
       </div>
     </div>
   ),
 
-  Detail: ({
-    contact,
-  }: {
-    contact: { id: string; name: string; avatar: string };
-  }) => (
-    <div className="flex-1 overflow-y-auto">
+  Detail: ({ 
+    avatar, 
+    name, 
+    id,
+    idPrefix,
+    sections,
+    actions,
+    className, 
+    style 
+  }: ContactDetailProps) => (
+    <div className={`flex-1 overflow-y-auto ${className || ''}`} style={style}>
       <div className="p-4 border-b border-border">
         <div className="flex items-center gap-4 mb-4">
           <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center">
-            <span className="text-2xl">{contact.avatar}</span>
+            {avatar}
           </div>
           <div>
-            <h3 className="text-xl font-medium mb-1">{contact.name}</h3>
-            <p className="text-sm text-muted-foreground">
-              微信号：wxid_{contact.id}
-            </p>
+            <h3 className="text-xl font-medium mb-1">{name}</h3>
+            {id && (
+              <p className="text-sm text-muted-foreground">
+                {idPrefix || ''}{id}
+              </p>
+            )}
           </div>
-        </div>
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <span>备注：</span>
-          <span className="text-foreground">未设置</span>
         </div>
       </div>
 
-      <div className="p-4 border-b border-border">
-        <div className="flex items-center justify-between mb-2">
-          <h4 className="text-sm font-medium">朋友圈</h4>
-          <button className="text-xs text-primary hover:text-primary/80">
-            查看全部
-          </button>
-        </div>
-        <div className="grid grid-cols-3 gap-2">
-          {[1, 2, 3].map((i) => (
-            <div
-              key={i}
-              className="aspect-square bg-muted rounded cursor-pointer hover:opacity-80 transition-opacity"
-            >
-              <Image className="h-full w-full object-cover rounded" />
+      {sections?.map((section, index) => (
+        <div key={index} className="p-4 border-b border-border">
+          {section.title && (
+            <div className="flex items-center justify-between mb-2">
+              <h4 className="text-sm font-medium">{section.title}</h4>
             </div>
+          )}
+          {section.content}
+        </div>
+      ))}
+
+      {actions && (
+        <div className="p-4 flex items-center justify-center gap-8">
+          {actions.map((action, index) => (
+            <button
+              key={index}
+              className="flex flex-col items-center gap-1 text-muted-foreground hover:text-primary"
+              onClick={action.onClick}
+            >
+              <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                {action.icon}
+              </div>
+              <span className="text-xs">{action.label}</span>
+            </button>
           ))}
         </div>
-      </div>
-
-      <div className="p-4 border-b border-border">
-        <div className="flex items-center justify-between">
-          <h4 className="text-sm font-medium">共同群聊</h4>
-          <span className="text-sm text-muted-foreground">3个</span>
-        </div>
-      </div>
-
-      <div className="p-4 flex items-center justify-center gap-8">
-        <button className="flex flex-col items-center gap-1 text-muted-foreground hover:text-primary">
-          <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-            <MessageSquare className="h-6 w-6" />
-          </div>
-          <span className="text-xs">发消息</span>
-        </button>
-        <button className="flex flex-col items-center gap-1 text-muted-foreground hover:text-primary">
-          <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-            <Phone className="h-6 w-6" />
-          </div>
-          <span className="text-xs">语音通话</span>
-        </button>
-        <button className="flex flex-col items-center gap-1 text-muted-foreground hover:text-primary">
-          <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-            <Video className="h-6 w-6" />
-          </div>
-          <span className="text-xs">视频通话</span>
-        </button>
-      </div>
+      )}
     </div>
   ),
 };
 
 const Popup = {
-  Container: ({
-    children,
-    isOpen,
-    onClose,
-  }: {
-    children: React.ReactNode;
-    isOpen: boolean;
-    onClose: () => void;
-  }) => {
+  Container: ({ 
+    isOpen, 
+    onClose, 
+    children, 
+    width,
+    height,
+    className, 
+    style 
+  }: PopupProps) => {
     if (!isOpen) return null;
 
     return (
       <div
-        className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center"
+        className={`fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center ${className || ''}`}
         onClick={onClose}
+        style={style}
       >
         <div
-          className="w-[480px] h-[640px] bg-background rounded-lg shadow-lg flex flex-col"
+          className="bg-background rounded-lg shadow-lg flex flex-col"
+          style={{ width: width || '480px', height: height || '640px' }}
           onClick={(e) => e.stopPropagation()}
         >
           {children}
@@ -707,8 +897,8 @@ const Popup = {
     );
   },
 
-  Header: ({ title, onClose }: { title: string; onClose: () => void }) => (
-    <div className="h-14 border-b border-border flex items-center justify-between px-4">
+  Header: ({ title, onClose, className, style }: { title: string; onClose: () => void } & BaseProps) => (
+    <div className={`h-14 border-b border-border flex items-center justify-between px-4 ${className || ''}`} style={style}>
       <div className="flex items-center gap-2">
         <button
           className="p-2 rounded-full text-muted-foreground hover:text-primary hover:bg-muted transition-colors"
@@ -721,9 +911,229 @@ const Popup = {
     </div>
   ),
 
-  Content: ({ children }: { children: React.ReactNode }) => (
-    <div className="flex-1 overflow-y-auto">{children}</div>
+  Content: ({ children, className, style }: LayoutProps) => (
+    <div className={`flex-1 overflow-y-auto ${className || ''}`} style={style}>
+      {children}
+    </div>
   ),
+};
+
+const SearchInput = {
+  Input: ({ 
+    placeholder, 
+    value, 
+    onChange, 
+    onSearch,
+    icon,
+    iconPosition = 'left',
+    inputStyle,
+    iconStyle,
+    className, 
+    style 
+  }: SearchInputProps) => {
+    const defaultIcon = <SearchIcon className="h-4 w-4 text-muted-foreground" />;
+    const Icon = icon || defaultIcon;
+
+    return (
+      <div className={`relative ${className || ''}`} style={style}>
+        {iconPosition === 'left' && (
+          <div className={`absolute left-3 top-1/2 transform -translate-y-1/2 ${iconStyle || ''}`}>
+            {Icon}
+          </div>
+        )}
+        <input
+          type="text"
+          value={value}
+          onChange={(e) => onChange?.(e.target.value)}
+          onKeyPress={(e) => {
+            if (e.key === "Enter") {
+              onSearch?.(value || '');
+            }
+          }}
+          placeholder={placeholder || "搜索..."}
+          className={`w-full ${iconPosition === 'left' ? 'pl-9' : 'pr-9'} pr-4 py-2 bg-muted rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 ${inputStyle || ''}`}
+        />
+        {iconPosition === 'right' && (
+          <div className={`absolute right-3 top-1/2 transform -translate-y-1/2 ${iconStyle || ''}`}>
+            {Icon}
+          </div>
+        )}
+      </div>
+    );
+  },
+};
+
+const Action = {
+  Button: ({ 
+    icon, 
+    onClick, 
+    variant = 'default',
+    size = 'md',
+    badge,
+    badgeStyle,
+    tooltip,
+    className, 
+    style 
+  }: ActionButtonProps) => {
+    const sizeClasses = {
+      sm: 'p-1.5',
+      md: 'p-2',
+      lg: 'p-3',
+    };
+
+    const variantClasses = {
+      default: 'text-muted-foreground hover:text-primary hover:bg-muted',
+      primary: 'text-primary hover:bg-primary/10',
+      ghost: 'text-muted-foreground hover:bg-muted/50',
+    };
+
+    return (
+      <button
+        className={`rounded-full transition-colors ${sizeClasses[size]} ${variantClasses[variant]} ${className || ''}`}
+        onClick={onClick}
+        style={style}
+        title={tooltip}
+      >
+        {icon}
+        {badge && (
+          <span className={`absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center ${badgeStyle || ''}`}>
+            {badge}
+          </span>
+        )}
+      </button>
+    );
+  },
+
+  Group: ({ 
+    actions, 
+    variant = 'default',
+    size = 'md',
+    gap = '4',
+    className, 
+    style 
+  }: ActionGroupProps) => (
+    <div className={`flex items-center gap-${gap} ${className || ''}`} style={style}>
+      {actions.map((action, index) => (
+        <Action.Button
+          key={index}
+          icon={action.icon}
+          onClick={action.onClick}
+          variant={action.variant || variant}
+          size={action.size || size}
+          badge={action.badge}
+          badgeStyle={action.badgeStyle}
+          tooltip={action.tooltip}
+        />
+      ))}
+    </div>
+  ),
+};
+
+const GridLayout = {
+  Container: ({ 
+    items, 
+    columns = 4,
+    gap = '2',
+    itemStyle,
+    iconStyle,
+    labelStyle,
+    className, 
+    style 
+  }: GridProps) => (
+    <div 
+      className={`grid gap-${gap} ${className || ''}`} 
+      style={{ 
+        gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))`,
+        ...style 
+      }}
+    >
+      {items.map((item) => (
+        <button
+          key={item.id}
+          className={`flex flex-col items-center gap-1 p-2 rounded-lg hover:bg-muted transition-colors ${itemStyle || ''}`}
+          onClick={item.onClick}
+        >
+          <span className={`text-2xl ${iconStyle || ''}`}>{item.icon}</span>
+          <span className={`text-xs w-14 text-center truncate ${labelStyle || ''}`}>{item.label}</span>
+        </button>
+      ))}
+    </div>
+  ),
+};
+
+export {
+  Layout,
+  Nav,
+  Chat,
+  Contact,
+  Popup,
+  SearchInput,
+  Action,
+  GridLayout,
+};
+
+export type {
+  BaseProps,
+  LayoutProps,
+  NavItemProps,
+  ChatItemProps,
+  MessageProps,
+  ContactItemProps,
+  ContactDetailProps,
+  PopupProps,
+  NavMenuProps,
+  ChatInputProps,
+  SearchInputProps,
+  ActionButtonProps,
+  ActionGroupProps,
+  GridProps,
+};
+
+const wechatConfig = {
+  chatTypes: {
+    private: {
+      label: '',
+      style: '',
+    },
+    group: {
+      label: '',
+      style: '',
+    },
+    official: {
+      label: '公众号',
+      style: 'text-blue-500',
+    },
+    subscription: {
+      label: '订阅号',
+      style: 'text-green-500',
+    },
+    system: {
+      label: '',
+      style: '',
+    },
+    'official-articles': {
+      label: '',
+      style: '',
+    },
+  },
+  contactTypes: {
+    private: {
+      label: '',
+      style: '',
+    },
+    group: {
+      label: '',
+      style: '',
+    },
+    official: {
+      label: '公众号',
+      style: 'text-blue-500',
+    },
+  },
+  navMenuPosition: {
+    left: '4rem',
+    bottom: '0',
+  },
 };
 
 export default function WechatLayout() {
@@ -851,7 +1261,13 @@ export default function WechatLayout() {
               <div className="p-4 bg-muted/50">
                 <div className="space-y-4">
                   {mockMessages.map((message) => (
-                    <Chat.Message key={message.id} message={message} />
+                    <Chat.Message
+                      key={message.id}
+                      content={message.content}
+                      time={message.time}
+                      isSelf={message.isSelf}
+                      type={message.type}
+                    />
                   ))}
                   <div ref={messagesEndRef} />
                 </div>
@@ -873,21 +1289,29 @@ export default function WechatLayout() {
                 <div className="flex items-center">
                   <span className="font-medium">通讯录</span>
                 </div>
-                <div className="flex items-center gap-4">
-                  <button className="p-2 rounded-full text-muted-foreground hover:text-primary hover:bg-muted transition-colors">
-                    <Plus className="h-5 w-5" />
-                  </button>
-                  <button className="p-2 rounded-full text-muted-foreground hover:text-primary hover:bg-muted transition-colors">
-                    <Search className="h-5 w-5" />
-                  </button>
-                </div>
+                <Action.Group
+                  actions={[
+                    {
+                      icon: <Plus className="h-5 w-5" />,
+                      onClick: () => {},
+                      tooltip: '添加联系人',
+                    },
+                    {
+                      icon: <SearchIcon className="h-5 w-5" />,
+                      onClick: () => {},
+                      tooltip: '搜索',
+                    },
+                  ]}
+                />
               </Layout.Header>
 
               <Contact.List>
                 {mockContacts.map((contact) => (
                   <Contact.Item
                     key={contact.id}
-                    contact={contact}
+                    avatar={contact.avatar}
+                    name={contact.name}
+                    type={contact.type as 'private' | 'group' | 'official'}
                     isSelected={selectedContact === contact.id}
                     onClick={() => setSelectedContact(contact.id)}
                   />
@@ -904,9 +1328,55 @@ export default function WechatLayout() {
                     </div>
                   </Layout.Header>
                   <Contact.Detail
-                    contact={
-                      mockContacts.find((c) => c.id === selectedContact)!
-                    }
+                    avatar={<span className="text-2xl">{mockContacts.find((c) => c.id === selectedContact)?.avatar}</span>}
+                    name={mockContacts.find((c) => c.id === selectedContact)?.name || ''}
+                    id={selectedContact}
+                    idPrefix="微信号：wxid_"
+                    sections={[
+                      {
+                        title: '朋友圈',
+                        content: (
+                          <>
+                            <div className="flex items-center justify-between mb-2">
+                              <button className="text-xs text-primary hover:text-primary/80">
+                                查看全部
+                              </button>
+                            </div>
+                            <div className="grid grid-cols-3 gap-2">
+                              {[1, 2, 3].map((i) => (
+                                <div
+                                  key={i}
+                                  className="aspect-square bg-muted rounded cursor-pointer hover:opacity-80 transition-opacity"
+                                >
+                                  <Image className="h-full w-full object-cover rounded" />
+                                </div>
+                              ))}
+                            </div>
+                          </>
+                        ),
+                      },
+                      {
+                        title: '共同群聊',
+                        content: <span className="text-sm text-muted-foreground">3个</span>,
+                      },
+                    ]}
+                    actions={[
+                      {
+                        icon: <MessageSquare className="h-6 w-6" />,
+                        label: '发消息',
+                        onClick: () => {},
+                      },
+                      {
+                        icon: <Phone className="h-6 w-6" />,
+                        label: '语音通话',
+                        onClick: () => {},
+                      },
+                      {
+                        icon: <Video className="h-6 w-6" />,
+                        label: '视频通话',
+                        onClick: () => {},
+                      },
+                    ]}
                   />
                 </>
               ) : (
@@ -984,7 +1454,7 @@ export default function WechatLayout() {
           className="w-12 h-12 rounded-lg flex items-center justify-center text-muted-foreground hover:bg-muted mb-2"
           onClick={() => setShowMiniPrograms(!showMiniPrograms)}
         >
-          <Grid className="h-5 w-5" />
+          <GridIcon className="h-5 w-5" />
         </button>
 
         {showMiniPrograms && (
@@ -1004,32 +1474,30 @@ export default function WechatLayout() {
 
             <div className="mb-4">
               <h4 className="text-sm text-muted-foreground mb-2">最近使用</h4>
-              <div className="grid grid-cols-4 gap-2">
-                {recentMiniPrograms.map((mp) => (
-                  <button
-                    key={mp.id}
-                    className="flex flex-col items-center gap-1 p-2 rounded-lg hover:bg-muted transition-colors"
-                  >
-                    <span className="text-2xl">{mp.icon}</span>
-                    <span className="text-xs w-14 text-center truncate">{mp.name}</span>
-                  </button>
-                ))}
-              </div>
+              <GridLayout.Container
+                items={recentMiniPrograms.map(mp => ({
+                  id: mp.id,
+                  icon: mp.icon,
+                  label: mp.name,
+                  onClick: () => console.log('打开小程序:', mp.name),
+                }))}
+                columns={4}
+                gap="2"
+              />
             </div>
 
             <div>
               <h4 className="text-sm text-muted-foreground mb-2">我的小程序</h4>
-              <div className="grid grid-cols-4 gap-2">
-                {myMiniPrograms.map((mp) => (
-                  <button
-                    key={mp.id}
-                    className="flex flex-col items-center gap-1 p-2 rounded-lg hover:bg-muted transition-colors"
-                  >
-                    <span className="text-2xl">{mp.icon}</span>
-                    <span className="text-xs w-14 text-center truncate">{mp.name}</span>
-                  </button>
-                ))}
-              </div>
+              <GridLayout.Container
+                items={myMiniPrograms.map(mp => ({
+                  id: mp.id,
+                  icon: mp.icon,
+                  label: mp.name,
+                  onClick: () => console.log('打开小程序:', mp.name),
+                }))}
+                columns={4}
+                gap="2"
+              />
             </div>
           </div>
         )}
@@ -1045,29 +1513,32 @@ export default function WechatLayout() {
           items={menuItems}
           isOpen={showMenu}
           onClose={() => setShowMenu(false)}
+          position={wechatConfig.navMenuPosition}
         />
       </Nav.Bar>
 
       {activeNav === "chat" && (
         <Layout.Sidebar>
-          <div className="p-4 border-b border-border">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <input
-                type="text"
-                placeholder="搜索"
-                className="w-full pl-9 pr-4 py-2 bg-muted rounded-lg text-sm"
-              />
-            </div>
-          </div>
+          <SearchInput.Input
+            placeholder="搜索"
+            onChange={(value) => console.log('搜索:', value)}
+            onSearch={(value) => console.log('执行搜索:', value)}
+          />
 
           <Chat.List>
             {mockChats.map((chat) => (
               <Chat.Item
                 key={chat.id}
-                chat={chat}
+                avatar={chat.avatar}
+                name={chat.name}
+                lastMessage={chat.lastMessage}
+                time={chat.time}
+                unread={chat.unread}
                 isActive={activeChat === chat.id}
                 onClick={() => setActiveChat(chat.id)}
+                type={chat.type}
+                typeLabel={wechatConfig.chatTypes[chat.type]?.label}
+                typeStyle={wechatConfig.chatTypes[chat.type]?.style}
               />
             ))}
           </Chat.List>
