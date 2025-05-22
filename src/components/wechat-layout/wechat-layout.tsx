@@ -1,5 +1,5 @@
 import React from 'react';
-import {
+import { 
   BellIcon,
   Camera,
   ChevronLeft,
@@ -530,6 +530,13 @@ interface Message {
   type: 'text' | 'image';
 }
 
+interface MessageGroup {
+  id: string;
+  title: string;
+  messages: Message[];
+  type: 'time' | 'sender';
+}
+
 interface MenuItem {
   id: string;
   icon: React.ReactNode;
@@ -1004,7 +1011,42 @@ const ChatHeader = React.forwardRef<HTMLDivElement, ChatHeaderProps>(
 );
 ChatHeader.displayName = "ChatHeader";
 
-// 在 ChatHeader 组件定义后添加
+interface MessageBubbleProps {
+  content: string;
+  time: string;
+  isSelf: boolean;
+  type: 'text' | 'image';
+  className?: string;
+}
+
+const MessageBubble = React.forwardRef<HTMLDivElement, MessageBubbleProps>(
+  ({ content, time, isSelf, type, className = '' }, ref) => {
+    return (
+      <div
+        ref={ref}
+        className={`max-w-[70%] rounded-lg p-3 ${
+          isSelf
+            ? "bg-primary text-primary-foreground"
+            : "bg-background"
+        } ${className}`}
+      >
+        {type === 'text' ? (
+          <p className="text-sm whitespace-pre-wrap break-words">{content}</p>
+        ) : (
+          <div className="w-48 h-32 bg-muted rounded flex items-center justify-center">
+            <Image className="h-8 w-8 text-muted-foreground" />
+          </div>
+        )}
+        <span className="text-xs opacity-70 mt-1 block">
+          {time}
+        </span>
+      </div>
+    );
+  }
+);
+MessageBubble.displayName = "MessageBubble";
+
+// 更新 MessageItem 组件以使用 MessageBubble
 interface MessageItemProps {
   message: Message;
   className?: string;
@@ -1017,38 +1059,144 @@ const MessageItem = React.forwardRef<HTMLDivElement, MessageItemProps>(
         ref={ref}
         className={`flex ${message.isSelf ? "justify-end" : "justify-start"} ${className}`}
       >
-        <div
-          className={`max-w-[70%] rounded-lg p-3 ${
-            message.isSelf
-              ? "bg-primary text-primary-foreground"
-              : "bg-background"
-          }`}
-        >
-          {message.type === 'text' ? (
-            <p className="text-sm">{message.content}</p>
-          ) : (
-            <div className="w-48 h-32 bg-muted rounded flex items-center justify-center">
-              <Image className="h-8 w-8 text-muted-foreground" />
-            </div>
-          )}
-          <span className="text-xs opacity-70 mt-1 block">
-            {message.time}
-          </span>
-        </div>
+        <MessageBubble
+          content={message.content}
+          time={message.time}
+          isSelf={message.isSelf}
+          type={message.type}
+        />
       </div>
     );
   }
 );
 MessageItem.displayName = "MessageItem";
 
+// 添加消息分组辅助函数
+const groupMessagesByTime = (messages: Message[]): MessageGroup[] => {
+  const groups: MessageGroup[] = [];
+  let currentGroup: MessageGroup | null = null;
+
+  messages.forEach((message) => {
+    const date = new Date(message.time);
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+
+    let groupTitle = '';
+    if (date.toDateString() === today.toDateString()) {
+      groupTitle = '今天';
+    } else if (date.toDateString() === yesterday.toDateString()) {
+      groupTitle = '昨天';
+    } else {
+      groupTitle = date.toLocaleDateString('zh-CN', {
+        month: 'long',
+        day: 'numeric'
+      });
+    }
+
+    if (!currentGroup || currentGroup.title !== groupTitle) {
+      currentGroup = {
+        id: `time-${groupTitle}`,
+        title: groupTitle,
+        messages: [],
+        type: 'time'
+      };
+      groups.push(currentGroup);
+    }
+
+    currentGroup.messages.push(message);
+  });
+
+  return groups;
+};
+
+const groupMessagesBySender = (messages: Message[]): MessageGroup[] => {
+  const groups: MessageGroup[] = [];
+  let currentGroup: MessageGroup | null = null;
+
+  messages.forEach((message) => {
+    const senderId = message.isSelf ? 'self' : 'other';
+    const groupTitle = message.isSelf ? '我' : '对方';
+
+    if (!currentGroup || currentGroup.title !== groupTitle) {
+      currentGroup = {
+        id: `sender-${senderId}`,
+        title: groupTitle,
+        messages: [],
+        type: 'sender'
+      };
+      groups.push(currentGroup);
+    }
+
+    currentGroup.messages.push(message);
+  });
+
+  return groups;
+};
+
+// 添加 MessageGroup 组件
+interface MessageGroupProps {
+  group: MessageGroup;
+  className?: string;
+}
+
+const MessageGroup = React.forwardRef<HTMLDivElement, MessageGroupProps>(
+  ({ group, className = '' }, ref) => {
+    const [isCollapsed, setIsCollapsed] = React.useState(false);
+
+    return (
+      <div
+        ref={ref}
+        className={`space-y-2 ${className}`}
+      >
+        <div 
+          className="flex items-center justify-center py-2 cursor-pointer"
+          onClick={() => setIsCollapsed(!isCollapsed)}
+        >
+          <div className="px-3 py-1 bg-muted rounded-full text-xs text-muted-foreground">
+            {group.title}
+          </div>
+        </div>
+        {!isCollapsed && (
+          <div className="space-y-4">
+            {group.messages.map((message) => (
+              <MessageItem
+                key={message.id}
+                message={message}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  }
+);
+MessageGroup.displayName = "MessageGroup";
+
+// 更新 MessageList 组件以使用 MessageGroup
 interface MessageListProps {
   messages: Message[];
   className?: string;
   onScroll?: (event: React.UIEvent<HTMLDivElement>) => void;
+  groupBy?: 'time' | 'sender' | 'none';
 }
 
 const MessageList = React.forwardRef<HTMLDivElement, MessageListProps>(
-  ({ messages, className = '', onScroll }, ref) => {
+  ({ messages, className = '', onScroll, groupBy = 'time' }, ref) => {
+    const groups = React.useMemo(() => {
+      if (groupBy === 'time') {
+        return groupMessagesByTime(messages);
+      } else if (groupBy === 'sender') {
+        return groupMessagesBySender(messages);
+      }
+      return [{
+        id: 'all',
+        title: '',
+        messages,
+        type: 'time' as const
+      }];
+    }, [messages, groupBy]);
+
     return (
       <ScrollArea 
         ref={ref}
@@ -1056,10 +1204,10 @@ const MessageList = React.forwardRef<HTMLDivElement, MessageListProps>(
         onScroll={onScroll}
       >
         <div className="space-y-4">
-          {messages.map((message) => (
-            <MessageItem
-              key={message.id}
-              message={message}
+          {groups.map((group) => (
+            <MessageGroup
+              key={group.id}
+              group={group}
             />
           ))}
         </div>
@@ -1604,7 +1752,7 @@ const WechatLayout = () => {
                 // 处理滚动事件
               }}
             />
-            <div ref={messagesEndRef} />
+                <div ref={messagesEndRef} />
 
             <ChatInput
               onSend={(message) => {
@@ -1661,7 +1809,7 @@ const WechatLayout = () => {
               </ScrollArea>
             </div>
 
-            {selectedContact ? (
+              {selectedContact ? (
               <ContactDetail
                 contact={mockContacts.find(c => c.id === selectedContact)!}
                 onMomentsClick={() => handleNavClick("moments")}
@@ -1705,7 +1853,7 @@ const WechatLayout = () => {
         <ProfileAvatar onClick={() => setShowProfile(!showProfile)} />
 
         <ProfilePopover
-          ref={profileRef}
+            ref={profileRef}
           isOpen={showProfile}
           onClose={() => setShowProfile(false)}
           onNavClick={handleNavClick}
