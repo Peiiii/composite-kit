@@ -1,34 +1,184 @@
-import * as React from "react";
-import { 
-  MessageSquare, 
-  Phone, 
-  Video, 
-  MoreVertical, 
-  Search, 
-  Plus,
-  Users,
-  Star,
-  FileText,
-  Image as ImageIcon,
-  Newspaper,
-  Bell,
-  Mail,
-  Menu,
-  Grid as GridIcon,
-  X,
-  LogOut,
-  User,
-  HelpCircle,
+import React from 'react';
+import {
+  BellIcon,
   Camera,
-  Heart,
   ChevronLeft,
+  FileText,
+  GridIcon,
+  Heart,
+  HelpCircle,
   Image,
-  ThumbsUp,
+  LogOut,
+  Menu,
   MessageCircle,
-  Share2,
+  MessageSquare,
+  MoreVertical,
+  Phone,
+  Plus,
   RefreshCw,
-  Bell as BellIcon
-} from "lucide-react";
+  Search,
+  Share2,
+  Star,
+  ThumbsUp,
+  User,
+  Users,
+  Video,
+  X
+} from 'lucide-react';
+
+interface BackdropProps {
+  onClick?: (e: React.MouseEvent) => void;
+  className?: string;
+  children?: React.ReactNode;
+}
+
+const Backdrop = React.forwardRef<HTMLDivElement, BackdropProps>(
+  ({ onClick, className = '', children }, ref) => {
+    return (
+      <div
+        ref={ref}
+        className={`fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center ${className}`}
+        onClick={onClick}
+      >
+        {children}
+      </div>
+    );
+  }
+);
+Backdrop.displayName = "Backdrop";
+
+interface SectionProps {
+  className?: string;
+  children?: React.ReactNode;
+}
+
+const Section = React.forwardRef<HTMLDivElement, SectionProps>(
+  ({ className = '', children }, ref) => {
+    return (
+      <div
+        ref={ref}
+        className={`p-4 border-b border-border ${className}`}
+      >
+        {children}
+      </div>
+    );
+  }
+);
+Section.displayName = "Section";
+
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  icon?: React.ReactNode;
+  className?: string;
+}
+
+const Input = React.forwardRef<HTMLInputElement, InputProps>(
+  ({ icon, className = '', ...props }, ref) => {
+    return (
+      <div className="relative">
+        {icon && (
+          <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
+            {icon}
+          </div>
+        )}
+        <input
+          ref={ref}
+          className={`w-full bg-muted rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 ${
+            icon ? 'pl-9' : 'pl-4'
+          } pr-4 py-2 ${className}`}
+          {...props}
+        />
+      </div>
+    );
+  }
+);
+Input.displayName = "Input";
+
+interface ScrollAreaProps {
+  className?: string;
+  children?: React.ReactNode;
+  onScroll?: (event: React.UIEvent<HTMLDivElement>) => void;
+}
+
+const ScrollArea = React.forwardRef<HTMLDivElement, ScrollAreaProps>(
+  ({ className = '', children, onScroll }, ref) => {
+    return (
+      <div
+        ref={ref}
+        className={`flex-1 overflow-y-auto ${className}`}
+        onScroll={onScroll}
+      >
+        {children}
+      </div>
+    );
+  }
+);
+ScrollArea.displayName = "ScrollArea";
+
+interface ImageGridProps {
+  images: {
+    id: string | number;
+    src?: string;
+    onClick?: () => void;
+  }[];
+  columns?: number;
+  gap?: number;
+  className?: string;
+}
+
+const ImageGrid = React.forwardRef<HTMLDivElement, ImageGridProps>(
+  ({ images, columns = 3, gap = 2, className = '' }, ref) => {
+    return (
+      <div
+        ref={ref}
+        className={`grid grid-cols-${columns} gap-${gap} ${className}`}
+      >
+        {images.map((image) => (
+          <div
+            key={image.id}
+            className="aspect-square bg-muted rounded cursor-pointer hover:opacity-80 transition-opacity"
+            onClick={image.onClick}
+          >
+            {image.src ? (
+              <img
+                src={image.src}
+                alt=""
+                className="h-full w-full object-cover rounded"
+              />
+            ) : (
+              <Image className="h-full w-full object-cover rounded" />
+            )}
+          </div>
+        ))}
+      </div>
+    );
+  }
+);
+ImageGrid.displayName = "ImageGrid";
+
+interface ActionButtonProps {
+  icon: React.ReactNode;
+  label: string;
+  onClick?: () => void;
+  className?: string;
+}
+
+const ActionButton = React.forwardRef<HTMLButtonElement, ActionButtonProps>(
+  ({ icon, label, onClick, className = '' }, ref) => {
+    return (
+      <button
+        ref={ref}
+        className={`flex flex-col items-center gap-1 text-muted-foreground hover:text-primary ${className}`}
+        onClick={onClick}
+      >
+        <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+          {icon}
+        </div>
+        <span className="text-xs">{label}</span>
+      </button>
+    );
+  }
+);
+ActionButton.displayName = "ActionButton";
 
 // 基础原子组件
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -878,7 +1028,7 @@ const MessageItem = React.forwardRef<HTMLDivElement, MessageItemProps>(
             <p className="text-sm">{message.content}</p>
           ) : (
             <div className="w-48 h-32 bg-muted rounded flex items-center justify-center">
-              <ImageIcon className="h-8 w-8 text-muted-foreground" />
+              <Image className="h-8 w-8 text-muted-foreground" />
             </div>
           )}
           <span className="text-xs opacity-70 mt-1 block">
@@ -1077,52 +1227,160 @@ const Header = React.forwardRef<HTMLDivElement, HeaderProps>(
 );
 Header.displayName = "Header";
 
+interface PageHeaderProps {
+  title: React.ReactNode;
+  actions?: React.ReactNode;
+  className?: string;
+}
+
+const PageHeader = React.forwardRef<HTMLDivElement, PageHeaderProps>(
+  ({ title, actions, className = '' }, ref) => {
+    return (
+      <div 
+        ref={ref}
+        className={`h-14 border-b border-border flex items-center justify-between px-4 ${className}`}
+      >
+        <div className="flex items-center">
+          <span className="font-medium">{title}</span>
+        </div>
+        {actions && (
+          <div className="flex items-center gap-4">
+            {actions}
+          </div>
+        )}
+      </div>
+    );
+  }
+);
+PageHeader.displayName = "PageHeader";
+
 interface EmptyStateProps {
-  icon?: React.ReactNode;
-  title?: string;
-  description?: string;
+  message: string;
   className?: string;
 }
 
 const EmptyState = React.forwardRef<HTMLDivElement, EmptyStateProps>(
-  ({ icon, title, description, className = '' }, ref) => {
+  ({ message, className = '' }, ref) => {
     return (
       <div 
         ref={ref}
-        className={`flex-1 flex flex-col items-center justify-center text-muted-foreground ${className}`}
+        className={`flex-1 flex items-center justify-center text-muted-foreground ${className}`}
       >
-        {icon && <div className="mb-4">{icon}</div>}
-        {title && <h3 className="text-lg font-medium mb-2">{title}</h3>}
-        {description && <p className="text-sm">{description}</p>}
+        {message}
       </div>
     );
   }
 );
 EmptyState.displayName = "EmptyState";
 
-// 修改 Grid 组件名称为 GridLayout 以避免冲突
-interface GridLayoutProps {
-  columns?: number;
-  gap?: number;
+interface ContactDetailProps {
+  contact: {
+    id: string;
+    name: string;
+    avatar: string;
+  };
+  onMomentsClick?: () => void;
+  onActionClick?: (action: 'message' | 'voice' | 'video') => void;
   className?: string;
-  children?: React.ReactNode;
 }
 
-const GridLayout = React.forwardRef<HTMLDivElement, GridLayoutProps>(
-  ({ columns = 3, gap = 2, className = '', children }, ref) => {
+const ContactDetail = React.forwardRef<HTMLDivElement, ContactDetailProps>(
+  ({ contact, onMomentsClick, onActionClick, className = '' }, ref) => {
     return (
-      <div 
-        ref={ref}
-        className={`grid grid-cols-${columns} gap-${gap} ${className}`}
-      >
-        {children}
+      <div ref={ref} className={`flex-1 flex flex-col ${className}`}>
+        <PageHeader title="详细资料" />
+
+        <ScrollArea>
+          <div className="p-4 border-b border-border">
+            <div className="flex items-center gap-4 mb-4">
+              <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center">
+                <span className="text-2xl">{contact.avatar}</span>
+              </div>
+              <div>
+                <h3 className="text-xl font-medium mb-1">{contact.name}</h3>
+                <p className="text-sm text-muted-foreground">微信号：wxid_{contact.id}</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <span>备注：</span>
+              <span className="text-foreground">未设置</span>
+            </div>
+          </div>
+
+          <div className="p-4 border-b border-border">
+            <div className="flex items-center justify-between mb-2">
+              <h4 className="text-sm font-medium">朋友圈</h4>
+              <button 
+                className="text-xs text-primary hover:text-primary/80"
+                onClick={onMomentsClick}
+              >
+                查看全部
+              </button>
+            </div>
+            <ImageGrid
+              images={[1, 2, 3].map(i => ({
+                id: i,
+                onClick: onMomentsClick
+              }))}
+            />
+          </div>
+
+          <div className="p-4 border-b border-border">
+            <div className="flex items-center justify-between">
+              <h4 className="text-sm font-medium">共同群聊</h4>
+              <span className="text-sm text-muted-foreground">3个</span>
+            </div>
+          </div>
+
+          <div className="p-4 flex items-center justify-center gap-8">
+            <ActionButton
+              icon={<MessageSquare className="h-6 w-6" />}
+              label="发消息"
+              onClick={() => onActionClick?.('message')}
+            />
+            <ActionButton
+              icon={<Phone className="h-6 w-6" />}
+              label="语音通话"
+              onClick={() => onActionClick?.('voice')}
+            />
+            <ActionButton
+              icon={<Video className="h-6 w-6" />}
+              label="视频通话"
+              onClick={() => onActionClick?.('video')}
+            />
+          </div>
+        </ScrollArea>
       </div>
     );
   }
 );
-GridLayout.displayName = "GridLayout";
+ContactDetail.displayName = "ContactDetail";
 
-// 添加 ProfilePopoverProps 接口定义
+interface WindowManagerProps {
+  windows: Window[];
+  onBackdropClick: (e: React.MouseEvent) => void;
+}
+
+const WindowManager = React.forwardRef<HTMLDivElement, WindowManagerProps>(
+  ({ windows, onBackdropClick }, ref) => {
+    return (
+      <>
+        {windows.map((window) => (
+          <Backdrop
+            key={window.id}
+            onClick={onBackdropClick}
+          >
+            <div className="w-[480px] h-[640px] bg-background rounded-lg shadow-lg flex flex-col">
+              {window.content}
+            </div>
+          </Backdrop>
+        ))}
+      </>
+    );
+  }
+);
+WindowManager.displayName = "WindowManager";
+
 interface ProfilePopoverProps {
   isOpen: boolean;
   onClose: () => void;
@@ -1130,7 +1388,6 @@ interface ProfilePopoverProps {
   className?: string;
 }
 
-// 修改 ProfilePopover 组件，添加 ref 支持
 const ProfilePopover = React.forwardRef<HTMLDivElement, ProfilePopoverProps>(
   ({ isOpen, onClose, onNavClick, className = '' }, ref) => {
     return (
@@ -1181,240 +1438,21 @@ const ProfilePopover = React.forwardRef<HTMLDivElement, ProfilePopoverProps>(
 );
 ProfilePopover.displayName = "ProfilePopover";
 
-interface WindowManagerProps {
-  windows: Window[];
-  onBackdropClick: (e: React.MouseEvent) => void;
-}
-
-interface BackdropProps {
-  onClick?: (e: React.MouseEvent) => void;
-  className?: string;
-  children?: React.ReactNode;
-}
-
-const Backdrop = React.forwardRef<HTMLDivElement, BackdropProps>(
-  ({ onClick, className = '', children }, ref) => {
-    return (
-      <div
-        ref={ref}
-        className={`fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center ${className}`}
-        onClick={onClick}
-      >
-        {children}
-      </div>
-    );
+const getChatIcon = (chat: ChatItem) => {
+  switch (chat.type) {
+    case 'official':
+    case 'official-articles':
+      return <FileText className="h-5 w-5" />;
+    case 'subscription':
+      return <MessageSquare className="h-5 w-5" />;
+    case 'system':
+      return <BellIcon className="h-5 w-5" />;
+    default:
+      return null;
   }
-);
-Backdrop.displayName = "Backdrop";
+};
 
-interface CardProps {
-  className?: string;
-  children?: React.ReactNode;
-}
-
-const Card = React.forwardRef<HTMLDivElement, CardProps>(
-  ({ className = '', children }, ref) => {
-    return (
-      <div
-        ref={ref}
-        className={`bg-background rounded-lg p-4 ${className}`}
-      >
-        {children}
-      </div>
-    );
-  }
-);
-Card.displayName = "Card";
-
-interface ListProps {
-  className?: string;
-  children?: React.ReactNode;
-}
-
-const List = React.forwardRef<HTMLDivElement, ListProps>(
-  ({ className = '', children }, ref) => {
-    return (
-      <div
-        ref={ref}
-        className={`flex-1 overflow-y-auto ${className}`}
-      >
-        {children}
-      </div>
-    );
-  }
-);
-List.displayName = "List";
-
-interface SectionProps {
-  className?: string;
-  children?: React.ReactNode;
-}
-
-const Section = React.forwardRef<HTMLDivElement, SectionProps>(
-  ({ className = '', children }, ref) => {
-    return (
-      <div
-        ref={ref}
-        className={`p-4 border-b border-border ${className}`}
-      >
-        {children}
-      </div>
-    );
-  }
-);
-Section.displayName = "Section";
-
-interface DividerProps {
-  className?: string;
-}
-
-const Divider = React.forwardRef<HTMLDivElement, DividerProps>(
-  ({ className = '' }, ref) => {
-    return (
-      <div
-        ref={ref}
-        className={`h-px bg-border ${className}`}
-      />
-    );
-  }
-);
-Divider.displayName = "Divider";
-
-interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  icon?: React.ReactNode;
-  className?: string;
-}
-
-const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ icon, className = '', ...props }, ref) => {
-    return (
-      <div className="relative">
-        {icon && (
-          <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
-            {icon}
-          </div>
-        )}
-        <input
-          ref={ref}
-          className={`w-full bg-muted rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 ${
-            icon ? 'pl-9' : 'pl-4'
-          } pr-4 py-2 ${className}`}
-          {...props}
-        />
-      </div>
-    );
-  }
-);
-Input.displayName = "Input";
-
-interface ScrollAreaProps {
-  className?: string;
-  children?: React.ReactNode;
-  onScroll?: (event: React.UIEvent<HTMLDivElement>) => void;
-}
-
-const ScrollArea = React.forwardRef<HTMLDivElement, ScrollAreaProps>(
-  ({ className = '', children, onScroll }, ref) => {
-    return (
-      <div
-        ref={ref}
-        className={`flex-1 overflow-y-auto ${className}`}
-        onScroll={onScroll}
-      >
-        {children}
-      </div>
-    );
-  }
-);
-ScrollArea.displayName = "ScrollArea";
-
-interface ImageGridProps {
-  images: {
-    id: string | number;
-    src?: string;
-    onClick?: () => void;
-  }[];
-  columns?: number;
-  gap?: number;
-  className?: string;
-}
-
-const ImageGrid = React.forwardRef<HTMLDivElement, ImageGridProps>(
-  ({ images, columns = 3, gap = 2, className = '' }, ref) => {
-    return (
-      <div
-        ref={ref}
-        className={`grid grid-cols-${columns} gap-${gap} ${className}`}
-      >
-        {images.map((image) => (
-          <div
-            key={image.id}
-            className="aspect-square bg-muted rounded cursor-pointer hover:opacity-80 transition-opacity"
-            onClick={image.onClick}
-          >
-            {image.src ? (
-              <img
-                src={image.src}
-                alt=""
-                className="h-full w-full object-cover rounded"
-              />
-            ) : (
-              <Image className="h-full w-full object-cover rounded" />
-            )}
-          </div>
-        ))}
-      </div>
-    );
-  }
-);
-ImageGrid.displayName = "ImageGrid";
-
-interface ActionButtonProps {
-  icon: React.ReactNode;
-  label: string;
-  onClick?: () => void;
-  className?: string;
-}
-
-const ActionButton = React.forwardRef<HTMLButtonElement, ActionButtonProps>(
-  ({ icon, label, onClick, className = '' }, ref) => {
-    return (
-      <button
-        ref={ref}
-        className={`flex flex-col items-center gap-1 text-muted-foreground hover:text-primary ${className}`}
-        onClick={onClick}
-      >
-        <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-          {icon}
-        </div>
-        <span className="text-xs">{label}</span>
-      </button>
-    );
-  }
-);
-ActionButton.displayName = "ActionButton";
-
-const WindowManager = React.forwardRef<HTMLDivElement, WindowManagerProps>(
-  ({ windows, onBackdropClick }, ref) => {
-    return (
-      <>
-        {windows.map((window) => (
-          <Backdrop
-            key={window.id}
-            onClick={onBackdropClick}
-          >
-            <div className="w-[480px] h-[640px] bg-background rounded-lg shadow-lg flex flex-col">
-              {window.content}
-            </div>
-          </Backdrop>
-        ))}
-      </>
-    );
-  }
-);
-WindowManager.displayName = "WindowManager";
-
-export default function WechatLayout() {
+const WechatLayout = () => {
   const [activeChat, setActiveChat] = React.useState<string>("1");
   const [activeNav, setActiveNav] = React.useState<string>("chat");
   const [showMenu, setShowMenu] = React.useState(false);
@@ -1447,20 +1485,6 @@ export default function WechatLayout() {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-
-  const getChatIcon = (chat: ChatItem) => {
-    switch (chat.type) {
-      case 'official':
-      case 'official-articles':
-        return <Newspaper className="h-5 w-5" />;
-      case 'subscription':
-        return <Mail className="h-5 w-5" />;
-      case 'system':
-        return <Bell className="h-5 w-5" />;
-      default:
-        return null;
-    }
-  };
 
   const handleNavClick = (id: string) => {
     if (id === "moments") {
@@ -1550,9 +1574,9 @@ export default function WechatLayout() {
       case "chat":
         return (
           <div className="flex-1 flex flex-col">
-            <Header
+            <PageHeader
               title={mockChats.find(c => c.id === activeChat)?.name}
-              right={[
+              actions={[
                 <IconButton
                   key="phone"
                   icon={<Phone className="h-5 w-5" />}
@@ -1594,21 +1618,25 @@ export default function WechatLayout() {
         return (
           <>
             <div className="w-80 border-r border-border flex flex-col">
-              <div className="h-14 border-b border-border flex items-center justify-between px-4">
-                <div className="flex items-center">
-                  <span className="font-medium">通讯录</span>
-                </div>
-                <div className="flex items-center gap-4">
-                  <button className="p-2 rounded-full text-muted-foreground hover:text-primary hover:bg-muted transition-colors">
-                    <Plus className="h-5 w-5" />
-                  </button>
-                  <button className="p-2 rounded-full text-muted-foreground hover:text-primary hover:bg-muted transition-colors">
-                    <Search className="h-5 w-5" />
-                  </button>
-                </div>
-              </div>
+              <PageHeader
+                title="通讯录"
+                actions={[
+                  <IconButton
+                    key="add"
+                    icon={<Plus className="h-5 w-5" />}
+                    variant="ghost"
+                    onClick={() => {}}
+                  />,
+                  <IconButton
+                    key="search"
+                    icon={<Search className="h-5 w-5" />}
+                    variant="ghost"
+                    onClick={() => {}}
+                  />
+                ]}
+              />
 
-              <div className="flex-1 overflow-y-auto">
+              <ScrollArea>
                 {mockContacts.map((contact) => (
                   <div
                     key={contact.id}
@@ -1630,115 +1658,35 @@ export default function WechatLayout() {
                     </div>
                   </div>
                 ))}
-              </div>
+              </ScrollArea>
             </div>
 
-            <div className="flex-1 flex flex-col">
-              {selectedContact ? (
-                <>
-                  <div className="h-14 border-b border-border flex items-center justify-between px-4">
-                    <div className="flex items-center">
-                      <span className="font-medium">详细资料</span>
-                    </div>
-                  </div>
-
-                  <div className="flex-1 overflow-y-auto">
-                    <div className="p-4 border-b border-border">
-                      <div className="flex items-center gap-4 mb-4">
-                        <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center">
-                          <span className="text-2xl">{mockContacts.find(c => c.id === selectedContact)?.avatar}</span>
-                        </div>
-                        <div>
-                          <h3 className="text-xl font-medium mb-1">
-                            {mockContacts.find(c => c.id === selectedContact)?.name}
-                          </h3>
-                          <p className="text-sm text-muted-foreground">微信号：wxid_{selectedContact}</p>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <span>备注：</span>
-                        <span className="text-foreground">未设置</span>
-                      </div>
-                    </div>
-
-                    <div className="p-4 border-b border-border">
-                      <div className="flex items-center justify-between mb-2">
-                        <h4 className="text-sm font-medium">朋友圈</h4>
-                        <button 
-                          className="text-xs text-primary hover:text-primary/80"
-                          onClick={() => handleNavClick("moments")}
-                        >
-                          查看全部
-                        </button>
-                      </div>
-                      <div className="grid grid-cols-3 gap-2">
-                        {[1, 2, 3].map((i) => (
-                          <div 
-                            key={i}
-                            className="aspect-square bg-muted rounded cursor-pointer hover:opacity-80 transition-opacity"
-                            onClick={() => handleNavClick("moments")}
-                          >
-                            <Image className="h-full w-full object-cover rounded" />
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div className="p-4 border-b border-border">
-                      <div className="flex items-center justify-between">
-                        <h4 className="text-sm font-medium">共同群聊</h4>
-                        <span className="text-sm text-muted-foreground">3个</span>
-                      </div>
-                    </div>
-
-                    <div className="p-4 flex items-center justify-center gap-8">
-                      <ActionButton
-                        icon={<MessageSquare className="h-6 w-6" />}
-                        label="发消息"
-                      />
-                      <ActionButton
-                        icon={<Phone className="h-6 w-6" />}
-                        label="语音通话"
-                      />
-                      <ActionButton
-                        icon={<Video className="h-6 w-6" />}
-                        label="视频通话"
-                      />
-                    </div>
-                  </div>
-                </>
-              ) : (
-                <div className="flex-1 flex items-center justify-center text-muted-foreground">
-                  请选择一个联系人查看详情
-                </div>
-              )}
-            </div>
+            {selectedContact ? (
+              <ContactDetail
+                contact={mockContacts.find(c => c.id === selectedContact)!}
+                onMomentsClick={() => handleNavClick("moments")}
+                onActionClick={(action) => {
+                  // 处理操作点击
+                  console.log('Action clicked:', action);
+                }}
+              />
+            ) : (
+              <EmptyState message="请选择一个联系人查看详情" />
+            )}
           </>
         );
       case "favorites":
         return (
           <div className="flex-1 flex flex-col">
-            <div className="h-14 border-b border-border flex items-center justify-between px-4">
-              <div className="flex items-center">
-                <span className="font-medium">收藏</span>
-              </div>
-            </div>
-            <div className="flex-1 flex items-center justify-center text-muted-foreground">
-              暂无收藏内容
-            </div>
+            <PageHeader title="收藏" />
+            <EmptyState message="暂无收藏内容" />
           </div>
         );
       case "files":
         return (
           <div className="flex-1 flex flex-col">
-            <div className="h-14 border-b border-border flex items-center justify-between px-4">
-              <div className="flex items-center">
-                <span className="font-medium">文件传输助手</span>
-              </div>
-            </div>
-            <div className="flex-1 flex items-center justify-center text-muted-foreground">
-              暂无文件
-            </div>
+            <PageHeader title="文件传输助手" />
+            <EmptyState message="暂无文件" />
           </div>
         );
       default:
@@ -1813,4 +1761,6 @@ export default function WechatLayout() {
       {renderRightContent()}
     </div>
   );
-}
+};
+
+export default WechatLayout;
