@@ -25,14 +25,15 @@ import {
   Video,
   X
 } from 'lucide-react';
+import { cn } from '../../lib/utils';
 
-interface BackdropProps {
+export interface BackdropProps {
   onClick?: (e: React.MouseEvent) => void;
   className?: string;
   children?: React.ReactNode;
 }
 
-const Backdrop = React.forwardRef<HTMLDivElement, BackdropProps>(
+export const Backdrop = React.forwardRef<HTMLDivElement, BackdropProps>(
   ({ onClick, className = '', children }, ref) => {
     return (
       <div
@@ -47,12 +48,12 @@ const Backdrop = React.forwardRef<HTMLDivElement, BackdropProps>(
 );
 Backdrop.displayName = "Backdrop";
 
-interface SectionProps {
+export interface SectionProps {
   className?: string;
   children?: React.ReactNode;
 }
 
-const Section = React.forwardRef<HTMLDivElement, SectionProps>(
+export const Section = React.forwardRef<HTMLDivElement, SectionProps>(
   ({ className = '', children }, ref) => {
     return (
       <div
@@ -66,12 +67,12 @@ const Section = React.forwardRef<HTMLDivElement, SectionProps>(
 );
 Section.displayName = "Section";
 
-interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   icon?: React.ReactNode;
   className?: string;
 }
 
-const Input = React.forwardRef<HTMLInputElement, InputProps>(
+export const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ icon, className = '', ...props }, ref) => {
     return (
       <div className="relative">
@@ -93,13 +94,13 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 );
 Input.displayName = "Input";
 
-interface ScrollAreaProps {
+export interface ScrollAreaProps {
   className?: string;
   children?: React.ReactNode;
   onScroll?: (event: React.UIEvent<HTMLDivElement>) => void;
 }
 
-const ScrollArea = React.forwardRef<HTMLDivElement, ScrollAreaProps>(
+export const ScrollArea = React.forwardRef<HTMLDivElement, ScrollAreaProps>(
   ({ className = '', children, onScroll }, ref) => {
     return (
       <div
@@ -180,8 +181,7 @@ const ActionButton = React.forwardRef<HTMLButtonElement, ActionButtonProps>(
 );
 ActionButton.displayName = "ActionButton";
 
-// 基础原子组件
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'default' | 'primary' | 'ghost' | 'link';
   size?: 'sm' | 'md' | 'lg';
   icon?: React.ReactNode;
@@ -189,7 +189,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   className?: string;
 }
 
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ variant = 'default', size = 'md', icon, children, className = '', ...props }, ref) => {
     const baseStyles = "inline-flex items-center justify-center rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-primary/20";
     const variantStyles = {
@@ -207,7 +207,12 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <button
         ref={ref}
-        className={`${baseStyles} ${variantStyles[variant]} ${sizeStyles[size]} ${className}`}
+        className={cn(
+          baseStyles,
+          variantStyles[variant],
+          sizeStyles[size],
+          className
+        )}
         {...props}
       >
         {icon && <span className="mr-2">{icon}</span>}
@@ -216,16 +221,17 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     );
   }
 );
+
 Button.displayName = "Button";
 
-interface IconButtonProps extends Omit<ButtonProps, 'children' | 'size' | 'variant'> {
+export interface IconButtonProps extends Omit<ButtonProps, 'children' | 'size' | 'variant'> {
   icon: React.ReactNode;
   label?: string;
   variant?: 'default' | 'primary' | 'ghost' | 'link' | 'nav';
   size?: 'sm' | 'md' | 'lg' | 'nav';
 }
 
-const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
+export const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
   ({ icon, label, variant = 'default', size = 'md', className = '', ...props }, ref) => {
     const baseStyles = "inline-flex items-center justify-center transition-colors focus:outline-none focus:ring-2 focus:ring-primary/20";
     const variantStyles = {
@@ -245,7 +251,12 @@ const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
     return (
       <button
         ref={ref}
-        className={`${baseStyles} ${variantStyles[variant]} ${sizeStyles[size]} ${className}`}
+        className={cn(
+          baseStyles,
+          variantStyles[variant],
+          sizeStyles[size],
+          className
+        )}
         {...props}
       >
         {icon}
@@ -254,9 +265,10 @@ const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
     );
   }
 );
+
 IconButton.displayName = "IconButton";
 
-interface AvatarProps {
+export interface AvatarProps {
   src?: string;
   alt?: string;
   fallback?: string;
@@ -264,7 +276,7 @@ interface AvatarProps {
   className?: string;
 }
 
-const Avatar = React.forwardRef<HTMLDivElement, AvatarProps>(
+export const Avatar = React.forwardRef<HTMLDivElement, AvatarProps>(
   ({ src, alt, fallback, size = 'md', className = '' }, ref) => {
     const sizeStyles = {
       sm: "w-8 h-8",
@@ -308,13 +320,13 @@ const ProfileAvatar = React.forwardRef<HTMLDivElement, ProfileAvatarProps>(
 );
 ProfileAvatar.displayName = "ProfileAvatar";
 
-interface BadgeProps {
+export interface BadgeProps {
   count?: number;
   dot?: boolean;
   className?: string;
 }
 
-const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
+export const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
   ({ count, dot, className = '' }, ref) => {
     if (!count && !dot) return null;
 
@@ -332,14 +344,14 @@ const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
 );
 Badge.displayName = "Badge";
 
-interface TooltipProps {
+export interface TooltipProps {
   content: React.ReactNode;
   children: React.ReactNode;
   className?: string;
   position?: 'top' | 'bottom' | 'left' | 'right';
 }
 
-const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>(
+export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>(
   ({ content, children, className = '', position = 'top' }, ref) => {
     const [isVisible, setIsVisible] = React.useState(false);
 
@@ -371,7 +383,7 @@ const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>(
 );
 Tooltip.displayName = "Tooltip";
 
-interface ModalProps {
+export interface ModalProps {
   isOpen: boolean;
   onClose?: () => void;
   title?: React.ReactNode;
@@ -380,7 +392,7 @@ interface ModalProps {
   size?: 'sm' | 'md' | 'lg';
 }
 
-const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
+export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
   ({ isOpen, onClose, title, children, className = '', size = 'md' }, ref) => {
     if (!isOpen) return null;
 
@@ -419,14 +431,14 @@ const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
 );
 Modal.displayName = "Modal";
 
-interface TabsProps {
+export interface TabsProps {
   value: string;
   onChange: (value: string) => void;
   children?: React.ReactNode;
   className?: string;
 }
 
-const Tabs = React.forwardRef<HTMLDivElement, TabsProps>(
+export const Tabs = React.forwardRef<HTMLDivElement, TabsProps>(
   ({ value, onChange, children, className = '' }, ref) => {
     return (
       <div
@@ -440,7 +452,7 @@ const Tabs = React.forwardRef<HTMLDivElement, TabsProps>(
 );
 Tabs.displayName = "Tabs";
 
-interface TabProps {
+export interface TabProps {
   value: string;
   label: React.ReactNode;
   isActive?: boolean;
@@ -448,7 +460,7 @@ interface TabProps {
   className?: string;
 }
 
-const Tab = React.forwardRef<HTMLButtonElement, TabProps>(
+export const Tab = React.forwardRef<HTMLButtonElement, TabProps>(
   ({ value, label, isActive, onClick, className = '' }, ref) => {
     return (
       <button
@@ -467,7 +479,7 @@ const Tab = React.forwardRef<HTMLButtonElement, TabProps>(
 );
 Tab.displayName = "Tab";
 
-interface DropdownProps {
+export interface DropdownProps {
   trigger: React.ReactNode;
   items: {
     label: React.ReactNode;
@@ -479,7 +491,7 @@ interface DropdownProps {
   className?: string;
 }
 
-const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
+export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
   ({ trigger, items, isOpen, onClose, className = '' }, ref) => {
     return (
       <div
@@ -808,7 +820,7 @@ const myMiniPrograms: MiniProgram[] = [
   { id: "mp7", name: "腾讯视频", icon: "🎬" },
 ];
 
-interface ListItemProps {
+export interface ListItemProps {
   icon?: React.ReactNode;
   title: React.ReactNode;
   subtitle?: React.ReactNode;
@@ -818,7 +830,7 @@ interface ListItemProps {
   className?: string;
 }
 
-const ListItem = React.forwardRef<HTMLDivElement, ListItemProps>(
+export const ListItem = React.forwardRef<HTMLDivElement, ListItemProps>(
   ({ icon, title, subtitle, right, onClick, isActive, className = '' }, ref) => {
     return (
       <div
@@ -852,14 +864,13 @@ const ListItem = React.forwardRef<HTMLDivElement, ListItemProps>(
 );
 ListItem.displayName = "ListItem";
 
-// 在 Avatar 组件定义后添加
-interface ChatListItemProps {
+export interface ChatListItemProps {
   chat: ChatItem;
   isActive: boolean;
   onClick: () => void;
 }
 
-const ChatListItem = React.forwardRef<HTMLDivElement, ChatListItemProps>(
+export const ChatListItem = React.forwardRef<HTMLDivElement, ChatListItemProps>(
   ({ chat, isActive, onClick }, ref) => {
     return (
       <ListItem
@@ -906,14 +917,13 @@ const ChatListItem = React.forwardRef<HTMLDivElement, ChatListItemProps>(
 );
 ChatListItem.displayName = "ChatListItem";
 
-// 在 ChatListItem 组件定义后添加
-interface MiniProgramListProps {
+export interface MiniProgramListProps {
   title: string;
   programs: MiniProgram[];
   onClose?: () => void;
 }
 
-const MiniProgramList = React.forwardRef<HTMLDivElement, MiniProgramListProps>(
+export const MiniProgramList = React.forwardRef<HTMLDivElement, MiniProgramListProps>(
   ({ title, programs, onClose }, ref) => {
     return (
       <div ref={ref} className="absolute left-16 bottom-0 w-64 bg-popover border border-border rounded-lg shadow-lg p-4 z-50">
@@ -949,13 +959,12 @@ const MiniProgramList = React.forwardRef<HTMLDivElement, MiniProgramListProps>(
 );
 MiniProgramList.displayName = "MiniProgramList";
 
-// 在 MiniProgramList 组件定义后添加
-interface MenuListProps {
+export interface MenuListProps {
   items: MenuItem[];
   onClose?: () => void;
 }
 
-const MenuList = React.forwardRef<HTMLDivElement, MenuListProps>(
+export const MenuList = React.forwardRef<HTMLDivElement, MenuListProps>(
   ({ items, onClose }, ref) => {
     return (
       <div 
@@ -979,14 +988,13 @@ const MenuList = React.forwardRef<HTMLDivElement, MenuListProps>(
 );
 MenuList.displayName = "MenuList";
 
-// 在 MenuList 组件定义后添加
-interface ChatListProps {
+export interface ChatListProps {
   chats: ChatItem[];
   activeChat: string;
   onChatSelect: (chatId: string) => void;
 }
 
-const ChatList = React.forwardRef<HTMLDivElement, ChatListProps>(
+export const ChatList = React.forwardRef<HTMLDivElement, ChatListProps>(
   ({ chats, activeChat, onChatSelect }, ref) => {
     return (
       <div ref={ref} className="w-80 border-r border-border flex flex-col">
@@ -1013,8 +1021,7 @@ const ChatList = React.forwardRef<HTMLDivElement, ChatListProps>(
 );
 ChatList.displayName = "ChatList";
 
-// 修改 ChatHeader 组件定义
-interface ChatHeaderProps {
+export interface ChatHeaderProps {
   title: string;
   actions?: {
     icon: React.ReactNode;
@@ -1024,7 +1031,7 @@ interface ChatHeaderProps {
   className?: string;
 }
 
-const ChatHeader = React.forwardRef<HTMLDivElement, ChatHeaderProps>(
+export const ChatHeader = React.forwardRef<HTMLDivElement, ChatHeaderProps>(
   ({ title, actions = [], className = '' }, ref) => {
     return (
       <div 
@@ -1052,7 +1059,7 @@ const ChatHeader = React.forwardRef<HTMLDivElement, ChatHeaderProps>(
 );
 ChatHeader.displayName = "ChatHeader";
 
-interface MessageBubbleProps {
+export interface MessageBubbleProps {
   content: string;
   time: string;
   isSelf: boolean;
@@ -1060,7 +1067,7 @@ interface MessageBubbleProps {
   className?: string;
 }
 
-const MessageBubble = React.forwardRef<HTMLDivElement, MessageBubbleProps>(
+export const MessageBubble = React.forwardRef<HTMLDivElement, MessageBubbleProps>(
   ({ content, time, isSelf, type, className = '' }, ref) => {
     return (
       <div
@@ -1087,13 +1094,12 @@ const MessageBubble = React.forwardRef<HTMLDivElement, MessageBubbleProps>(
 );
 MessageBubble.displayName = "MessageBubble";
 
-// 更新 MessageItem 组件以使用 MessageBubble
-interface MessageItemProps {
+export interface MessageItemProps {
   message: Message;
   className?: string;
 }
 
-const MessageItem = React.forwardRef<HTMLDivElement, MessageItemProps>(
+export const MessageItem = React.forwardRef<HTMLDivElement, MessageItemProps>(
   ({ message, className = '' }, ref) => {
     return (
       <div
@@ -1112,7 +1118,6 @@ const MessageItem = React.forwardRef<HTMLDivElement, MessageItemProps>(
 );
 MessageItem.displayName = "MessageItem";
 
-// 添加消息分组辅助函数
 const groupMessagesByTime = (messages: Message[]): MessageGroup[] => {
   const groups: MessageGroup[] = [];
   let currentGroup: MessageGroup | null = null;
@@ -1175,13 +1180,12 @@ const groupMessagesBySender = (messages: Message[]): MessageGroup[] => {
   return groups;
 };
 
-// 添加 MessageGroup 组件
-interface MessageGroupProps {
+export interface MessageGroupProps {
   group: MessageGroup;
   className?: string;
 }
 
-const MessageGroup = React.forwardRef<HTMLDivElement, MessageGroupProps>(
+export const MessageGroup = React.forwardRef<HTMLDivElement, MessageGroupProps>(
   ({ group, className = '' }, ref) => {
     const [isCollapsed, setIsCollapsed] = React.useState(false);
 
@@ -1214,15 +1218,14 @@ const MessageGroup = React.forwardRef<HTMLDivElement, MessageGroupProps>(
 );
 MessageGroup.displayName = "MessageGroup";
 
-// 更新 MessageList 组件以使用 MessageGroup
-interface MessageListProps {
+export interface MessageListProps {
   messages: Message[];
   className?: string;
   onScroll?: (event: React.UIEvent<HTMLDivElement>) => void;
   groupBy?: 'time' | 'sender' | 'none';
 }
 
-const MessageList = React.forwardRef<HTMLDivElement, MessageListProps>(
+export const MessageList = React.forwardRef<HTMLDivElement, MessageListProps>(
   ({ messages, className = '', onScroll, groupBy = 'time' }, ref) => {
     const groups = React.useMemo(() => {
       if (groupBy === 'time') {
@@ -1258,12 +1261,12 @@ const MessageList = React.forwardRef<HTMLDivElement, MessageListProps>(
 );
 MessageList.displayName = "MessageList";
 
-interface ChatInputProps {
+export interface ChatInputProps {
   onSend?: (message: string) => void;
   className?: string;
 }
 
-const ChatInput = React.forwardRef<HTMLDivElement, ChatInputProps>(
+export const ChatInput = React.forwardRef<HTMLDivElement, ChatInputProps>(
   ({ onSend, className = '' }, ref) => {
     const [message, setMessage] = React.useState('');
 
@@ -1311,12 +1314,12 @@ const ChatInput = React.forwardRef<HTMLDivElement, ChatInputProps>(
 );
 ChatInput.displayName = "ChatInput";
 
-interface NavBarProps {
+export interface NavBarProps {
   className?: string;
   children?: React.ReactNode;
 }
 
-const NavBar = React.forwardRef<HTMLDivElement, NavBarProps>(
+export const NavBar = React.forwardRef<HTMLDivElement, NavBarProps>(
   ({ className = '', children }, ref) => {
     return (
       <div 
@@ -1330,14 +1333,14 @@ const NavBar = React.forwardRef<HTMLDivElement, NavBarProps>(
 );
 NavBar.displayName = "NavBar";
 
-interface NavBarItemProps {
+export interface NavBarItemProps {
   icon: React.ReactNode;
   isActive?: boolean;
   onClick?: () => void;
   className?: string;
 }
 
-const NavBarItem = React.forwardRef<HTMLButtonElement, NavBarItemProps>(
+export const NavBarItem = React.forwardRef<HTMLButtonElement, NavBarItemProps>(
   ({ icon, isActive, onClick, className = '' }, ref) => {
     return (
       <IconButton
@@ -1355,13 +1358,13 @@ const NavBarItem = React.forwardRef<HTMLButtonElement, NavBarItemProps>(
 );
 NavBarItem.displayName = "NavBarItem";
 
-interface NavBarGroupProps {
+export interface NavBarGroupProps {
   title?: string;
   children?: React.ReactNode;
   className?: string;
 }
 
-const NavBarGroup = React.forwardRef<HTMLDivElement, NavBarGroupProps>(
+export const NavBarGroup = React.forwardRef<HTMLDivElement, NavBarGroupProps>(
   ({ title, children, className = '' }, ref) => {
     return (
       <div
@@ -1380,13 +1383,13 @@ const NavBarGroup = React.forwardRef<HTMLDivElement, NavBarGroupProps>(
 );
 NavBarGroup.displayName = "NavBarGroup";
 
-interface NavBarSectionProps {
+export interface NavBarSectionProps {
   children?: React.ReactNode;
   className?: string;
   position?: 'top' | 'bottom';
 }
 
-const NavBarSection = React.forwardRef<HTMLDivElement, NavBarSectionProps>(
+export const NavBarSection = React.forwardRef<HTMLDivElement, NavBarSectionProps>(
   ({ children, className = '', position = 'top' }, ref) => {
     return (
       <div
@@ -1400,7 +1403,7 @@ const NavBarSection = React.forwardRef<HTMLDivElement, NavBarSectionProps>(
 );
 NavBarSection.displayName = "NavBarSection";
 
-interface PopoverProps {
+export interface PopoverProps {
   isOpen: boolean;
   onClose?: () => void;
   className?: string;
@@ -1409,7 +1412,7 @@ interface PopoverProps {
   offset?: number;
 }
 
-const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
+export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
   ({ isOpen, onClose, className = '', children, position = 'left', offset = 16 }, ref) => {
     if (!isOpen) return null;
 
@@ -1432,14 +1435,14 @@ const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
 );
 Popover.displayName = "Popover";
 
-interface HeaderProps {
+export interface HeaderProps {
   title?: React.ReactNode;
   left?: React.ReactNode;
   right?: React.ReactNode;
   className?: string;
 }
 
-const Header = React.forwardRef<HTMLDivElement, HeaderProps>(
+export const Header = React.forwardRef<HTMLDivElement, HeaderProps>(
   ({ title, left, right, className = '' }, ref) => {
     return (
       <div 
@@ -1461,13 +1464,13 @@ const Header = React.forwardRef<HTMLDivElement, HeaderProps>(
 );
 Header.displayName = "Header";
 
-interface PageHeaderProps {
+export interface PageHeaderProps {
   title: React.ReactNode;
   actions?: React.ReactNode;
   className?: string;
 }
 
-const PageHeader = React.forwardRef<HTMLDivElement, PageHeaderProps>(
+export const PageHeader = React.forwardRef<HTMLDivElement, PageHeaderProps>(
   ({ title, actions, className = '' }, ref) => {
     return (
       <div 
@@ -1488,12 +1491,12 @@ const PageHeader = React.forwardRef<HTMLDivElement, PageHeaderProps>(
 );
 PageHeader.displayName = "PageHeader";
 
-interface EmptyStateProps {
+export interface EmptyStateProps {
   message: string;
   className?: string;
 }
 
-const EmptyState = React.forwardRef<HTMLDivElement, EmptyStateProps>(
+export const EmptyState = React.forwardRef<HTMLDivElement, EmptyStateProps>(
   ({ message, className = '' }, ref) => {
     return (
       <div 
@@ -1507,7 +1510,7 @@ const EmptyState = React.forwardRef<HTMLDivElement, EmptyStateProps>(
 );
 EmptyState.displayName = "EmptyState";
 
-interface ContactDetailProps {
+export interface ContactDetailProps {
   contact: {
     id: string;
     name: string;
@@ -1518,7 +1521,7 @@ interface ContactDetailProps {
   className?: string;
 }
 
-const ContactDetail = React.forwardRef<HTMLDivElement, ContactDetailProps>(
+export const ContactDetail = React.forwardRef<HTMLDivElement, ContactDetailProps>(
   ({ contact, onMomentsClick, onActionClick, className = '' }, ref) => {
     return (
       <div ref={ref} className={`flex-1 flex flex-col ${className}`}>
@@ -1590,12 +1593,12 @@ const ContactDetail = React.forwardRef<HTMLDivElement, ContactDetailProps>(
 );
 ContactDetail.displayName = "ContactDetail";
 
-interface WindowManagerProps {
+export interface WindowManagerProps {
   windows: Window[];
   onBackdropClick: (e: React.MouseEvent) => void;
 }
 
-const WindowManager = React.forwardRef<HTMLDivElement, WindowManagerProps>(
+export const WindowManager = React.forwardRef<HTMLDivElement, WindowManagerProps>(
   ({ windows, onBackdropClick }, ref) => {
     return (
       <>
@@ -1615,14 +1618,14 @@ const WindowManager = React.forwardRef<HTMLDivElement, WindowManagerProps>(
 );
 WindowManager.displayName = "WindowManager";
 
-interface ProfilePopoverProps {
+export interface ProfilePopoverProps {
   isOpen: boolean;
   onClose: () => void;
   onNavClick: (id: string) => void;
   className?: string;
 }
 
-const ProfilePopover = React.forwardRef<HTMLDivElement, ProfilePopoverProps>(
+export const ProfilePopover = React.forwardRef<HTMLDivElement, ProfilePopoverProps>(
   ({ isOpen, onClose, onNavClick, className = '' }, ref) => {
     return (
       <Popover
@@ -1686,7 +1689,11 @@ const getChatIcon = (chat: ChatItem) => {
   }
 };
 
-const WechatLayout = () => {
+export interface WechatLayoutProps {
+  className?: string;
+}
+
+export const WechatLayout: React.FC<WechatLayoutProps> = ({ className = '' }) => {
   const [activeChat, setActiveChat] = React.useState<string>("1");
   const [activeNav, setActiveNav] = React.useState<string>("chat");
   const [showMenu, setShowMenu] = React.useState(false);
@@ -1876,8 +1883,8 @@ const WechatLayout = () => {
                     key={contact.id}
                     icon={
                       <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                        {contact.avatar}
-                      </div>
+                      {contact.avatar}
+                    </div>
                     }
                     title={
                       <div className="flex items-center gap-1">
