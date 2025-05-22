@@ -1314,6 +1314,51 @@ const NavBarItem = React.forwardRef<HTMLButtonElement, NavBarItemProps>(
 );
 NavBarItem.displayName = "NavBarItem";
 
+interface NavBarGroupProps {
+  title?: string;
+  children?: React.ReactNode;
+  className?: string;
+}
+
+const NavBarGroup = React.forwardRef<HTMLDivElement, NavBarGroupProps>(
+  ({ title, children, className = '' }, ref) => {
+    return (
+      <div
+        ref={ref}
+        className={`flex flex-col items-center ${className}`}
+      >
+        {title && (
+          <div className="text-xs text-muted-foreground mb-2">
+            {title}
+          </div>
+        )}
+        {children}
+      </div>
+    );
+  }
+);
+NavBarGroup.displayName = "NavBarGroup";
+
+interface NavBarSectionProps {
+  children?: React.ReactNode;
+  className?: string;
+  position?: 'top' | 'bottom';
+}
+
+const NavBarSection = React.forwardRef<HTMLDivElement, NavBarSectionProps>(
+  ({ children, className = '', position = 'top' }, ref) => {
+    return (
+      <div
+        ref={ref}
+        className={`flex flex-col items-center ${position === 'bottom' ? 'mt-auto' : ''} ${className}`}
+      >
+        {children}
+      </div>
+    );
+  }
+);
+NavBarSection.displayName = "NavBarSection";
+
 interface PopoverProps {
   isOpen: boolean;
   onClose?: () => void;
@@ -1850,35 +1895,36 @@ const WechatLayout = () => {
       />
 
       <NavBar>
-        <ProfileAvatar onClick={() => setShowProfile(!showProfile)} />
+        <NavBarSection>
+          <NavBarGroup>
+            <ProfileAvatar onClick={() => setShowProfile(!showProfile)} />
+          </NavBarGroup>
 
-        <ProfilePopover
-            ref={profileRef}
-          isOpen={showProfile}
-          onClose={() => setShowProfile(false)}
-          onNavClick={handleNavClick}
-        />
+          <NavBarGroup>
+            {navItems.map((item) => (
+              <NavBarItem
+                key={item.id}
+                icon={item.icon}
+                isActive={activeNav === item.id}
+                onClick={() => handleNavClick(item.id)}
+              />
+            ))}
+          </NavBarGroup>
+        </NavBarSection>
 
-        {navItems.map((item) => (
-          <NavBarItem
-            key={item.id}
-            icon={item.icon}
-            isActive={activeNav === item.id}
-            onClick={() => handleNavClick(item.id)}
-          />
-        ))}
+        <NavBarSection position="bottom">
+          <NavBarGroup>
+            <NavBarItem
+              icon={<GridIcon className="h-5 w-5" />}
+              onClick={() => setShowMiniPrograms(!showMiniPrograms)}
+            />
 
-        <div className="flex-1" />
-
-        <NavBarItem
-          icon={<GridIcon className="h-5 w-5" />}
-          onClick={() => setShowMiniPrograms(!showMiniPrograms)}
-        />
-
-        <NavBarItem
-          icon={<Menu className="h-5 w-5" />}
-          onClick={() => setShowMenu(!showMenu)}
-        />
+            <NavBarItem
+              icon={<Menu className="h-5 w-5" />}
+              onClick={() => setShowMenu(!showMenu)}
+            />
+          </NavBarGroup>
+        </NavBarSection>
 
         {showMenu && (
           <MenuList
@@ -1896,6 +1942,13 @@ const WechatLayout = () => {
             onClose={() => setShowMiniPrograms(false)}
           />
         )}
+
+        <ProfilePopover
+          ref={profileRef}
+          isOpen={showProfile}
+          onClose={() => setShowProfile(false)}
+          onNavClick={handleNavClick}
+        />
       </NavBar>
 
       {activeNav === "chat" && (
