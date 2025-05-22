@@ -1689,6 +1689,27 @@ const getChatIcon = (chat: ChatItem) => {
   }
 };
 
+export interface PageContainerProps {
+  header?: React.ReactNode;
+  children?: React.ReactNode;
+  className?: string;
+}
+
+export const PageContainer = React.forwardRef<HTMLDivElement, PageContainerProps>(
+  ({ header, children, className = '' }, ref) => {
+    return (
+      <div 
+        ref={ref}
+        className={`flex-1 flex flex-col ${className}`}
+      >
+        {header}
+        {children}
+      </div>
+    );
+  }
+);
+PageContainer.displayName = "PageContainer";
+
 export interface WechatLayoutProps {
   className?: string;
 }
@@ -1814,77 +1835,80 @@ export const WechatLayout: React.FC<WechatLayoutProps> = ({ className = '' }) =>
     switch (activeNav) {
       case "chat":
         return (
-          <div className="flex-1 flex flex-col">
-            <PageHeader
-              title={mockChats.find(c => c.id === activeChat)?.name}
-              actions={[
-                <IconButton
-                  key="phone"
-                  icon={<Phone className="h-5 w-5" />}
-                  variant="ghost"
-                  onClick={() => {}}
-                />,
-                <IconButton
-                  key="video"
-                  icon={<Video className="h-5 w-5" />}
-                  variant="ghost"
-                  onClick={() => {}}
-                />,
-                <IconButton
-                  key="more"
-                  icon={<MoreVertical className="h-5 w-5" />}
-                  variant="ghost"
-                  onClick={() => {}}
-                />
-              ]}
-            />
-
+          <PageContainer
+            header={
+              <PageHeader
+                title={mockChats.find(c => c.id === activeChat)?.name}
+                actions={[
+                  <IconButton
+                    key="phone"
+                    icon={<Phone className="h-5 w-5" />}
+                    variant="ghost"
+                    onClick={() => {}}
+                  />,
+                  <IconButton
+                    key="video"
+                    icon={<Video className="h-5 w-5" />}
+                    variant="ghost"
+                    onClick={() => {}}
+                  />,
+                  <IconButton
+                    key="more"
+                    icon={<MoreVertical className="h-5 w-5" />}
+                    variant="ghost"
+                    onClick={() => {}}
+                  />
+                ]}
+              />
+            }
+          >
             <MessageList
               messages={mockMessages}
               onScroll={(e) => {
                 // 处理滚动事件
               }}
             />
-                <div ref={messagesEndRef} />
-
+            <div ref={messagesEndRef} />
             <ChatInput
               onSend={(message) => {
                 // 处理发送消息
                 console.log('发送消息:', message);
               }}
             />
-          </div>
+          </PageContainer>
         );
       case "contacts":
         return (
           <>
-            <div className="w-80 border-r border-border flex flex-col">
-              <PageHeader
-                title="通讯录"
-                actions={[
-                  <IconButton
-                    key="add"
-                    icon={<Plus className="h-5 w-5" />}
-                    variant="ghost"
-                    onClick={() => {}}
-                  />,
-                  <IconButton
-                    key="search"
-                    icon={<Search className="h-5 w-5" />}
-                    variant="ghost"
-                    onClick={() => {}}
-                  />
-                ]}
-              />
-
+            <PageContainer
+              header={
+                <PageHeader
+                  title="通讯录"
+                  actions={[
+                    <IconButton
+                      key="add"
+                      icon={<Plus className="h-5 w-5" />}
+                      variant="ghost"
+                      onClick={() => {}}
+                    />,
+                    <IconButton
+                      key="search"
+                      icon={<Search className="h-5 w-5" />}
+                      variant="ghost"
+                      onClick={() => {}}
+                    />
+                  ]}
+                />
+              }
+            >
               <ScrollArea>
                 {mockContacts.map((contact) => (
                   <ListItem
                     key={contact.id}
                     icon={
                       <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                      {contact.avatar}
-                    </div>
+                        {contact.avatar}
+                      </div>
                     }
                     title={
                       <div className="flex items-center gap-1">
@@ -1899,9 +1923,9 @@ export const WechatLayout: React.FC<WechatLayoutProps> = ({ className = '' }) =>
                   />
                 ))}
               </ScrollArea>
-            </div>
+            </PageContainer>
 
-              {selectedContact ? (
+            {selectedContact ? (
               <ContactDetail
                 contact={mockContacts.find(c => c.id === selectedContact)!}
                 onMomentsClick={() => handleNavClick("moments")}
@@ -1917,17 +1941,19 @@ export const WechatLayout: React.FC<WechatLayoutProps> = ({ className = '' }) =>
         );
       case "favorites":
         return (
-          <div className="flex-1 flex flex-col">
-            <PageHeader title="收藏" />
+          <PageContainer
+            header={<PageHeader title="收藏" />}
+          >
             <EmptyState message="暂无收藏内容" />
-          </div>
+          </PageContainer>
         );
       case "files":
         return (
-          <div className="flex-1 flex flex-col">
-            <PageHeader title="文件传输助手" />
+          <PageContainer
+            header={<PageHeader title="文件传输助手" />}
+          >
             <EmptyState message="暂无文件" />
-          </div>
+          </PageContainer>
         );
       default:
         return null;

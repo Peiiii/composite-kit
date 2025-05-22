@@ -1,7 +1,7 @@
 import * as React from "react";
 import WechatLayout from "./page";
 import WechatLayout2 from "@/components/wechat-layout/wechat-layout";
-import BasicDemo from "@/components/wechat-layout/examples/basic-demo";
+import BasicDemo from "@/components/wechat-layout/examples/note-app-demo";
 
 export const wechatLayoutDemos = [
   {
