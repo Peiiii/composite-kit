@@ -808,6 +808,50 @@ const myMiniPrograms: MiniProgram[] = [
   { id: "mp7", name: "腾讯视频", icon: "🎬" },
 ];
 
+interface ListItemProps {
+  icon?: React.ReactNode;
+  title: React.ReactNode;
+  subtitle?: React.ReactNode;
+  right?: React.ReactNode;
+  onClick?: () => void;
+  isActive?: boolean;
+  className?: string;
+}
+
+const ListItem = React.forwardRef<HTMLDivElement, ListItemProps>(
+  ({ icon, title, subtitle, right, onClick, isActive, className = '' }, ref) => {
+    return (
+      <div
+        ref={ref}
+        className={`flex items-center p-4 cursor-pointer hover:bg-muted ${
+          isActive ? "bg-muted" : ""
+        } ${className}`}
+        onClick={onClick}
+      >
+        {icon && (
+          <div className="mr-3">
+            {icon}
+          </div>
+        )}
+        <div className="flex-1 min-w-0">
+          <div className="flex justify-between items-center mb-1">
+            <div className="flex items-center gap-1">
+              {title}
+            </div>
+            {right}
+          </div>
+          {subtitle && (
+            <div className="flex justify-between items-center">
+              {subtitle}
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+);
+ListItem.displayName = "ListItem";
+
 // 在 Avatar 组件定义后添加
 interface ChatListItemProps {
   chat: ChatItem;
@@ -818,46 +862,45 @@ interface ChatListItemProps {
 const ChatListItem = React.forwardRef<HTMLDivElement, ChatListItemProps>(
   ({ chat, isActive, onClick }, ref) => {
     return (
-      <div
+      <ListItem
         ref={ref}
-        className={`flex items-center p-4 cursor-pointer hover:bg-muted ${
-          isActive ? "bg-muted" : ""
-        }`}
-        onClick={onClick}
-      >
-        <div className="relative">
-          <Avatar
-            fallback={chat.name[0]}
-            className={`mr-3 ${
-              chat.type === 'official' || chat.type === 'subscription' || chat.type === 'official-articles'
-                ? 'bg-blue-100 text-blue-600' 
-                : 'bg-primary/10'
-            }`}
-          />
-        </div>
-        <div className="flex-1 min-w-0">
-          <div className="flex justify-between items-center mb-1">
-            <div className="flex items-center gap-1">
-              <span className="font-medium truncate">{chat.name}</span>
-              {chat.type === 'official' && (
-                <span className="text-xs text-blue-500">公众号</span>
-              )}
-              {chat.type === 'subscription' && (
-                <span className="text-xs text-green-500">订阅号</span>
-              )}
-            </div>
-            <span className="text-xs text-muted-foreground">{chat.time}</span>
+        icon={
+          <div className="relative">
+            <Avatar
+              fallback={chat.name[0]}
+              className={`${
+                chat.type === 'official' || chat.type === 'subscription' || chat.type === 'official-articles'
+                  ? 'bg-blue-100 text-blue-600' 
+                  : 'bg-primary/10'
+              }`}
+            />
           </div>
-          <div className="flex justify-between items-center">
-            <span className="text-sm text-muted-foreground truncate">
-              {chat.lastMessage}
-            </span>
-            {chat.unread && (
-              <Badge count={chat.unread} />
+        }
+        title={
+          <div className="flex items-center gap-1">
+            <span className="font-medium truncate">{chat.name}</span>
+            {chat.type === 'official' && (
+              <span className="text-xs text-blue-500">公众号</span>
+            )}
+            {chat.type === 'subscription' && (
+              <span className="text-xs text-green-500">订阅号</span>
             )}
           </div>
-        </div>
-      </div>
+        }
+        subtitle={
+          <span className="text-sm text-muted-foreground truncate">
+            {chat.lastMessage}
+          </span>
+        }
+        right={
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-muted-foreground">{chat.time}</span>
+            {chat.unread && <Badge count={chat.unread} />}
+          </div>
+        }
+        isActive={isActive}
+        onClick={onClick}
+      />
     );
   }
 );
@@ -920,17 +963,15 @@ const MenuList = React.forwardRef<HTMLDivElement, MenuListProps>(
         className="absolute left-16 bottom-0 w-48 bg-popover border border-border rounded-lg shadow-lg py-2 z-50"
       >
         {items.map((item) => (
-          <button
+          <ListItem
             key={item.id}
-            className="w-full px-4 py-2 flex items-center gap-2 text-sm hover:bg-muted"
+            icon={item.icon}
+            title={item.label}
             onClick={() => {
               item.onClick?.();
               onClose?.();
             }}
-          >
-            {item.icon}
-            <span>{item.label}</span>
-          </button>
+          />
         ))}
       </div>
     );
@@ -1831,25 +1872,24 @@ const WechatLayout = () => {
 
               <ScrollArea>
                 {mockContacts.map((contact) => (
-                  <div
+                  <ListItem
                     key={contact.id}
-                    className={`flex items-center p-4 hover:bg-muted cursor-pointer ${
-                      selectedContact === contact.id ? "bg-muted" : ""
-                    }`}
-                    onClick={() => setSelectedContact(contact.id)}
-                  >
-                    <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mr-3">
-                      {contact.avatar}
-                    </div>
-                    <div className="flex-1">
+                    icon={
+                      <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                        {contact.avatar}
+                      </div>
+                    }
+                    title={
                       <div className="flex items-center gap-1">
                         <span className="font-medium">{contact.name}</span>
                         {contact.type === 'official' && (
                           <span className="text-xs text-blue-500">公众号</span>
                         )}
                       </div>
-                    </div>
-                  </div>
+                    }
+                    isActive={selectedContact === contact.id}
+                    onClick={() => setSelectedContact(contact.id)}
+                  />
                 ))}
               </ScrollArea>
             </div>
@@ -1901,12 +1941,12 @@ const WechatLayout = () => {
           </NavBarGroup>
 
           <NavBarGroup>
-            {navItems.map((item) => (
+        {navItems.map((item) => (
               <NavBarItem
-                key={item.id}
+            key={item.id}
                 icon={item.icon}
                 isActive={activeNav === item.id}
-                onClick={() => handleNavClick(item.id)}
+            onClick={() => handleNavClick(item.id)}
               />
             ))}
           </NavBarGroup>
@@ -1916,12 +1956,12 @@ const WechatLayout = () => {
           <NavBarGroup>
             <NavBarItem
               icon={<GridIcon className="h-5 w-5" />}
-              onClick={() => setShowMiniPrograms(!showMiniPrograms)}
+          onClick={() => setShowMiniPrograms(!showMiniPrograms)}
             />
 
             <NavBarItem
               icon={<Menu className="h-5 w-5" />}
-              onClick={() => setShowMenu(!showMenu)}
+          onClick={() => setShowMenu(!showMenu)}
             />
           </NavBarGroup>
         </NavBarSection>
