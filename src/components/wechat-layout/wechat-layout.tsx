@@ -454,6 +454,331 @@ const myMiniPrograms: MiniProgram[] = [
   { id: "mp7", name: "腾讯视频", icon: "🎬" },
 ];
 
+// 在 Avatar 组件定义后添加
+interface ChatListItemProps {
+  chat: ChatItem;
+  isActive: boolean;
+  onClick: () => void;
+}
+
+const ChatListItem = React.forwardRef<HTMLDivElement, ChatListItemProps>(
+  ({ chat, isActive, onClick }, ref) => {
+    return (
+      <div
+        ref={ref}
+        className={`flex items-center p-4 cursor-pointer hover:bg-muted ${
+          isActive ? "bg-muted" : ""
+        }`}
+        onClick={onClick}
+      >
+        <div className="relative">
+          <Avatar
+            fallback={chat.name[0]}
+            className={`mr-3 ${
+              chat.type === 'official' || chat.type === 'subscription' || chat.type === 'official-articles'
+                ? 'bg-blue-100 text-blue-600' 
+                : 'bg-primary/10'
+            }`}
+          />
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex justify-between items-center mb-1">
+            <div className="flex items-center gap-1">
+              <span className="font-medium truncate">{chat.name}</span>
+              {chat.type === 'official' && (
+                <span className="text-xs text-blue-500">公众号</span>
+              )}
+              {chat.type === 'subscription' && (
+                <span className="text-xs text-green-500">订阅号</span>
+              )}
+            </div>
+            <span className="text-xs text-muted-foreground">{chat.time}</span>
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="text-sm text-muted-foreground truncate">
+              {chat.lastMessage}
+            </span>
+            {chat.unread && (
+              <span className="ml-2 px-1.5 py-0.5 bg-primary text-primary-foreground text-xs rounded-full">
+                {chat.unread}
+              </span>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+);
+ChatListItem.displayName = "ChatListItem";
+
+// 在 ChatListItem 组件定义后添加
+interface MiniProgramListProps {
+  title: string;
+  programs: MiniProgram[];
+  onClose?: () => void;
+}
+
+const MiniProgramList = React.forwardRef<HTMLDivElement, MiniProgramListProps>(
+  ({ title, programs, onClose }, ref) => {
+    return (
+      <div ref={ref} className="absolute left-16 bottom-0 w-64 bg-popover border border-border rounded-lg shadow-lg p-4 z-50">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="font-medium">{title}</h3>
+          {onClose && (
+            <button 
+              className="p-1 hover:bg-muted rounded"
+              onClick={onClose}
+            >
+              <X className="h-4 w-4" />
+            </button>
+          )}
+        </div>
+        
+        <div className="mb-4">
+          <h4 className="text-sm text-muted-foreground mb-2">最近使用</h4>
+          <div className="grid grid-cols-4 gap-2">
+            {programs.map((mp) => (
+              <button
+                key={mp.id}
+                className="flex flex-col items-center gap-1 p-2 rounded-lg hover:bg-muted transition-colors"
+              >
+                <span className="text-2xl">{mp.icon}</span>
+                <span className="text-xs w-14 text-center truncate">{mp.name}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+);
+MiniProgramList.displayName = "MiniProgramList";
+
+// 在 MiniProgramList 组件定义后添加
+interface MenuListProps {
+  items: MenuItem[];
+  onClose?: () => void;
+}
+
+const MenuList = React.forwardRef<HTMLDivElement, MenuListProps>(
+  ({ items, onClose }, ref) => {
+    return (
+      <div 
+        ref={ref}
+        className="absolute left-16 bottom-0 w-48 bg-popover border border-border rounded-lg shadow-lg py-2 z-50"
+      >
+        {items.map((item) => (
+          <button
+            key={item.id}
+            className="w-full px-4 py-2 flex items-center gap-2 text-sm hover:bg-muted"
+            onClick={() => {
+              item.onClick?.();
+              onClose?.();
+            }}
+          >
+            {item.icon}
+            <span>{item.label}</span>
+          </button>
+        ))}
+      </div>
+    );
+  }
+);
+MenuList.displayName = "MenuList";
+
+// 在 MenuList 组件定义后添加
+interface ChatListProps {
+  chats: ChatItem[];
+  activeChat: string;
+  onChatSelect: (chatId: string) => void;
+}
+
+const ChatList = React.forwardRef<HTMLDivElement, ChatListProps>(
+  ({ chats, activeChat, onChatSelect }, ref) => {
+    return (
+      <div ref={ref} className="w-80 border-r border-border flex flex-col">
+        <div className="p-4 border-b border-border">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <input
+              type="text"
+              placeholder="搜索"
+              className="w-full pl-9 pr-4 py-2 bg-muted rounded-lg text-sm"
+            />
+          </div>
+        </div>
+
+        <div className="flex-1 overflow-y-auto">
+          {chats.map((chat) => (
+            <ChatListItem
+              key={chat.id}
+              chat={chat}
+              isActive={activeChat === chat.id}
+              onClick={() => onChatSelect(chat.id)}
+            />
+          ))}
+        </div>
+      </div>
+    );
+  }
+);
+ChatList.displayName = "ChatList";
+
+// 修改 ChatHeader 组件定义
+interface ChatHeaderProps {
+  title: string;
+  actions?: {
+    icon: React.ReactNode;
+    onClick?: () => void;
+    className?: string;
+  }[];
+  className?: string;
+}
+
+const ChatHeader = React.forwardRef<HTMLDivElement, ChatHeaderProps>(
+  ({ title, actions = [], className = '' }, ref) => {
+    return (
+      <div 
+        ref={ref} 
+        className={`h-14 border-b border-border flex items-center justify-between px-4 ${className}`}
+      >
+        <div className="flex items-center">
+          <span className="font-medium">{title}</span>
+        </div>
+        {actions.length > 0 && (
+          <div className="flex items-center gap-4">
+            {actions.map((action, index) => (
+              <IconButton
+                key={index}
+                icon={action.icon}
+                className={`text-muted-foreground hover:text-primary hover:bg-muted ${action.className || ''}`}
+                onClick={action.onClick}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  }
+);
+ChatHeader.displayName = "ChatHeader";
+
+// 在 ChatHeader 组件定义后添加
+interface MessageItemProps {
+  message: Message;
+  className?: string;
+}
+
+const MessageItem = React.forwardRef<HTMLDivElement, MessageItemProps>(
+  ({ message, className = '' }, ref) => {
+    return (
+      <div
+        ref={ref}
+        className={`flex ${message.isSelf ? "justify-end" : "justify-start"} ${className}`}
+      >
+        <div
+          className={`max-w-[70%] rounded-lg p-3 ${
+            message.isSelf
+              ? "bg-primary text-primary-foreground"
+              : "bg-background"
+          }`}
+        >
+          {message.type === 'text' ? (
+            <p className="text-sm">{message.content}</p>
+          ) : (
+            <div className="w-48 h-32 bg-muted rounded flex items-center justify-center">
+              <ImageIcon className="h-8 w-8 text-muted-foreground" />
+            </div>
+          )}
+          <span className="text-xs opacity-70 mt-1 block">
+            {message.time}
+          </span>
+        </div>
+      </div>
+    );
+  }
+);
+MessageItem.displayName = "MessageItem";
+
+interface MessageListProps {
+  messages: Message[];
+  className?: string;
+  onScroll?: (event: React.UIEvent<HTMLDivElement>) => void;
+}
+
+const MessageList = React.forwardRef<HTMLDivElement, MessageListProps>(
+  ({ messages, className = '', onScroll }, ref) => {
+    return (
+      <div 
+        ref={ref}
+        className={`flex-1 overflow-y-auto p-4 bg-muted/50 ${className}`}
+        onScroll={onScroll}
+      >
+        <div className="space-y-4">
+          {messages.map((message) => (
+            <MessageItem
+              key={message.id}
+              message={message}
+            />
+          ))}
+        </div>
+      </div>
+    );
+  }
+);
+MessageList.displayName = "MessageList";
+
+interface ChatInputProps {
+  onSend?: (message: string) => void;
+  className?: string;
+}
+
+const ChatInput = React.forwardRef<HTMLDivElement, ChatInputProps>(
+  ({ onSend, className = '' }, ref) => {
+    const [message, setMessage] = React.useState('');
+
+    const handleSend = () => {
+      if (message.trim() && onSend) {
+        onSend(message.trim());
+        setMessage('');
+      }
+    };
+
+    const handleKeyPress = (e: React.KeyboardEvent) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        handleSend();
+      }
+    };
+
+    return (
+      <div 
+        ref={ref}
+        className={`h-14 border-t border-border flex items-center px-4 gap-2 ${className}`}
+      >
+        <button className="p-2 rounded-full text-muted-foreground hover:text-primary hover:bg-muted transition-colors">
+          <Plus className="h-5 w-5" />
+        </button>
+        <input
+          type="text"
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          onKeyPress={handleKeyPress}
+          placeholder="输入消息..."
+          className="flex-1 bg-muted rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
+        />
+        <button 
+          className="p-2 rounded-full text-primary hover:bg-primary/10 transition-colors"
+          onClick={handleSend}
+        >
+          <MessageSquare className="h-5 w-5" />
+        </button>
+      </div>
+    );
+  }
+);
+ChatInput.displayName = "ChatInput";
+
 export default function WechatLayout() {
   const [activeChat, setActiveChat] = React.useState<string>("1");
   const [activeNav, setActiveNav] = React.useState<string>("chat");
@@ -590,67 +915,38 @@ export default function WechatLayout() {
       case "chat":
         return (
           <div className="flex-1 flex flex-col">
-            <div className="h-14 border-b border-border flex items-center justify-between px-4">
-              <div className="flex items-center">
-                <span className="font-medium">{mockChats.find(c => c.id === activeChat)?.name}</span>
-              </div>
-              <div className="flex items-center gap-4">
-                <button className="p-2 rounded-full text-muted-foreground hover:text-primary hover:bg-muted transition-colors">
-                  <Phone className="h-5 w-5" />
-                </button>
-                <button className="p-2 rounded-full text-muted-foreground hover:text-primary hover:bg-muted transition-colors">
-                  <Video className="h-5 w-5" />
-                </button>
-                <button className="p-2 rounded-full text-muted-foreground hover:text-primary hover:bg-muted transition-colors">
-                  <MoreVertical className="h-5 w-5" />
-                </button>
-              </div>
-            </div>
+            <ChatHeader
+              title={mockChats.find(c => c.id === activeChat)?.name || ""}
+              actions={[
+                {
+                  icon: <Phone className="h-5 w-5" />,
+                  onClick: () => {},
+                },
+                {
+                  icon: <Video className="h-5 w-5" />,
+                  onClick: () => {},
+                },
+                {
+                  icon: <MoreVertical className="h-5 w-5" />,
+                  onClick: () => {},
+                },
+              ]}
+            />
 
-            <div className="flex-1 overflow-y-auto p-4 bg-muted/50">
-              <div className="space-y-4">
-                {mockMessages.map((message) => (
-                  <div
-                    key={message.id}
-                    className={`flex ${message.isSelf ? "justify-end" : "justify-start"}`}
-                  >
-                    <div
-                      className={`max-w-[70%] rounded-lg p-3 ${
-                        message.isSelf
-                          ? "bg-primary text-primary-foreground"
-                          : "bg-background"
-                      }`}
-                    >
-                      {message.type === 'text' ? (
-                        <p className="text-sm">{message.content}</p>
-                      ) : (
-                        <div className="w-48 h-32 bg-muted rounded flex items-center justify-center">
-                          <ImageIcon className="h-8 w-8 text-muted-foreground" />
-                        </div>
-                      )}
-                      <span className="text-xs opacity-70 mt-1 block">
-                        {message.time}
-                      </span>
-                    </div>
-                  </div>
-                ))}
-                <div ref={messagesEndRef} />
-              </div>
-            </div>
+            <MessageList
+              messages={mockMessages}
+              onScroll={(e) => {
+                // 处理滚动事件
+              }}
+            />
+            <div ref={messagesEndRef} />
 
-            <div className="h-14 border-t border-border flex items-center px-4 gap-2">
-              <button className="p-2 rounded-full text-muted-foreground hover:text-primary hover:bg-muted transition-colors">
-                <Plus className="h-5 w-5" />
-              </button>
-              <input
-                type="text"
-                placeholder="输入消息..."
-                className="flex-1 bg-muted rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
-              />
-              <button className="p-2 rounded-full text-primary hover:bg-primary/10 transition-colors">
-                <MessageSquare className="h-5 w-5" />
-              </button>
-            </div>
+            <ChatInput
+              onSend={(message) => {
+                // 处理发送消息
+                console.log('发送消息:', message);
+              }}
+            />
           </div>
         );
       case "contacts":
@@ -905,131 +1201,29 @@ export default function WechatLayout() {
         />
 
         {showMenu && (
-          <div 
+          <MenuList
             ref={menuRef}
-            className="absolute left-16 bottom-0 w-48 bg-popover border border-border rounded-lg shadow-lg py-2 z-50"
-          >
-            {menuItems.map((item) => (
-              <button
-                key={item.id}
-                className="w-full px-4 py-2 flex items-center gap-2 text-sm hover:bg-muted"
-                onClick={item.onClick}
-              >
-                {item.icon}
-                <span>{item.label}</span>
-              </button>
-            ))}
-          </div>
+            items={menuItems}
+            onClose={() => setShowMenu(false)}
+          />
         )}
 
         {showMiniPrograms && (
-          <div 
+          <MiniProgramList
             ref={miniProgramsRef}
-            className="absolute left-16 bottom-0 w-64 bg-popover border border-border rounded-lg shadow-lg p-4 z-50"
-          >
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-medium">小程序</h3>
-              <button 
-                className="p-1 hover:bg-muted rounded"
-                onClick={() => setShowMiniPrograms(false)}
-              >
-                <X className="h-4 w-4" />
-              </button>
-            </div>
-            
-            <div className="mb-4">
-              <h4 className="text-sm text-muted-foreground mb-2">最近使用</h4>
-              <div className="grid grid-cols-4 gap-2">
-                {recentMiniPrograms.map((mp) => (
-                  <button
-                    key={mp.id}
-                    className="flex flex-col items-center gap-1 p-2 rounded-lg hover:bg-muted transition-colors"
-                  >
-                    <span className="text-2xl">{mp.icon}</span>
-                    <span className="text-xs w-14 text-center truncate">{mp.name}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <h4 className="text-sm text-muted-foreground mb-2">我的小程序</h4>
-              <div className="grid grid-cols-4 gap-2">
-                {myMiniPrograms.map((mp) => (
-                  <button
-                    key={mp.id}
-                    className="flex flex-col items-center gap-1 p-2 rounded-lg hover:bg-muted transition-colors"
-                  >
-                    <span className="text-2xl">{mp.icon}</span>
-                    <span className="text-xs w-14 text-center truncate">{mp.name}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
+            title="小程序"
+            programs={[...recentMiniPrograms, ...myMiniPrograms]}
+            onClose={() => setShowMiniPrograms(false)}
+          />
         )}
       </div>
 
       {activeNav === "chat" && (
-        <div className="w-80 border-r border-border flex flex-col">
-          <div className="p-4 border-b border-border">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <input
-                type="text"
-                placeholder="搜索"
-                className="w-full pl-9 pr-4 py-2 bg-muted rounded-lg text-sm"
-              />
-            </div>
-          </div>
-
-          <div className="flex-1 overflow-y-auto">
-            {mockChats.map((chat) => (
-              <div
-                key={chat.id}
-                className={`flex items-center p-4 cursor-pointer hover:bg-muted ${
-                  activeChat === chat.id ? "bg-muted" : ""
-                }`}
-                onClick={() => setActiveChat(chat.id)}
-              >
-                <div className="relative">
-                  <Avatar
-                    fallback={chat.name[0]}
-                    className={`mr-3 ${
-                      chat.type === 'official' || chat.type === 'subscription' || chat.type === 'official-articles'
-                        ? 'bg-blue-100 text-blue-600' 
-                        : 'bg-primary/10'
-                    }`}
-                  />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex justify-between items-center mb-1">
-                    <div className="flex items-center gap-1">
-                      <span className="font-medium truncate">{chat.name}</span>
-                      {chat.type === 'official' && (
-                        <span className="text-xs text-blue-500">公众号</span>
-                      )}
-                      {chat.type === 'subscription' && (
-                        <span className="text-xs text-green-500">订阅号</span>
-                      )}
-                    </div>
-                    <span className="text-xs text-muted-foreground">{chat.time}</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-muted-foreground truncate">
-                      {chat.lastMessage}
-                    </span>
-                    {chat.unread && (
-                      <span className="ml-2 px-1.5 py-0.5 bg-primary text-primary-foreground text-xs rounded-full">
-                        {chat.unread}
-                      </span>
-                    )}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+        <ChatList
+          chats={mockChats}
+          activeChat={activeChat}
+          onChatSelect={setActiveChat}
+        />
       )}
 
       {renderRightContent()}
