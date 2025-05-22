@@ -799,7 +799,7 @@ const ChatList = React.forwardRef<HTMLDivElement, ChatListProps>(
           />
         </Section>
 
-        <List>
+        <ScrollArea>
           {chats.map((chat) => (
             <ChatListItem
               key={chat.id}
@@ -808,7 +808,7 @@ const ChatList = React.forwardRef<HTMLDivElement, ChatListProps>(
               onClick={() => onChatSelect(chat.id)}
             />
           ))}
-        </List>
+        </ScrollArea>
       </div>
     );
   }
@@ -900,9 +900,9 @@ interface MessageListProps {
 const MessageList = React.forwardRef<HTMLDivElement, MessageListProps>(
   ({ messages, className = '', onScroll }, ref) => {
     return (
-      <div 
+      <ScrollArea 
         ref={ref}
-        className={`flex-1 overflow-y-auto p-4 bg-muted/50 ${className}`}
+        className={`p-4 bg-muted/50 ${className}`}
         onScroll={onScroll}
       >
         <div className="space-y-4">
@@ -913,7 +913,7 @@ const MessageList = React.forwardRef<HTMLDivElement, MessageListProps>(
             />
           ))}
         </div>
-      </div>
+      </ScrollArea>
     );
   }
 );
@@ -1158,17 +1158,12 @@ const ProfilePopover = React.forwardRef<HTMLDivElement, ProfilePopoverProps>(
               查看全部
             </button>
           </div>
-          <GridLayout>
-            {[1, 2, 3].map((i) => (
-              <div 
-                key={i}
-                className="aspect-square bg-muted rounded cursor-pointer hover:opacity-80 transition-opacity"
-                onClick={() => onNavClick("moments")}
-              >
-                <Image className="h-full w-full object-cover rounded" />
-              </div>
-            ))}
-          </GridLayout>
+          <ImageGrid
+            images={[1, 2, 3].map(i => ({
+              id: i,
+              onClick: () => onNavClick("moments")
+            }))}
+          />
         </div>
 
         <button 
@@ -1311,6 +1306,93 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
   }
 );
 Input.displayName = "Input";
+
+interface ScrollAreaProps {
+  className?: string;
+  children?: React.ReactNode;
+  onScroll?: (event: React.UIEvent<HTMLDivElement>) => void;
+}
+
+const ScrollArea = React.forwardRef<HTMLDivElement, ScrollAreaProps>(
+  ({ className = '', children, onScroll }, ref) => {
+    return (
+      <div
+        ref={ref}
+        className={`flex-1 overflow-y-auto ${className}`}
+        onScroll={onScroll}
+      >
+        {children}
+      </div>
+    );
+  }
+);
+ScrollArea.displayName = "ScrollArea";
+
+interface ImageGridProps {
+  images: {
+    id: string | number;
+    src?: string;
+    onClick?: () => void;
+  }[];
+  columns?: number;
+  gap?: number;
+  className?: string;
+}
+
+const ImageGrid = React.forwardRef<HTMLDivElement, ImageGridProps>(
+  ({ images, columns = 3, gap = 2, className = '' }, ref) => {
+    return (
+      <div
+        ref={ref}
+        className={`grid grid-cols-${columns} gap-${gap} ${className}`}
+      >
+        {images.map((image) => (
+          <div
+            key={image.id}
+            className="aspect-square bg-muted rounded cursor-pointer hover:opacity-80 transition-opacity"
+            onClick={image.onClick}
+          >
+            {image.src ? (
+              <img
+                src={image.src}
+                alt=""
+                className="h-full w-full object-cover rounded"
+              />
+            ) : (
+              <Image className="h-full w-full object-cover rounded" />
+            )}
+          </div>
+        ))}
+      </div>
+    );
+  }
+);
+ImageGrid.displayName = "ImageGrid";
+
+interface ActionButtonProps {
+  icon: React.ReactNode;
+  label: string;
+  onClick?: () => void;
+  className?: string;
+}
+
+const ActionButton = React.forwardRef<HTMLButtonElement, ActionButtonProps>(
+  ({ icon, label, onClick, className = '' }, ref) => {
+    return (
+      <button
+        ref={ref}
+        className={`flex flex-col items-center gap-1 text-muted-foreground hover:text-primary ${className}`}
+        onClick={onClick}
+      >
+        <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+          {icon}
+        </div>
+        <span className="text-xs">{label}</span>
+      </button>
+    );
+  }
+);
+ActionButton.displayName = "ActionButton";
 
 const WindowManager = React.forwardRef<HTMLDivElement, WindowManagerProps>(
   ({ windows, onBackdropClick }, ref) => {
@@ -1610,24 +1692,18 @@ export default function WechatLayout() {
                     </div>
 
                     <div className="p-4 flex items-center justify-center gap-8">
-                      <button className="flex flex-col items-center gap-1 text-muted-foreground hover:text-primary">
-                        <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                          <MessageSquare className="h-6 w-6" />
-                        </div>
-                        <span className="text-xs">发消息</span>
-                      </button>
-                      <button className="flex flex-col items-center gap-1 text-muted-foreground hover:text-primary">
-                        <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                          <Phone className="h-6 w-6" />
-                        </div>
-                        <span className="text-xs">语音通话</span>
-                      </button>
-                      <button className="flex flex-col items-center gap-1 text-muted-foreground hover:text-primary">
-                        <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                          <Video className="h-6 w-6" />
-                        </div>
-                        <span className="text-xs">视频通话</span>
-                      </button>
+                      <ActionButton
+                        icon={<MessageSquare className="h-6 w-6" />}
+                        label="发消息"
+                      />
+                      <ActionButton
+                        icon={<Phone className="h-6 w-6" />}
+                        label="语音通话"
+                      />
+                      <ActionButton
+                        icon={<Video className="h-6 w-6" />}
+                        label="视频通话"
+                      />
                     </div>
                   </div>
                 </>
