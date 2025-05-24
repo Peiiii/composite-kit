@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import * as React from "react";
 
+// =============== 类型定义 ===============
 interface CommandItem {
   id: string;
   title: string;
@@ -33,23 +34,176 @@ interface CommandItem {
   subCommands?: CommandItem[];
 }
 
-// 命令分类接口
 interface CommandCategory {
   id: string;
   name: string;
   icon?: React.ReactNode;
-  priority: number; // 用于排序
+  priority: number;
   items: CommandItem[];
 }
 
+interface CommandPath {
+  id: string;
+  title: string;
+  icon?: React.ReactNode;
+}
+
 interface CommandState {
-  currentPath: string[];
+  currentPath: CommandPath[];
   selectedIndex: number;
   search: string;
 }
 
+// =============== 常量定义 ===============
 const MAX_HISTORY = 10;
+const SCROLL_PADDING = 8;
 
+// =============== 工具函数 ===============
+const scrollToElement = (element: HTMLElement, container: HTMLElement, padding: number) => {
+  const containerRect = container.getBoundingClientRect();
+  const elementRect = element.getBoundingClientRect();
+
+  if (elementRect.top < containerRect.top + padding) {
+    container.scrollTo({
+      top: container.scrollTop + elementRect.top - containerRect.top - padding,
+      behavior: 'smooth'
+    });
+  } else if (elementRect.bottom > containerRect.bottom - padding) {
+    container.scrollTo({
+      top: container.scrollTop + elementRect.bottom - containerRect.bottom + padding,
+      behavior: 'smooth'
+    });
+  }
+};
+
+// =============== 子组件 ===============
+const CommandInput = React.forwardRef<
+  HTMLInputElement,
+  {
+    value: string;
+    onChange: (value: string) => void;
+    onKeyDown: (e: React.KeyboardEvent) => void;
+  }
+>(({ value, onChange, onKeyDown }, ref) => (
+  <div className="flex items-center border-b px-3">
+    <Search className="mr-2 h-4 w-4 shrink-0 opacity-50" />
+    <input
+      ref={ref}
+      placeholder="搜索命令..."
+      className="flex h-11 w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      onKeyDown={onKeyDown}
+    />
+  </div>
+));
+
+// 更新 NavigationHandler 类型定义
+type NavigationHandler = (index: number) => void;
+
+// 更新 CommandBreadcrumb 组件接口
+const CommandBreadcrumb = ({ 
+  path, 
+  onNavigate 
+}: { 
+  path: CommandPath[]; 
+  onNavigate: NavigationHandler;
+}) => (
+  <div className="flex items-center gap-2 px-2 py-2 text-sm border-b mb-2">
+    <button
+      onClick={() => onNavigate(-1)}
+      className="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors"
+    >
+      <Command className="w-4 h-4" />
+      <span>命令面板</span>
+    </button>
+    {path.map((item, index) => (
+      <React.Fragment key={item.id}>
+        <ChevronRight className="w-4 h-4 text-muted-foreground" />
+        <button
+          onClick={() => onNavigate(index)}
+          className="flex items-center gap-1 hover:text-foreground transition-colors"
+        >
+          {item.icon}
+          <span className="font-medium">{item.title}</span>
+        </button>
+      </React.Fragment>
+    ))}
+  </div>
+);
+
+const CommandCategoryHeader = ({ category }: { category: CommandCategory }) => (
+  <div className="px-2 py-1.5 text-sm font-medium text-muted-foreground flex items-center gap-2 sticky top-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    {category.icon}
+    {category.name}
+  </div>
+);
+
+const CommandItem = React.memo(({
+  item,
+  category,
+  isSelected,
+  onSelect,
+  ref,
+}: {
+  item: CommandItem;
+  category: CommandCategory;
+  isSelected: boolean;
+  onSelect: (item: CommandItem) => void;
+  ref: (el: HTMLElement | null) => void;
+}) => (
+  <button
+    ref={ref}
+    onClick={() => onSelect(item)}
+    className={cn(
+      "flex w-full items-center gap-2 px-2 py-1.5 text-sm rounded-sm outline-none cursor-pointer transition-colors duration-150",
+      isSelected
+        ? "bg-accent text-accent-foreground"
+        : "hover:bg-accent/50"
+    )}
+  >
+    <div className="flex-1 flex items-center gap-2">
+      <div className={cn(
+        "w-4 h-4 flex items-center justify-center transition-transform duration-150",
+        isSelected && "scale-110"
+      )}>
+        {item.icon}
+      </div>
+      <div className="flex flex-col items-start">
+        <span className={cn(
+          "transition-colors duration-150",
+          isSelected && "font-medium"
+        )}>
+          {item.title}
+        </span>
+        {item.description && (
+          <span className="text-xs text-muted-foreground">
+            {item.description}
+          </span>
+        )}
+      </div>
+    </div>
+    {item.shortcut && (
+      <kbd className={cn(
+        "px-2 py-1 text-xs bg-muted rounded transition-colors duration-150",
+        isSelected && "bg-accent/50"
+      )}>
+        {item.shortcut}
+      </kbd>
+    )}
+    {item.subCommands && (
+      <ChevronRight className={cn(
+        "w-4 h-4 text-muted-foreground transition-transform duration-150",
+        isSelected && "translate-x-0.5"
+      )} />
+    )}
+    {isSelected && !item.subCommands && (
+      <ArrowRight className="w-4 h-4 text-muted-foreground animate-in slide-in-from-right-1" />
+    )}
+  </button>
+));
+
+// =============== 主组件 ===============
 const CommandPaletteDemo = () => {
   const [open, setOpen] = React.useState(false);
   const [commandState, setCommandState] = React.useState<CommandState>({
@@ -74,11 +228,11 @@ const CommandPaletteDemo = () => {
           const fileName = prompt("请输入文件名：");
           if (fileName) {
             console.log(`创建文件：${fileName}`);
-            // 实际项目中这里应该调用文件系统 API
           }
         },
         shortcut: "⌘N",
         description: "创建一个新的文件",
+        isFavorite: false,
       },
       {
         id: "theme",
@@ -88,6 +242,7 @@ const CommandPaletteDemo = () => {
         action: () => {},
         shortcut: "⌘K ⌘T",
         description: "更改编辑器的颜色主题",
+        isFavorite: false,
         subCommands: [
           {
             id: "theme-light",
@@ -97,6 +252,7 @@ const CommandPaletteDemo = () => {
             action: () => console.log("切换到浅色主题"),
             shortcut: "⌘K ⌘T L",
             description: "切换到浅色主题",
+            isFavorite: false,
           },
           {
             id: "theme-dark",
@@ -106,6 +262,7 @@ const CommandPaletteDemo = () => {
             action: () => console.log("切换到深色主题"),
             shortcut: "⌘K ⌘T D",
             description: "切换到深色主题",
+            isFavorite: false,
           },
           {
             id: "theme-system",
@@ -115,6 +272,7 @@ const CommandPaletteDemo = () => {
             action: () => console.log("跟随系统主题"),
             shortcut: "⌘K ⌘T S",
             description: "跟随系统主题设置",
+            isFavorite: false,
           },
         ],
       },
@@ -126,6 +284,7 @@ const CommandPaletteDemo = () => {
         action: () => {},
         shortcut: "⌘⇧G",
         description: "Git 相关操作",
+        isFavorite: false,
         subCommands: [
           {
             id: "git-commit",
@@ -136,11 +295,11 @@ const CommandPaletteDemo = () => {
               const message = prompt("请输入提交信息：");
               if (message) {
                 console.log(`提交更改：${message}`);
-                // 实际项目中这里应该调用 Git API
               }
             },
             shortcut: "⌘⇧G C",
             description: "提交当前的更改",
+            isFavorite: false,
           },
           {
             id: "git-pull",
@@ -150,6 +309,7 @@ const CommandPaletteDemo = () => {
             action: () => console.log("拉取远程更新"),
             shortcut: "⌘⇧G P",
             description: "从远程仓库拉取更新",
+            isFavorite: false,
           },
           {
             id: "git-merge",
@@ -164,6 +324,7 @@ const CommandPaletteDemo = () => {
             },
             shortcut: "⌘⇧G M",
             description: "合并指定的分支到当前分支",
+            isFavorite: false,
           },
         ],
       },
@@ -175,6 +336,7 @@ const CommandPaletteDemo = () => {
         action: () => console.log("打开集成终端"),
         shortcut: "⌘`",
         description: "打开集成终端",
+        isFavorite: false,
       },
       {
         id: "install-package",
@@ -185,21 +347,11 @@ const CommandPaletteDemo = () => {
           const packageName = prompt("请输入要安装的包名：");
           if (packageName) {
             console.log(`安装包：${packageName}`);
-            // 实际项目中这里应该调用包管理器 API
           }
         },
         shortcut: "⌘⇧P",
         description: "安装新的 npm 包",
-      },
-      {
-        id: "command-palette",
-        title: "命令面板",
-        icon: <Command className="w-4 h-4" />,
-        category: "视图",
-        action: () => console.log("打开命令面板"),
-        shortcut: "⌘K",
-        description: "打开命令面板",
-        isFavorite: true,
+        isFavorite: false,
       },
       {
         id: "settings",
@@ -209,6 +361,93 @@ const CommandPaletteDemo = () => {
         action: () => console.log("打开设置"),
         shortcut: "⌘,",
         description: "打开编辑器设置",
+        isFavorite: false,
+      },
+      {
+        id: "project",
+        title: "项目管理",
+        icon: <File className="w-4 h-4" />,
+        category: "项目",
+        action: () => {},
+        shortcut: "⌘⇧P",
+        description: "项目相关操作",
+        isFavorite: false,
+        subCommands: [
+          {
+            id: "project-build",
+            title: "构建项目",
+            icon: <Package className="w-4 h-4" />,
+            category: "项目",
+            action: () => {},
+            shortcut: "⌘⇧P B",
+            description: "构建项目相关操作",
+            isFavorite: false,
+            subCommands: [
+              {
+                id: "project-build-dev",
+                title: "开发环境构建",
+                icon: <Terminal className="w-4 h-4" />,
+                category: "项目",
+                action: () => console.log("执行开发环境构建"),
+                shortcut: "⌘⇧P B D",
+                description: "执行开发环境构建",
+                isFavorite: false,
+              },
+              {
+                id: "project-build-prod",
+                title: "生产环境构建",
+                icon: <Terminal className="w-4 h-4" />,
+                category: "项目",
+                action: () => console.log("执行生产环境构建"),
+                shortcut: "⌘⇧P B P",
+                description: "执行生产环境构建",
+                isFavorite: false,
+              },
+              {
+                id: "project-build-test",
+                title: "测试环境构建",
+                icon: <Terminal className="w-4 h-4" />,
+                category: "项目",
+                action: () => console.log("执行测试环境构建"),
+                shortcut: "⌘⇧P B T",
+                description: "执行测试环境构建",
+                isFavorite: false,
+              },
+            ],
+          },
+          {
+            id: "project-deploy",
+            title: "部署项目",
+            icon: <GitPullRequest className="w-4 h-4" />,
+            category: "项目",
+            action: () => {},
+            shortcut: "⌘⇧P D",
+            description: "部署项目相关操作",
+            isFavorite: false,
+            subCommands: [
+              {
+                id: "project-deploy-dev",
+                title: "部署到开发环境",
+                icon: <Terminal className="w-4 h-4" />,
+                category: "项目",
+                action: () => console.log("部署到开发环境"),
+                shortcut: "⌘⇧P D D",
+                description: "部署到开发环境",
+                isFavorite: false,
+              },
+              {
+                id: "project-deploy-prod",
+                title: "部署到生产环境",
+                icon: <Terminal className="w-4 h-4" />,
+                category: "项目",
+                action: () => console.log("部署到生产环境"),
+                shortcut: "⌘⇧P D P",
+                description: "部署到生产环境",
+                isFavorite: false,
+              },
+            ],
+          },
+        ],
       },
     ],
     []
@@ -248,13 +487,13 @@ const CommandPaletteDemo = () => {
   const getCurrentCommands = React.useCallback(() => {
     let currentCommands = commands;
     for (const path of commandState.currentPath) {
-      const command = currentCommands.find((cmd) => cmd.id === path);
+      const command = currentCommands.find((cmd) => cmd.id === path.id);
       if (command?.subCommands) {
         currentCommands = command.subCommands;
       }
     }
     return currentCommands;
-  }, [commands, commandState.currentPath]);
+  }, [commandState.currentPath]);
 
   // 按类别分组命令
   const groupedCommands = React.useMemo(() => {
@@ -275,24 +514,27 @@ const CommandPaletteDemo = () => {
       },
     ];
 
+    // 获取当前层级的命令
+    const currentCommands = getCurrentCommands();
+
     // 添加历史记录
     commandHistory.forEach((id) => {
-      const cmd = commands.find((c) => c.id === id);
+      const cmd = currentCommands.find((c) => c.id === id);
       if (cmd) {
         categories[0].items.push(cmd);
       }
     });
 
     // 添加收藏
-    commands
-      .filter((cmd) => cmd.isFavorite)
+    currentCommands
+      .filter((cmd) => cmd.isFavorite === true)
       .forEach((cmd) => {
         categories[1].items.push(cmd);
       });
 
     // 添加其他命令
     const otherCategories = new Map<string, CommandCategory>();
-    commands.forEach((cmd) => {
+    currentCommands.forEach((cmd) => {
       if (!categories.some((c) => c.id === cmd.category)) {
         if (!otherCategories.has(cmd.category)) {
           otherCategories.set(cmd.category, {
@@ -310,7 +552,7 @@ const CommandPaletteDemo = () => {
     return [...categories, ...otherCategories.values()].sort(
       (a, b) => a.priority - b.priority
     );
-  }, [commands, commandHistory]);
+  }, [commandHistory, getCurrentCommands]);
 
   // 过滤命令
   const filteredCommands = React.useMemo(() => {
@@ -348,25 +590,45 @@ const CommandPaletteDemo = () => {
     return items;
   }, [filteredCommands]);
 
-  // 添加平滑滚动效果
-  const scrollToElement = React.useCallback((element: HTMLElement, container: HTMLElement, padding: number) => {
-    const containerRect = container.getBoundingClientRect();
-    const elementRect = element.getBoundingClientRect();
+  // 添加导航处理函数
+  const handleNavigate = React.useCallback((index: number) => {
+    setCommandState(prev => ({
+      ...prev,
+      currentPath: index === -1 ? [] : prev.currentPath.slice(0, index + 1),
+      selectedIndex: 0,
+      search: "", // 清空搜索
+    }));
+  }, []);
 
-    if (elementRect.top < containerRect.top + padding) {
-      container.scrollTo({
-        top: container.scrollTop + elementRect.top - containerRect.top - padding,
-        behavior: 'smooth'
+  // 修改命令选择处理函数
+  const handleCommandSelect = React.useCallback((item: CommandItem) => {
+    if (item.subCommands) {
+      setCommandState(prev => ({
+        ...prev,
+        currentPath: [...prev.currentPath, {
+          id: item.id,
+          title: item.title,
+          icon: item.icon
+        }],
+        selectedIndex: 0,
+        search: "",
+      }));
+    } else {
+      setCommandHistory((prev) => {
+        const newHistory = [
+          item.id,
+          ...prev.filter((id) => id !== item.id),
+        ];
+        return newHistory.slice(0, MAX_HISTORY);
       });
-    } else if (elementRect.bottom > containerRect.bottom - padding) {
-      container.scrollTo({
-        top: container.scrollTop + elementRect.bottom - containerRect.bottom + padding,
-        behavior: 'smooth'
-      });
+      item.action();
+      if (!item.subCommands) {
+        setOpen(false);
+      }
     }
   }, []);
 
-  // 处理键盘导航
+  // 修改键盘导航处理函数
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "ArrowDown") {
       e.preventDefault();
@@ -387,48 +649,13 @@ const CommandPaletteDemo = () => {
       e.preventDefault();
       const selectedCommand = visibleCommands[commandState.selectedIndex];
       if (selectedCommand) {
-        if (selectedCommand.subCommands) {
-          // 如果有子命令，进入子命令层级
-          setCommandState((prev) => ({
-            ...prev,
-            currentPath: [...prev.currentPath, selectedCommand.id],
-            selectedIndex: 0,
-          }));
-        } else {
-          // 执行命令
-          setCommandHistory((prev) => {
-            const newHistory = [
-              selectedCommand.id,
-              ...prev.filter((id) => id !== selectedCommand.id),
-            ];
-            return newHistory.slice(0, MAX_HISTORY);
-          });
-          selectedCommand.action();
-          if (!selectedCommand.subCommands) {
-            setOpen(false);
-          }
-        }
+        handleCommandSelect(selectedCommand);
       }
+    } else if (e.key === "Backspace" && !commandState.search && commandState.currentPath.length > 0) {
+      e.preventDefault();
+      handleNavigate(commandState.currentPath.length - 2);
     }
   };
-
-  // 当命令列表变化时，确保 selectedIndex 有效
-  React.useEffect(() => {
-    if (visibleCommands.length > 0) {
-      setCommandState((prev) => ({
-        ...prev,
-        selectedIndex: Math.min(prev.selectedIndex, visibleCommands.length - 1),
-      }));
-    }
-  }, [visibleCommands]);
-
-  // 当搜索内容变化时，重置选中索引
-  React.useEffect(() => {
-    setCommandState((prev) => ({
-      ...prev,
-      selectedIndex: 0,
-    }));
-  }, [commandState.search]);
 
   // 滚动到选中项
   React.useEffect(() => {
@@ -439,7 +666,6 @@ const CommandPaletteDemo = () => {
 
     const container = containerRef.current;
 
-    // 如果是第一项，平滑滚动到顶部
     if (commandState.selectedIndex === 0) {
       container.scrollTo({ top: 0, behavior: 'smooth' });
       return;
@@ -448,18 +674,17 @@ const CommandPaletteDemo = () => {
     const selectedElement = itemRefs.current.get(selectedCommand.navigationId);
     if (!selectedElement) return;
 
-    const PADDING = 8;
     const containerRect = container.getBoundingClientRect();
     const elementRect = selectedElement.getBoundingClientRect();
 
     const isVisible =
-      elementRect.top >= containerRect.top + PADDING &&
-      elementRect.bottom <= containerRect.bottom - PADDING;
+      elementRect.top >= containerRect.top + SCROLL_PADDING &&
+      elementRect.bottom <= containerRect.bottom - SCROLL_PADDING;
 
     if (!isVisible) {
-      scrollToElement(selectedElement, container, PADDING);
+      scrollToElement(selectedElement, container, SCROLL_PADDING);
     }
-  }, [commandState.selectedIndex, visibleCommands, scrollToElement]);
+  }, [commandState.selectedIndex, visibleCommands]);
 
   if (!open) {
     return (
@@ -492,33 +717,19 @@ const CommandPaletteDemo = () => {
     <div className="fixed inset-0 bg-background/80 backdrop-blur-sm">
       <div className="fixed inset-0 flex items-center justify-center p-4">
         <div className="w-full max-w-2xl rounded-lg border bg-background shadow-lg animate-in fade-in-50 zoom-in-95">
-          <div className="flex items-center border-b px-3">
-            <Search className="mr-2 h-4 w-4 shrink-0 opacity-50" />
-            <input
-              ref={inputRef}
-              placeholder="搜索命令..."
-              className="flex h-11 w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
-              value={commandState.search}
-              onChange={(e) =>
-                setCommandState((prev) => ({ ...prev, search: e.target.value }))
-              }
-              onKeyDown={handleKeyDown}
-            />
-          </div>
+          <CommandInput
+            ref={inputRef}
+            value={commandState.search}
+            onChange={(value) => setCommandState((prev) => ({ ...prev, search: value }))}
+            onKeyDown={handleKeyDown}
+          />
           <div ref={containerRef} className="max-h-[300px] overflow-y-auto scroll-smooth">
             <div className="p-2">
               {commandState.currentPath.length > 0 && (
-                <div className="flex items-center gap-2 px-2 py-1.5 text-sm text-muted-foreground">
-                  {commandState.currentPath.map((path, index) => {
-                    const command = commands.find((cmd) => cmd.id === path);
-                    return (
-                      <React.Fragment key={path}>
-                        {index > 0 && <ChevronRight className="w-4 h-4" />}
-                        <span>{command?.title}</span>
-                      </React.Fragment>
-                    );
-                  })}
-                </div>
+                <CommandBreadcrumb 
+                  path={commandState.currentPath} 
+                  onNavigate={handleNavigate}
+                />
               )}
               {filteredCommands.length === 0 ? (
                 <div className="py-6 text-center text-sm text-muted-foreground">
@@ -527,87 +738,22 @@ const CommandPaletteDemo = () => {
               ) : (
                 filteredCommands.map((category) => (
                   <div key={category.id}>
-                    <div className="px-2 py-1.5 text-sm font-medium text-muted-foreground flex items-center gap-2 sticky top-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-                      {category.icon}
-                      {category.name}
-                    </div>
+                    <CommandCategoryHeader category={category} />
                     {category.items.map((item) => {
                       const isSelected =
                         visibleCommands[commandState.selectedIndex]?.navigationId === `${category.id}:${item.id}`;
                       return (
-                        <button
+                        <CommandItem
                           key={`${category.id}:${item.id}`}
+                          item={item}
+                          category={category}
+                          isSelected={isSelected}
+                          onSelect={handleCommandSelect}
                           ref={(el) => {
                             if (el) itemRefs.current.set(`${category.id}:${item.id}`, el);
                             else itemRefs.current.delete(`${category.id}:${item.id}`);
                           }}
-                          onClick={() => {
-                            if (item.subCommands) {
-                              setCommandState((prev) => ({
-                                ...prev,
-                                currentPath: [...prev.currentPath, item.id],
-                                selectedIndex: 0,
-                              }));
-                            } else {
-                              setCommandHistory((prev) => {
-                                const newHistory = [
-                                  item.id,
-                                  ...prev.filter((id) => id !== item.id),
-                                ];
-                                return newHistory.slice(0, MAX_HISTORY);
-                              });
-                              item.action();
-                              if (!item.subCommands) {
-                                setOpen(false);
-                              }
-                            }
-                          }}
-                          className={cn(
-                            "flex w-full items-center gap-2 px-2 py-1.5 text-sm rounded-sm outline-none cursor-pointer transition-colors duration-150",
-                            isSelected
-                              ? "bg-accent text-accent-foreground"
-                              : "hover:bg-accent/50"
-                          )}
-                        >
-                          <div className="flex-1 flex items-center gap-2">
-                            <div className={cn(
-                              "w-4 h-4 flex items-center justify-center transition-transform duration-150",
-                              isSelected && "scale-110"
-                            )}>
-                              {item.icon}
-                            </div>
-                            <div className="flex flex-col items-start">
-                              <span className={cn(
-                                "transition-colors duration-150",
-                                isSelected && "font-medium"
-                              )}>
-                                {item.title}
-                              </span>
-                              {item.description && (
-                                <span className="text-xs text-muted-foreground">
-                                  {item.description}
-                                </span>
-                              )}
-                            </div>
-                          </div>
-                          {item.shortcut && (
-                            <kbd className={cn(
-                              "px-2 py-1 text-xs bg-muted rounded transition-colors duration-150",
-                              isSelected && "bg-accent/50"
-                            )}>
-                              {item.shortcut}
-                            </kbd>
-                          )}
-                          {item.subCommands && (
-                            <ChevronRight className={cn(
-                              "w-4 h-4 text-muted-foreground transition-transform duration-150",
-                              isSelected && "translate-x-0.5"
-                            )} />
-                          )}
-                          {isSelected && !item.subCommands && (
-                            <ArrowRight className="w-4 h-4 text-muted-foreground animate-in slide-in-from-right-1" />
-                          )}
-                        </button>
+                        />
                       );
                     })}
                   </div>
