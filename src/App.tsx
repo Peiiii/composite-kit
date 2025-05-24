@@ -4,6 +4,7 @@ import { ActivityBar } from "@/components/activity-bar";
 import { Home, BookOpen, Settings, HelpCircle } from "lucide-react";
 import ThemeSwitcherDemo from "./demos/theme-switcher";
 import MobileNavComposite from "./demos/mobile-nav-composite/page";
+import CommandPaletteDemo from "./demos/command-palette/page";
 import { resizablePanelDemos } from "./demos/resizable-panel-composite/demos";
 import { activityBarDemos } from "./demos/activity-bar-composite/demos";
 import { demoGalleryDemos } from "./demos/demo-gallery-composite/demos";
@@ -19,6 +20,14 @@ const demos = [
     description: "展示如何使用主题切换器在不同主题之间切换",
     category: "主题系统",
     tags: ["theme", "主题切换", "material-design"],
+  },
+  {
+    id: "command-palette",
+    title: "命令面板",
+    component: <CommandPaletteDemo />,
+    description: "类似 VSCode 的命令面板实现，支持快捷键和模糊搜索",
+    category: "交互组件",
+    tags: ["command-palette", "快捷键", "搜索"],
   },
   ...wechatLayoutDemos,
   ...vscodeLayoutDemos,
