@@ -64,7 +64,7 @@ export const DemoGallerySidebar = React.memo(function DemoGallerySidebar({
     <div
       className={cn(
         "flex flex-col bg-card border-r transition-all duration-200 ease-in-out",
-        "absolute left-0 top-0 bottom-0 z-20",
+        "absolute left-0 top-0 bottom-0",
         sidebarExpanded ? `${sidebarWidth} opacity-100 translate-x-0` : `${sidebarWidth} opacity-0 -translate-x-full`,
         className
       )}
