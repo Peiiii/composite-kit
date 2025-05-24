@@ -1,25 +1,26 @@
 import { cn } from "@/lib/utils";
 import {
-    ArrowRight,
-    ChevronRight,
-    Command,
-    File,
-    GitBranch,
-    GitCommit,
-    GitMerge,
-    GitPullRequest,
-    History,
-    Laptop,
-    Moon,
-    Package,
-    Palette,
-    Search,
-    Settings,
-    Star,
-    Sun,
-    Terminal,
+  ArrowRight,
+  ChevronRight,
+  Command,
+  File,
+  GitBranch,
+  GitCommit,
+  GitMerge,
+  GitPullRequest,
+  History,
+  Laptop,
+  Moon,
+  Package,
+  Palette,
+  Search,
+  Settings,
+  Star,
+  Sun,
+  Terminal,
 } from "lucide-react";
 import * as React from "react";
+import { createPortal } from "react-dom";
 
 // =============== 类型定义 ===============
 interface CommandItem {
@@ -59,19 +60,27 @@ const MAX_HISTORY = 10;
 const SCROLL_PADDING = 8;
 
 // =============== 工具函数 ===============
-const scrollToElement = (element: HTMLElement, container: HTMLElement, padding: number) => {
+const scrollToElement = (
+  element: HTMLElement,
+  container: HTMLElement,
+  padding: number
+) => {
   const containerRect = container.getBoundingClientRect();
   const elementRect = element.getBoundingClientRect();
 
   if (elementRect.top < containerRect.top + padding) {
     container.scrollTo({
       top: container.scrollTop + elementRect.top - containerRect.top - padding,
-      behavior: 'smooth'
+      behavior: "smooth",
     });
   } else if (elementRect.bottom > containerRect.bottom - padding) {
     container.scrollTo({
-      top: container.scrollTop + elementRect.bottom - containerRect.bottom + padding,
-      behavior: 'smooth'
+      top:
+        container.scrollTop +
+        elementRect.bottom -
+        containerRect.bottom +
+        padding,
+      behavior: "smooth",
     });
   }
 };
@@ -102,11 +111,11 @@ const CommandInput = React.forwardRef<
 type NavigationHandler = (index: number) => void;
 
 // 更新 CommandBreadcrumb 组件接口
-const CommandBreadcrumb = ({ 
-  path, 
-  onNavigate 
-}: { 
-  path: CommandPath[]; 
+const CommandBreadcrumb = ({
+  path,
+  onNavigate,
+}: {
+  path: CommandPath[];
   onNavigate: NavigationHandler;
 }) => (
   <div className="flex items-center gap-2 px-2 py-2 text-sm border-b mb-2">
@@ -139,72 +148,88 @@ const CommandCategoryHeader = ({ category }: { category: CommandCategory }) => (
   </div>
 );
 
-const CommandItem = React.memo(({
-  item,
-  category,
-  isSelected,
-  onSelect,
-  ref,
-}: {
-  item: CommandItem;
-  category: CommandCategory;
-  isSelected: boolean;
-  onSelect: (item: CommandItem) => void;
-  ref: (el: HTMLElement | null) => void;
-}) => (
-  <button
-    ref={ref}
-    onClick={() => onSelect(item)}
-    className={cn(
-      "flex w-full items-center gap-2 px-2 py-1.5 text-sm rounded-sm outline-none cursor-pointer transition-colors duration-150",
-      isSelected
-        ? "bg-accent text-accent-foreground"
-        : "hover:bg-accent/50"
-    )}
-  >
-    <div className="flex-1 flex items-center gap-2">
-      <div className={cn(
-        "w-4 h-4 flex items-center justify-center transition-transform duration-150",
-        isSelected && "scale-110"
-      )}>
-        {item.icon}
-      </div>
-      <div className="flex flex-col items-start">
-        <span className={cn(
-          "transition-colors duration-150",
-          isSelected && "font-medium"
-        )}>
-          {item.title}
-        </span>
-        {item.description && (
-          <span className="text-xs text-muted-foreground">
-            {item.description}
+const CommandItem = React.memo(
+  ({
+    item,
+    category,
+    isSelected,
+    onSelect,
+    ref,
+  }: {
+    item: CommandItem;
+    category: CommandCategory;
+    isSelected: boolean;
+    onSelect: (item: CommandItem) => void;
+    ref: (el: HTMLElement | null) => void;
+  }) => (
+    <button
+      ref={ref}
+      onClick={() => onSelect(item)}
+      className={cn(
+        "flex w-full items-center gap-2 px-2 py-1.5 text-sm rounded-sm outline-none cursor-pointer transition-colors duration-150",
+        isSelected ? "bg-accent text-accent-foreground" : "hover:bg-accent/50"
+      )}
+    >
+      <div className="flex-1 flex items-center gap-2">
+        <div
+          className={cn(
+            "w-4 h-4 flex items-center justify-center transition-transform duration-150",
+            isSelected && "scale-110"
+          )}
+        >
+          {item.icon}
+        </div>
+        <div className="flex flex-col items-start">
+          <span
+            className={cn(
+              "transition-colors duration-150",
+              isSelected && "font-medium"
+            )}
+          >
+            {item.title}
           </span>
-        )}
+          {item.description && (
+            <span className="text-xs text-muted-foreground">
+              {item.description}
+            </span>
+          )}
+        </div>
       </div>
-    </div>
-    {item.shortcut && (
-      <kbd className={cn(
-        "px-2 py-1 text-xs bg-muted rounded transition-colors duration-150",
-        isSelected && "bg-accent/50"
-      )}>
-        {item.shortcut}
-      </kbd>
-    )}
-    {item.subCommands && (
-      <ChevronRight className={cn(
-        "w-4 h-4 text-muted-foreground transition-transform duration-150",
-        isSelected && "translate-x-0.5"
-      )} />
-    )}
-    {isSelected && !item.subCommands && (
-      <ArrowRight className="w-4 h-4 text-muted-foreground animate-in slide-in-from-right-1" />
-    )}
-  </button>
-));
+      {item.shortcut && (
+        <kbd
+          className={cn(
+            "px-2 py-1 text-xs bg-muted rounded transition-colors duration-150",
+            isSelected && "bg-accent/50"
+          )}
+        >
+          {item.shortcut}
+        </kbd>
+      )}
+      {item.subCommands && (
+        <ChevronRight
+          className={cn(
+            "w-4 h-4 text-muted-foreground transition-transform duration-150",
+            isSelected && "translate-x-0.5"
+          )}
+        />
+      )}
+      {isSelected && !item.subCommands && (
+        <ArrowRight className="w-4 h-4 text-muted-foreground animate-in slide-in-from-right-1" />
+      )}
+    </button>
+  )
+);
 
 // =============== 主组件 ===============
-const CommandPaletteDemo = () => {
+interface CommandPaletteProps {
+  getContainer?: () => HTMLElement | null;
+  className?: string;
+}
+
+const CommandPaletteDemo: React.FC<CommandPaletteProps> = ({
+  getContainer,
+  className,
+}) => {
   const [open, setOpen] = React.useState(false);
   const [commandState, setCommandState] = React.useState<CommandState>({
     currentPath: [],
@@ -215,6 +240,54 @@ const CommandPaletteDemo = () => {
   const inputRef = React.useRef<HTMLInputElement>(null);
   const containerRef = React.useRef<HTMLDivElement>(null);
   const itemRefs = React.useRef(new Map<string, HTMLElement>());
+  const overlayRef = React.useRef<HTMLDivElement>(null);
+
+  // 获取容器元素
+  const getContainerElement = React.useCallback(() => {
+    if (getContainer) {
+      return getContainer();
+    }
+    // 默认返回 body
+    return document.body;
+  }, [getContainer]);
+
+  // 修改计算位置的逻辑
+  const calculatePosition = React.useCallback(() => {
+    const container = getContainerElement();
+    if (!container || !overlayRef.current) return;
+
+    const containerRect = container.getBoundingClientRect();
+    const overlay = overlayRef.current;
+    const overlayRect = overlay.getBoundingClientRect();
+
+    // 如果是 body，则使用全屏
+    if (container === document.body) {
+      overlay.style.position = 'fixed';
+      overlay.style.top = '0';
+      overlay.style.left = '0';
+      overlay.style.right = '0';
+      overlay.style.bottom = '0';
+      overlay.style.transform = 'none';
+      return;
+    }
+
+    // 对于自定义容器，使用固定定位并设置覆盖范围
+    overlay.style.position = 'fixed';
+    overlay.style.top = `${containerRect.top}px`;
+    overlay.style.left = `${containerRect.left}px`;
+    overlay.style.width = `${containerRect.width}px`;
+    overlay.style.height = `${containerRect.height}px`;
+    overlay.style.transform = 'none';
+  }, [getContainerElement]);
+
+  // 监听窗口大小变化
+  React.useEffect(() => {
+    if (open) {
+      calculatePosition();
+      window.addEventListener("resize", calculatePosition);
+      return () => window.removeEventListener("resize", calculatePosition);
+    }
+  }, [open, calculatePosition]);
 
   // 命令列表
   const commands = React.useMemo(
@@ -577,12 +650,12 @@ const CommandPaletteDemo = () => {
   // 获取所有可见的命令项
   const visibleCommands = React.useMemo(() => {
     const items: Array<CommandItem & { navigationId: string }> = [];
-    
-    filteredCommands.forEach(category => {
-      category.items.forEach(item => {
+
+    filteredCommands.forEach((category) => {
+      category.items.forEach((item) => {
         items.push({
           ...item,
-          navigationId: `${category.id}:${item.id}`
+          navigationId: `${category.id}:${item.id}`,
         } as CommandItem & { navigationId: string });
       });
     });
@@ -592,7 +665,7 @@ const CommandPaletteDemo = () => {
 
   // 添加导航处理函数
   const handleNavigate = React.useCallback((index: number) => {
-    setCommandState(prev => ({
+    setCommandState((prev) => ({
       ...prev,
       currentPath: index === -1 ? [] : prev.currentPath.slice(0, index + 1),
       selectedIndex: 0,
@@ -603,22 +676,22 @@ const CommandPaletteDemo = () => {
   // 修改命令选择处理函数
   const handleCommandSelect = React.useCallback((item: CommandItem) => {
     if (item.subCommands) {
-      setCommandState(prev => ({
+      setCommandState((prev) => ({
         ...prev,
-        currentPath: [...prev.currentPath, {
-          id: item.id,
-          title: item.title,
-          icon: item.icon
-        }],
+        currentPath: [
+          ...prev.currentPath,
+          {
+            id: item.id,
+            title: item.title,
+            icon: item.icon,
+          },
+        ],
         selectedIndex: 0,
         search: "",
       }));
     } else {
       setCommandHistory((prev) => {
-        const newHistory = [
-          item.id,
-          ...prev.filter((id) => id !== item.id),
-        ];
+        const newHistory = [item.id, ...prev.filter((id) => id !== item.id)];
         return newHistory.slice(0, MAX_HISTORY);
       });
       item.action();
@@ -651,7 +724,11 @@ const CommandPaletteDemo = () => {
       if (selectedCommand) {
         handleCommandSelect(selectedCommand);
       }
-    } else if (e.key === "Backspace" && !commandState.search && commandState.currentPath.length > 0) {
+    } else if (
+      e.key === "Backspace" &&
+      !commandState.search &&
+      commandState.currentPath.length > 0
+    ) {
       e.preventDefault();
       handleNavigate(commandState.currentPath.length - 2);
     }
@@ -667,7 +744,7 @@ const CommandPaletteDemo = () => {
     const container = containerRef.current;
 
     if (commandState.selectedIndex === 0) {
-      container.scrollTo({ top: 0, behavior: 'smooth' });
+      container.scrollTo({ top: 0, behavior: "smooth" });
       return;
     }
 
@@ -686,85 +763,132 @@ const CommandPaletteDemo = () => {
     }
   }, [commandState.selectedIndex, visibleCommands]);
 
-  if (!open) {
-    return (
-      <div className="relative h-full">
-        <div className="p-4">
-          <h1 className="text-2xl font-bold mb-4">命令面板演示</h1>
-          <p className="text-muted-foreground">
-            按下 <kbd className="px-2 py-1 bg-muted rounded">⌘K</kbd> 或{" "}
-            <kbd className="px-2 py-1 bg-muted rounded">Ctrl+K</kbd>{" "}
-            打开命令面板
-          </p>
-          <div className="mt-8 space-y-4">
-            <h2 className="text-lg font-semibold">主要功能：</h2>
-            <ul className="list-disc list-inside space-y-2 text-muted-foreground">
-              <li>支持快捷键导航（↑↓ 键）</li>
-              <li>命令历史记录</li>
-              <li>命令收藏功能</li>
-              <li>命令分组展示</li>
-              <li>快捷键提示</li>
-              <li>命令描述</li>
-              <li>多层级命令导航</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="fixed inset-0 bg-background/80 backdrop-blur-sm">
-      <div className="fixed inset-0 flex items-center justify-center p-4">
-        <div className="w-full max-w-2xl rounded-lg border bg-background shadow-lg animate-in fade-in-50 zoom-in-95">
-          <CommandInput
-            ref={inputRef}
-            value={commandState.search}
-            onChange={(value) => setCommandState((prev) => ({ ...prev, search: value }))}
-            onKeyDown={handleKeyDown}
-          />
-          <div ref={containerRef} className="max-h-[300px] overflow-y-auto scroll-smooth">
-            <div className="p-2">
-              {commandState.currentPath.length > 0 && (
-                <CommandBreadcrumb 
-                  path={commandState.currentPath} 
-                  onNavigate={handleNavigate}
-                />
-              )}
-              {filteredCommands.length === 0 ? (
-                <div className="py-6 text-center text-sm text-muted-foreground">
-                  没有找到相关命令
-                </div>
-              ) : (
-                filteredCommands.map((category) => (
-                  <div key={category.id}>
-                    <CommandCategoryHeader category={category} />
-                    {category.items.map((item) => {
-                      const isSelected =
-                        visibleCommands[commandState.selectedIndex]?.navigationId === `${category.id}:${item.id}`;
-                      return (
-                        <CommandItem
-                          key={`${category.id}:${item.id}`}
-                          item={item}
-                          category={category}
-                          isSelected={isSelected}
-                          onSelect={handleCommandSelect}
-                          ref={(el) => {
-                            if (el) itemRefs.current.set(`${category.id}:${item.id}`, el);
-                            else itemRefs.current.delete(`${category.id}:${item.id}`);
-                          }}
-                        />
-                      );
-                    })}
-                  </div>
-                ))
-              )}
-            </div>
-          </div>
+  // 渲染基础内容
+  const renderContent = () => (
+    <div className={cn("relative h-full", className)}>
+      <div className="p-4">
+        <h1 className="text-2xl font-bold mb-4">命令面板演示</h1>
+        <p className="text-muted-foreground">
+          按下 <kbd className="px-2 py-1 bg-muted rounded">⌘K</kbd> 或{" "}
+          <kbd className="px-2 py-1 bg-muted rounded">Ctrl+K</kbd>{" "}
+          打开命令面板
+        </p>
+        <div className="mt-8 space-y-4">
+          <h2 className="text-lg font-semibold">主要功能：</h2>
+          <ul className="list-disc list-inside space-y-2 text-muted-foreground">
+            <li>支持快捷键导航（↑↓ 键）</li>
+            <li>命令历史记录</li>
+            <li>命令收藏功能</li>
+            <li>命令分组展示</li>
+            <li>快捷键提示</li>
+            <li>命令描述</li>
+            <li>多层级命令导航</li>
+            <li>自定义容器支持</li>
+          </ul>
         </div>
       </div>
     </div>
   );
+
+  // 渲染命令面板
+  const renderCommandPalette = () => {
+    if (!open) return null;
+
+    return createPortal(
+      <div
+        ref={overlayRef}
+        className={cn(
+          "bg-background/80 backdrop-blur-sm",
+          getContainer ? "fixed" : "fixed inset-0",
+          className
+        )}
+        style={getContainer ? {
+          zIndex: 50,
+        } : undefined}
+      >
+        <div className={cn(
+          "flex items-center justify-center p-4",
+          getContainer ? "h-full" : "fixed inset-0"
+        )}>
+          <div className="w-full max-w-2xl rounded-lg border bg-background shadow-lg animate-in fade-in-50 zoom-in-95">
+            <CommandInput
+              ref={inputRef}
+              value={commandState.search}
+              onChange={(value) =>
+                setCommandState((prev) => ({ ...prev, search: value }))
+              }
+              onKeyDown={handleKeyDown}
+            />
+            <div
+              ref={containerRef}
+              className="max-h-[300px] overflow-y-auto scroll-smooth"
+            >
+              <div className="p-2">
+                {commandState.currentPath.length > 0 && (
+                  <CommandBreadcrumb
+                    path={commandState.currentPath}
+                    onNavigate={handleNavigate}
+                  />
+                )}
+                {filteredCommands.length === 0 ? (
+                  <div className="py-6 text-center text-sm text-muted-foreground">
+                    没有找到相关命令
+                  </div>
+                ) : (
+                  filteredCommands.map((category) => (
+                    <div key={category.id}>
+                      <CommandCategoryHeader category={category} />
+                      {category.items.map((item) => {
+                        const isSelected =
+                          visibleCommands[commandState.selectedIndex]
+                            ?.navigationId === `${category.id}:${item.id}`;
+                        return (
+                          <CommandItem
+                            key={`${category.id}:${item.id}`}
+                            item={item}
+                            category={category}
+                            isSelected={isSelected}
+                            onSelect={handleCommandSelect}
+                            ref={(el) => {
+                              if (el)
+                                itemRefs.current.set(
+                                  `${category.id}:${item.id}`,
+                                  el
+                                );
+                              else
+                                itemRefs.current.delete(
+                                  `${category.id}:${item.id}`
+                                );
+                            }}
+                          />
+                        );
+                      })}
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>,
+      document.body
+    );
+  };
+
+  return (
+    <>
+      {renderContent()}
+      {renderCommandPalette()}
+    </>
+  );
 };
 
-export default CommandPaletteDemo;
+// 修改演示页面组件
+export default function CommandPaletteDemoPage() {
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  return (
+    <div ref={containerRef} className="h-full w-full overflow-hidden">
+      <CommandPaletteDemo getContainer={() => containerRef.current} />
+    </div>
+  );
+}
