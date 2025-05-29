@@ -10,6 +10,7 @@ import { activityBarDemos } from "./demos/activity-bar-composite/demos";
 import { demoGalleryDemos } from "./demos/demo-gallery-composite/demos";
 import { vscodeLayoutDemos } from "./demos/vscode-layout-v2/demos";
 import { wechatLayoutDemos } from "./demos/wechat-layout/demos";
+import { dingtalkLayoutDemos } from "./demos/dingtalk-layout/demos";
 
 // 所有 demo 的配置
 const demos = [
@@ -29,6 +30,7 @@ const demos = [
     category: "交互组件",
     tags: ["command-palette", "快捷键", "搜索"],
   },
+  ...dingtalkLayoutDemos,
   ...wechatLayoutDemos,
   ...vscodeLayoutDemos,
   ...resizablePanelDemos,

@@ -1,0 +1,42 @@
+export const MOCK_MESSAGES = [
+  {
+    id: "1",
+    avatar: "张",
+    name: "张三",
+    content: "你好，最近怎么样？",
+    time: "10:30",
+    unread: true,
+  },
+  {
+    id: "2",
+    avatar: "李",
+    name: "李四",
+    content: "项目进展如何？",
+    time: "09:15",
+    unread: false,
+  },
+  {
+    id: "3",
+    avatar: "王",
+    name: "王五",
+    content: "下午开会讨论一下新功能",
+    time: "昨天",
+    unread: true,
+  },
+  {
+    id: "4",
+    avatar: "赵",
+    name: "赵六",
+    content: "代码已经提交，请review",
+    time: "昨天",
+    unread: false,
+  },
+  {
+    id: "5",
+    avatar: "孙",
+    name: "孙七",
+    content: "周末有空一起吃饭吗？",
+    time: "周一",
+    unread: false,
+  },
+] as const; 
