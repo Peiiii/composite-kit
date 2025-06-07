@@ -1,20 +1,24 @@
 "use client";
 
 import {
+  Bell,
   Calendar,
   FileText,
   HelpCircle,
   MessageCircle,
+  MoreHorizontal,
+  Search,
   Settings,
   Users,
-  Bell,
-  Search,
-  MoreHorizontal,
 } from "lucide-react";
 import * as React from "react";
 import { Header, Layout, Nav } from "./components/layout";
-import { MessageDetail, MessageList } from "./components/message";
-import { useMessageState } from "./hooks/useMessageState";
+import {
+  Conversation,
+  ConversationDetail,
+  ConversationList,
+} from "./components/message";
+import { useConversationState } from "./hooks/use-conversation-state";
 
 // =============== 导航配置 ===============
 const NAV_ITEMS = [
@@ -30,21 +34,57 @@ const NAV_BOTTOM_ITEMS = [
 ] as const;
 
 type NavId = (typeof NAV_ITEMS)[number]["id"];
+/**
+ *   id: string;
+  avatar: string;
+  name: string;
+  lastMessage: string;
+  lastMessageTime: string;
+  unread?: boolean;
+  online?: boolean;
+ */
+const MOCK_CONVERSATIONS: Conversation[] = [
+  {
+    id: "1",
+    avatar: "https://via.placeholder.com/150",
+    name: "John Doe",
+    lastMessage: "Hello, how are you?",
+    lastMessageTime: "2021-01-01",
+    unread: true,
+    online: true,
+  },
+  {
+    id: "2",
+    avatar: "https://via.placeholder.com/150",
+    name: "Jane Smith",
+    lastMessage: "I'm good, thank you!",
+    lastMessageTime: "2021-01-02",
+    unread: false,
+    online: false,
+  },
+] as const;
 
 // =============== 主组件 ===============
 export default function DingTalkLayout() {
   const [activeNav, setActiveNav] = React.useState<NavId>(NAV_ITEMS[0].id);
   const {
-    filteredMessages,
-    activeMessage,
     activeFilter,
-    handleFilterChange,
-    handleMessageClick,
-  } = useMessageState();
+    setActiveFilter,
+    setActiveConversation,
+    getFilteredConversations,
+    getActiveConversation,
+  } = useConversationState([...MOCK_CONVERSATIONS]);
 
   const handleNavClick = React.useCallback((id: string) => {
     setActiveNav(id as NavId);
   }, []);
+
+  const handleConversationClick = React.useCallback(
+    (conversation: Conversation) => {
+      setActiveConversation(conversation.id);
+    },
+    [setActiveConversation]
+  );
 
   return (
     <Layout
@@ -67,13 +107,16 @@ export default function DingTalkLayout() {
         />
       }
     >
-      <MessageList
-        messages={filteredMessages}
+      <ConversationList
+        conversations={getFilteredConversations()}
         activeFilter={activeFilter}
-        onFilterChange={handleFilterChange}
-        onMessageClick={handleMessageClick}
+        onFilterChange={setActiveFilter}
+        onConversationClick={handleConversationClick}
       />
-      <MessageDetail message={activeMessage} />
+      <ConversationDetail
+        conversation={getActiveConversation()}
+        messages={[]}
+      />
     </Layout>
   );
 }

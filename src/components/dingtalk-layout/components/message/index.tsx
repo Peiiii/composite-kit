@@ -24,28 +24,42 @@ type BaseProps = {
   className?: string;
 };
 
-type Message = {
+export type Conversation = {
   id: string;
   avatar: string;
   name: string;
-  content: string;
-  time: string;
+  lastMessage: string;
+  lastMessageTime: string;
   unread?: boolean;
+  online?: boolean;
 };
 
-type MessageHeaderProps = BaseProps & {
+export type Message = {
+  id: string;
+  content: string;
+  time: string;
+  sender: {
+    id: string;
+    name: string;
+    avatar: string;
+  };
+};
+
+type ConversationHeaderProps = BaseProps & {
   onSearch: (value: string) => void;
 };
 
-type MessageListProps = BaseProps & {
-  messages: Message[];
+type ConversationListProps = BaseProps & {
+  conversations: Conversation[];
   activeFilter: "all" | "unread" | "read";
   onFilterChange: (filter: "all" | "unread" | "read") => void;
-  onMessageClick: (message: Message) => void;
+  onConversationClick: (conversation: Conversation) => void;
 };
 
-type MessageDetailProps = BaseProps & {
-  message: Message | null;
+type ConversationDetailProps = BaseProps & {
+  conversation: Conversation | null;
+  messages: Message[];
+  onSendMessage?: (message: string) => void;
 };
 
 type MessageInputProps = BaseProps & {
@@ -88,7 +102,7 @@ const THEME = {
 } as const;
 
 // =============== 组件 ===============
-export const MessageHeader = React.forwardRef<HTMLDivElement, MessageHeaderProps>(
+export const ConversationHeader = React.forwardRef<HTMLDivElement, ConversationHeaderProps>(
   ({ className, onSearch }, ref) => (
     <div ref={ref} className={cn(THEME.header.base, className)}>
       <Input
@@ -102,7 +116,7 @@ export const MessageHeader = React.forwardRef<HTMLDivElement, MessageHeaderProps
   )
 );
 
-export const MessageFilters = React.forwardRef<HTMLDivElement, Pick<MessageListProps, "activeFilter" | "onFilterChange">>(
+export const ConversationFilters = React.forwardRef<HTMLDivElement, Pick<ConversationListProps, "activeFilter" | "onFilterChange">>(
   ({ activeFilter, onFilterChange }, ref) => (
     <div ref={ref} className={THEME.filters.base}>
       <button
@@ -187,35 +201,35 @@ export const MessageInput = React.forwardRef<HTMLDivElement, MessageInputProps>(
   }
 );
 
-export const MessageList = React.forwardRef<HTMLDivElement, MessageListProps>(
-  ({ className, messages, activeFilter, onFilterChange, onMessageClick }, ref) => (
+export const ConversationList = React.forwardRef<HTMLDivElement, ConversationListProps>(
+  ({ className, conversations, activeFilter, onFilterChange, onConversationClick }, ref) => (
     <div ref={ref} className={cn("w-80 flex flex-col border-r", className)}>
-      <MessageFilters activeFilter={activeFilter} onFilterChange={onFilterChange} />
+      <ConversationFilters activeFilter={activeFilter} onFilterChange={onFilterChange} />
       <div className={THEME.list.base}>
-        {messages.map((message) => (
+        {conversations.map((conversation) => (
           <div
-            key={message.id}
+            key={conversation.id}
             className={THEME.list.item}
-            onClick={() => onMessageClick(message)}
+            onClick={() => onConversationClick(conversation)}
           >
             <Avatar
-              text={message.avatar}
+              text={conversation.avatar}
               size="md"
-              online={message.unread}
+              online={conversation.online}
             />
             <div className={THEME.list.content}>
               <div className="flex items-center justify-between">
                 <span className={THEME.list.name}>
-                  {message.name}
-                  {message.unread && (
+                  {conversation.name}
+                  {conversation.unread && (
                     <span className={cn(THEME.list.badge, THEME.list.unread)}>
                       新消息
                     </span>
                   )}
                 </span>
-                <span className={THEME.list.time}>{message.time}</span>
+                <span className={THEME.list.time}>{conversation.lastMessageTime}</span>
               </div>
-              <p className={THEME.list.preview}>{message.content}</p>
+              <p className={THEME.list.preview}>{conversation.lastMessage}</p>
             </div>
           </div>
         ))}
@@ -224,17 +238,17 @@ export const MessageList = React.forwardRef<HTMLDivElement, MessageListProps>(
   )
 );
 
-export const MessageDetail = React.forwardRef<HTMLDivElement, MessageDetailProps>(
-  ({ className, message }, ref) => (
+export const ConversationDetail = React.forwardRef<HTMLDivElement, ConversationDetailProps>(
+  ({ className, conversation, messages, onSendMessage }, ref) => (
     <div ref={ref} className={cn("flex-1 flex flex-col", className)}>
-      {message ? (
+      {conversation ? (
         <>
           <div className={THEME.detail.header}>
             <div className="flex items-center gap-3">
-              <Avatar text={message.avatar} size="md" />
+              <Avatar text={conversation.avatar} size="md" />
               <div>
-                <h3 className="font-medium">{message.name}</h3>
-                <p className="text-sm text-gray-500">在线</p>
+                <h3 className="font-medium">{conversation.name}</h3>
+                <p className="text-sm text-gray-500">{conversation.online ? "在线" : "离线"}</p>
               </div>
             </div>
             <div className="flex items-center gap-2">
@@ -246,17 +260,27 @@ export const MessageDetail = React.forwardRef<HTMLDivElement, MessageDetailProps
             </div>
           </div>
           <div className={cn(THEME.detail.content, "flex-1 overflow-y-auto")}>
-            <div className="flex items-center gap-2 text-sm text-gray-500 mb-4">
-              <Clock className="w-4 h-4" />
-              <span>{message.time}</span>
-            </div>
-            <p className="text-gray-700">{message.content}</p>
+            {messages.map((message) => (
+              <div key={message.id} className="mb-4">
+                <div className="flex items-center gap-2 text-sm text-gray-500">
+                  <Clock className="w-4 h-4" />
+                  <span>{message.time}</span>
+                </div>
+                <div className="flex items-start gap-2 mt-1">
+                  <Avatar text={message.sender.avatar} size="sm" />
+                  <div>
+                    <p className="text-sm font-medium">{message.sender.name}</p>
+                    <p className="text-gray-700">{message.content}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
-          <MessageInput onSend={(msg) => console.log("发送消息:", msg)} />
+          <MessageInput onSend={onSendMessage} />
         </>
       ) : (
         <div className="h-full flex items-center justify-center text-gray-500">
-          请选择一条消息
+          请选择一个会话
         </div>
       )}
     </div>

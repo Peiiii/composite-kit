@@ -8,26 +8,26 @@ type BaseProps = {
   className?: string;
 };
 
-type NavItem = {
+export type NavItem = {
   id: string;
   icon: LucideIcon;
   label: string;
 };
 
-type LayoutProps = BaseProps & {
+export type LayoutProps = BaseProps & {
   nav?: React.ReactNode;
   header?: React.ReactNode;
   children: React.ReactNode;
 };
 
-type NavProps = BaseProps & {
+export type NavProps = BaseProps & {
   items: readonly NavItem[];
   bottomItems?: readonly NavItem[];
   activeId: string;
   onItemClick: (id: string) => void;
 };
 
-type HeaderProps = BaseProps & {
+export type HeaderProps = BaseProps & {
   left?: React.ReactNode;
   right?: React.ReactNode;
   title?: string;
