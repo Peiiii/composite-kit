@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { Conversation } from "../components/message";
+import { Conversation } from "../components/conversation";
 
 export interface ConversationState {
   activeFilter: "all" | "unread" | "read";

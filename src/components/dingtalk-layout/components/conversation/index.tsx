@@ -203,7 +203,7 @@ export const MessageInput = React.forwardRef<HTMLDivElement, MessageInputProps>(
 
 export const ConversationList = React.forwardRef<HTMLDivElement, ConversationListProps>(
   ({ className, conversations, activeFilter, onFilterChange, onConversationClick }, ref) => (
-    <div ref={ref} className={cn("w-80 flex flex-col border-r", className)}>
+    <div ref={ref} className={cn("flex flex-col border-r", className)}>
       <ConversationFilters activeFilter={activeFilter} onFilterChange={onFilterChange} />
       <div className={THEME.list.base}>
         {conversations.map((conversation) => (
@@ -240,7 +240,7 @@ export const ConversationList = React.forwardRef<HTMLDivElement, ConversationLis
 
 export const ConversationDetail = React.forwardRef<HTMLDivElement, ConversationDetailProps>(
   ({ className, conversation, messages, onSendMessage }, ref) => (
-    <div ref={ref} className={cn("flex-1 flex flex-col", className)}>
+    <div ref={ref} className={cn("flex-1 flex flex-col h-full", className)}>
       {conversation ? (
         <>
           <div className={THEME.detail.header}>

@@ -1,6 +1,7 @@
-import { Conversation } from "@/components/dingtalk-layout/components/message";
+import { Conversation } from "@/components/dingtalk-layout/components/conversation";
 import { SwitchRule, useSwitch } from "@/components/dingtalk-layout/hooks/use-switch";
 import { useConversationState } from "@/components/dingtalk-layout/hooks/use-conversation-state";
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 import {
   Bell,
   Home,
@@ -147,18 +148,23 @@ export const DtlBasicDemo = () => {
         { icon: Plus, title: "发起群聊" },
       ],
       content: (
-        <>
-          <Dtl.ConversationList
-            conversations={getFilteredConversations()}
-            activeFilter={activeFilter}
-            onFilterChange={setActiveFilter}
-            onConversationClick={handleConversationClick}
-          />
-          <Dtl.ConversationDetail
-            conversation={getActiveConversation()}
-            messages={[]}
-          />
-        </>
+        <ResizablePanelGroup direction="horizontal">
+          <ResizablePanel defaultSize={30} minSize={20}>
+            <Dtl.ConversationList
+              conversations={getFilteredConversations()}
+              activeFilter={activeFilter}
+              onFilterChange={setActiveFilter}
+              onConversationClick={handleConversationClick}
+            />
+          </ResizablePanel>
+          <ResizableHandle />
+          <ResizablePanel defaultSize={70} minSize={30}>
+            <Dtl.ConversationDetail
+              conversation={getActiveConversation()}
+              messages={[]}
+            />
+          </ResizablePanel>
+        </ResizablePanelGroup>
       ),
     },
     contacts: {

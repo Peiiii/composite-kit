@@ -17,7 +17,7 @@ import {
   Conversation,
   ConversationDetail,
   ConversationList,
-} from "./components/message";
+} from "./components/conversation";
 import { useConversationState } from "./hooks/use-conversation-state";
 
 // =============== 导航配置 ===============
