@@ -277,7 +277,7 @@ export function WorkspacePanel({
             )}
           </div>
         ))}
-      <div className="flex-1 overflow-auto">{children}</div>
+      <div className="flex-1 overflow-auto flex flex-col">{children}</div>
     </div>
   );
 }
