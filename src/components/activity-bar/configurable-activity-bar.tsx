@@ -67,13 +67,20 @@ export function ConfigurableActivityBar({
     [onExpandedChange],
   )
 
-  const handleItemClick = React.useCallback(
-    (id: string, onClick?: (id: string) => void) => {
+  const handleActiveChange = React.useCallback(
+    (id: string) => {
       setActiveId(id)
       onActiveChange?.(id)
-      onClick?.(id)
     },
     [onActiveChange],
+  )
+
+  const handleItemClick = React.useCallback(
+    (id: string, onClick?: (id: string) => void) => {
+      handleActiveChange(id)
+      onClick?.(id)
+    },
+    [handleActiveChange],
   )
 
   // 处理徽章渲染

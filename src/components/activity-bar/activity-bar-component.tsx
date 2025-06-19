@@ -65,13 +65,19 @@ export function ActivityBarComponent({
     onExpandedChange?.(newExpanded)
   }, [expanded, onExpandedChange])
 
+  // Create a wrapper for setActiveId that also calls onActiveChange
+  const handleSetActiveId = React.useCallback((id: string) => {
+    setActiveId(id)
+    onActiveChange?.(id)
+  }, [onActiveChange])
+
   const contextValue = React.useMemo(
     () => ({
       expanded: expanded ?? false,
       activeId,
-      setActiveId,
+      setActiveId: handleSetActiveId,
     }),
-    [expanded, activeId],
+    [expanded, activeId, handleSetActiveId],
   )
 
   return (
