@@ -16,6 +16,7 @@ Activity Bar 是一个高度可定制的侧边栏组件，类似于 VS Code 的�
 - 🎯 支持复合组件模式
 - 🎭 支持分组和分隔
 - 🎪 支持搜索功能
+- 🎛️ 支持受控和不受控两种模式
 
 ## 组件结构
 
@@ -34,6 +35,70 @@ activity-bar/
 ```
 
 ## 使用方法
+
+### 受控模式 (Controlled)
+
+在受控模式下，组件的状态完全由父组件控制：
+
+```tsx
+import { ActivityBar } from "@/components/activity-bar"
+import { Home, Settings, Users } from "lucide-react"
+
+export function ControlledActivityBar() {
+  const [expanded, setExpanded] = React.useState(false)
+  const [activeId, setActiveId] = React.useState("home")
+
+  return (
+    <ActivityBar.Root
+      expanded={expanded}
+      activeId={activeId}
+      onExpandedChange={setExpanded}
+      onActiveChange={setActiveId}
+    >
+      <ActivityBar.Header icon={<Home />} title="受控模式" />
+      <ActivityBar.GroupList>
+        <ActivityBar.Group title="导航">
+          <ActivityBar.Item id="home" icon={<Home />} label="首页" />
+          <ActivityBar.Item id="users" icon={<Users />} label="用户" />
+          <ActivityBar.Item id="settings" icon={<Settings />} label="设置" />
+        </ActivityBar.Group>
+      </ActivityBar.GroupList>
+    </ActivityBar.Root>
+  )
+}
+```
+
+### 不受控模式 (Uncontrolled)
+
+在不受控模式下，组件内部管理状态，通过回调函数获取状态变化：
+
+```tsx
+import { ActivityBar } from "@/components/activity-bar"
+import { Home, Settings, Users } from "lucide-react"
+
+export function UncontrolledActivityBar() {
+  const [expanded, setExpanded] = React.useState(false)
+  const [activeId, setActiveId] = React.useState("home")
+
+  return (
+    <ActivityBar.Root
+      defaultExpanded={false}
+      defaultActiveId="home"
+      onExpandedChange={setExpanded}
+      onActiveChange={setActiveId}
+    >
+      <ActivityBar.Header icon={<Home />} title="不受控模式" />
+      <ActivityBar.GroupList>
+        <ActivityBar.Group title="导航">
+          <ActivityBar.Item id="home" icon={<Home />} label="首页" />
+          <ActivityBar.Item id="users" icon={<Users />} label="用户" />
+          <ActivityBar.Item id="settings" icon={<Settings />} label="设置" />
+        </ActivityBar.Group>
+      </ActivityBar.GroupList>
+    </ActivityBar.Root>
+  )
+}
+```
 
 ### 复合组件模式（推荐）
 
@@ -148,12 +213,18 @@ export function BasicActivityBar() {
 | 属性 | 类型 | 默认值 | 描述 |
 |------|------|--------|------|
 | position | "left" \| "right" | "left" | 侧边栏位置 |
-| expanded | boolean | false | 是否展开 |
-| defaultExpanded | boolean | false | 默认展开状态 |
-| defaultActiveId | string | - | 默认激活项 |
+| expanded | boolean | - | 受控的展开状态 |
+| defaultExpanded | boolean | false | 默认展开状态（不受控模式） |
+| activeId | string | - | 受控的激活项 |
+| defaultActiveId | string | - | 默认激活项（不受控模式） |
 | toggleable | boolean | true | 是否可切换 |
 | onExpandedChange | (expanded: boolean) => void | - | 展开状态改变回调 |
 | onActiveChange | (activeId: string) => void | - | 激活项改变回调 |
+
+**受控模式说明：**
+- 当提供 `expanded` 属性时，展开状态由父组件控制
+- 当提供 `activeId` 属性时，激活项由父组件控制
+- 当不提供这些属性时，组件使用内部状态管理（不受控模式）
 
 #### ActivityBar.Header
 
@@ -184,6 +255,18 @@ export function BasicActivityBar() {
 
 基础组件模式的 API 与复合组件模式相同，只是使用方式不同。
 
+## 受控 vs 不受控模式
+
+### 受控模式 (Controlled)
+- **优点**：状态完全可控，便于集成到复杂的状态管理系统中
+- **适用场景**：需要与其他组件状态同步，或需要根据外部条件控制组件状态
+- **使用方式**：提供 `expanded` 和 `activeId` 属性
+
+### 不受控模式 (Uncontrolled)
+- **优点**：使用简单，组件内部管理状态
+- **适用场景**：独立的组件，不需要与外部状态同步
+- **使用方式**：提供 `defaultExpanded` 和 `defaultActiveId` 属性
+
 ## 主题定制
 
 组件使用 Tailwind CSS 进行样式管理，可以通过以下方式自定义主题：
@@ -195,12 +278,13 @@ export function BasicActivityBar() {
 ## 最佳实践
 
 1. 优先使用复合组件模式，提供更好的开发体验
-2. 使用 `ActivityBar.Group` 对相关项目进行分组
-3. 合理使用徽章显示重要信息
-4. 保持导航项数量适中，避免过度拥挤
-5. 为重要操作提供键盘快捷键
-6. 使用有意义的图标和标签
-7. 在头部区域添加搜索功能，提升用户体验
+2. 根据应用需求选择合适的受控/不受控模式
+3. 使用 `ActivityBar.Group` 对相关项目进行分组
+4. 合理使用徽章显示重要信息
+5. 保持导航项数量适中，避免过度拥挤
+6. 为重要操作提供键盘快捷键
+7. 使用有意义的图标和标签
+8. 在头部区域添加搜索功能，提升用户体验
 
 ## 注意事项
 
@@ -209,6 +293,7 @@ export function BasicActivityBar() {
 3. 在移动端使用时注意响应式布局
 4. 考虑使用 `ActivityBarContext` 进行状态管理
 5. 合理使用分组和分隔线，提高导航的清晰度
+6. 在受控模式下，确保正确传递状态和回调函数
 
 ## 相关组件
 

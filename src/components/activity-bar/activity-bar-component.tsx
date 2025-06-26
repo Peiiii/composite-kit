@@ -34,6 +34,8 @@ export interface ActivityBarProps
     VariantProps<typeof activityBarVariants> {
   defaultExpanded?: boolean
   defaultActiveId?: string
+  expanded?: boolean // 受控的展开状态
+  activeId?: string // 受控的激活项状态
   toggleable?: boolean
   onExpandedChange?: (expanded: boolean) => void
   onActiveChange?: (activeId: string) => void
@@ -45,6 +47,7 @@ export function ActivityBarComponent({
   className,
   position = "left",
   expanded: controlledExpanded,
+  activeId: controlledActiveId,
   defaultExpanded = false,
   defaultActiveId,
   toggleable = true,
@@ -53,23 +56,56 @@ export function ActivityBarComponent({
   children,
   ...props
 }: ActivityBarComponentProps) {
-  const [isExpanded, setIsExpanded] = React.useState(defaultExpanded)
-  const [activeId, setActiveId] = React.useState<string | undefined>(defaultActiveId)
+  // 内部状态管理
+  const [internalExpanded, setInternalExpanded] = React.useState(defaultExpanded)
+  const [internalActiveId, setInternalActiveId] = React.useState<string | undefined>(defaultActiveId)
 
-  // Allow controlled expansion state
-  const expanded = controlledExpanded ?? isExpanded
+  // 判断是否为受控模式
+  const isExpandedControlled = controlledExpanded !== undefined
+  const isActiveIdControlled = controlledActiveId !== undefined
 
+  // 确定当前状态值
+  const expanded = isExpandedControlled ? controlledExpanded : internalExpanded
+  const activeId = isActiveIdControlled ? controlledActiveId : internalActiveId
+
+  // 展开状态切换处理
   const toggleExpanded = React.useCallback(() => {
     const newExpanded = !expanded
-    setIsExpanded(newExpanded)
-    onExpandedChange?.(newExpanded)
-  }, [expanded, onExpandedChange])
+    
+    // 如果是受控模式，只调用回调函数
+    if (isExpandedControlled) {
+      onExpandedChange?.(newExpanded)
+    } else {
+      // 非受控模式，更新内部状态并调用回调
+      setInternalExpanded(newExpanded)
+      onExpandedChange?.(newExpanded)
+    }
+  }, [expanded, isExpandedControlled, onExpandedChange])
 
-  // Create a wrapper for setActiveId that also calls onActiveChange
+  // 激活项设置处理
   const handleSetActiveId = React.useCallback((id: string) => {
-    setActiveId(id)
-    onActiveChange?.(id)
-  }, [onActiveChange])
+    // 如果是受控模式，只调用回调函数
+    if (isActiveIdControlled) {
+      onActiveChange?.(id)
+    } else {
+      // 非受控模式，更新内部状态并调用回调
+      setInternalActiveId(id)
+      onActiveChange?.(id)
+    }
+  }, [isActiveIdControlled, onActiveChange])
+
+  // 同步受控状态到内部状态（用于初始化）
+  React.useEffect(() => {
+    if (isExpandedControlled && controlledExpanded !== internalExpanded) {
+      setInternalExpanded(controlledExpanded)
+    }
+  }, [isExpandedControlled, controlledExpanded, internalExpanded])
+
+  React.useEffect(() => {
+    if (isActiveIdControlled && controlledActiveId !== internalActiveId) {
+      setInternalActiveId(controlledActiveId)
+    }
+  }, [isActiveIdControlled, controlledActiveId, internalActiveId])
 
   const contextValue = React.useMemo(
     () => ({
