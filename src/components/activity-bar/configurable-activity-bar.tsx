@@ -42,6 +42,8 @@ export interface ConfigurableActivityBarProps {
   onExpandedChange?: (expanded: boolean) => void
   onActiveChange?: (activeId: string) => void
   className?: string
+  expandedWidth?: number | string // 新增
+  collapsedWidth?: number | string // 新增
 }
 
 export function ConfigurableActivityBar({
@@ -52,6 +54,8 @@ export function ConfigurableActivityBar({
   onExpandedChange,
   onActiveChange,
   className,
+  expandedWidth,
+  collapsedWidth,
 }: ConfigurableActivityBarProps) {
   const [expanded, setExpanded] = React.useState(defaultExpanded)
   const [activeId, setActiveId] = React.useState<string | undefined>(defaultActiveId)
@@ -100,6 +104,8 @@ export function ConfigurableActivityBar({
       onExpandedChange={handleExpandedChange}
       className={className}
       defaultActiveId={activeId}
+      expandedWidth={expandedWidth}
+      collapsedWidth={collapsedWidth}
     >
       <ActivityBar.Header
         icon={config.header.icon}

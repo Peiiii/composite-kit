@@ -57,6 +57,7 @@ const App = React.memo(function App() {
         defaultActiveId={activeSection}
         onExpandedChange={setExpanded}
         onActiveChange={setActiveSection}
+        expandedWidth={240}
         className="flex-shrink-0"
       >
         <ActivityBar.Header

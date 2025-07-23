@@ -39,6 +39,8 @@ export interface ActivityBarProps
   toggleable?: boolean
   onExpandedChange?: (expanded: boolean) => void
   onActiveChange?: (activeId: string) => void
+  expandedWidth?: number | string // 新增，展开宽度
+  collapsedWidth?: number | string // 新增，收起宽度
 }
 
 export type ActivityBarComponentProps = ActivityBarProps
@@ -53,6 +55,8 @@ export function ActivityBarComponent({
   toggleable = true,
   onExpandedChange,
   onActiveChange,
+  expandedWidth = 240, // 默认展开宽度
+  collapsedWidth = 64, // 默认收起宽度
   children,
   ...props
 }: ActivityBarComponentProps) {
@@ -116,6 +120,10 @@ export function ActivityBarComponent({
     [expanded, activeId, handleSetActiveId],
   )
 
+  // 计算宽度
+  const width = expanded ? expandedWidth : collapsedWidth
+  const widthStyle = typeof width === "number" ? `${width}px` : width
+
   return (
     <ActivityBarContext.Provider value={contextValue}>
       <div
@@ -124,6 +132,7 @@ export function ActivityBarComponent({
           "relative flex-col transition-all duration-200 ease-in-out",
           className,
         )}
+        style={{ width: widthStyle, ...props.style }} // 新增，动态宽度
         {...props}
       >
         <div className="flex flex-col h-full">
