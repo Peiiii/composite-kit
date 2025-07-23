@@ -124,6 +124,8 @@ function App() {
           config={config}
           defaultExpanded={true}
           onActiveChange={(id) => console.log('Active item:', id)}
+          expandedWidth={300}
+          collapsedWidth={80}
         />
         <div className="flex-1 p-8">
           <div className="max-w-4xl mx-auto">
