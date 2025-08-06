@@ -68,8 +68,8 @@ const App = React.memo(function App() {
 
         <ActivityBar.GroupList>
           <ActivityBar.Group title="导航">
-            <ActivityBar.Item id="home" icon={<Home />} label="首页" />
-            <ActivityBar.Item id="demos" icon={<BookOpen />} label="组件演示" />
+            <ActivityBar.Item id="home" icon={<Home />} label="首页" collapsedLabel="首页" />
+            <ActivityBar.Item id="demos" icon={<BookOpen />} label="组件演示" collapsedLabel="演示" />
           </ActivityBar.Group>
         </ActivityBar.GroupList>
 

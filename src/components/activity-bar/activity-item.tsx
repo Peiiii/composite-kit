@@ -58,15 +58,66 @@ export function ActivityItem({ className, id, icon, label, badge, active, disabl
   // 收起时是否显示标签
   const shouldShowCollapsedLabel = !expanded && collapsedLabel
 
+  if (shouldShowCollapsedLabel) {
+    // 收起时显示标签的布局
+    return (
+      <div className="flex flex-col items-center mb-3">
+        {/* 图标容器 - 只包含图标，有hover效果 */}
+        <div
+          data-component="activity-item"
+          className={cn(
+            activityItemVariants({ active: isActive }),
+            "p-2 mx-3 mb-1",
+            "group",
+            disabled && "opacity-50 pointer-events-none",
+            className,
+          )}
+          onClick={handleClick}
+          role="button"
+          tabIndex={disabled ? -1 : 0}
+          aria-disabled={disabled}
+          aria-selected={isActive ? true : undefined}
+          onKeyDown={(e) => {
+            if (disabled) return
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault()
+              handleClick()
+            }
+          }}
+          {...props}
+        >
+          <div className="flex-shrink-0 transition-all duration-200 ease-in-out">
+            {React.cloneElement(icon as React.ReactElement<React.SVGProps<SVGSVGElement>>, {
+              className: cn(
+                "h-5 w-5 transition-colors duration-150",
+                isActive ? "text-current" : "text-muted-foreground group-hover:text-foreground",
+                (icon as React.ReactElement<React.SVGProps<SVGSVGElement>>).props.className,
+              ),
+            })}
+          </div>
+        </div>
+
+        {/* 标签文字 - 在图标容器外部，占用实际空间 */}
+        <div className="px-3 w-full">
+          <div className="text-center">
+            <span className="text-xs font-medium leading-tight truncate block text-muted-foreground group-hover:text-foreground transition-colors duration-150">
+              {collapsedLabel}
+            </span>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // 展开时的布局（原有逻辑）
   return (
     <div
       data-component="activity-item"
       className={cn(
         activityItemVariants({ active: isActive }),
-        expanded ? "px-3 py-2 mx-2" : "p-2 mx-3",
+        "px-3 py-2 mx-2",
         "group",
         disabled && "opacity-50 pointer-events-none",
-        shouldShowCollapsedLabel && "flex-col",
         className,
       )}
       onClick={handleClick}
@@ -84,11 +135,7 @@ export function ActivityItem({ className, id, icon, label, badge, active, disabl
       {...props}
     >
       {/* 图标容器 */}
-      <div className={cn(
-        "flex-shrink-0 transition-all duration-200 ease-in-out",
-        expanded ? "" : "mx-auto",
-        shouldShowCollapsedLabel ? "mb-1" : ""
-      )}>
+      <div className="flex-shrink-0 transition-all duration-200 ease-in-out">
         {React.cloneElement(icon as React.ReactElement<React.SVGProps<SVGSVGElement>>, {
           className: cn(
             "h-5 w-5 transition-colors duration-150",
@@ -98,22 +145,8 @@ export function ActivityItem({ className, id, icon, label, badge, active, disabl
         })}
       </div>
 
-      {/* 收起时的标签 */}
-      {shouldShowCollapsedLabel && (
-        <div className="flex-shrink-0 w-full text-center">
-          <span className="text-xs font-medium leading-tight truncate block text-muted-foreground group-hover:text-foreground transition-colors duration-150">
-            {collapsedLabel}
-          </span>
-        </div>
-      )}
-
       {/* 展开时的内容 */}
-      <div
-        className={cn(
-          "flex flex-1 items-center justify-between min-w-0 transition-all duration-200 ease-in-out",
-          expanded ? "opacity-100 w-auto ml-3" : "opacity-0 w-0 overflow-hidden ml-0",
-        )}
-      >
+      <div className="flex flex-1 items-center justify-between min-w-0 transition-all duration-200 ease-in-out ml-3">
         <span className="text-sm font-medium truncate min-w-0">{label}</span>
         {badge && <div className="ml-auto pl-2 flex-shrink-0">{renderBadge()}</div>}
       </div>
