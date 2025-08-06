@@ -56,6 +56,7 @@ export function ActivityItem({ className, id, icon, label, badge, active, disabl
 
   return (
     <div
+      data-component="activity-item"
       className={cn(
         activityItemVariants({ active: isActive }),
         expanded ? "px-3 py-2 mx-2" : "p-2 mx-3",
@@ -82,6 +83,7 @@ export function ActivityItem({ className, id, icon, label, badge, active, disabl
           className: cn(
             "h-5 w-5 transition-colors duration-150",
             isActive ? "text-current" : "text-muted-foreground group-hover:text-foreground",
+            (icon as React.ReactElement<React.SVGProps<SVGSVGElement>>).props.className,
           ),
         })}
       </div>

@@ -127,6 +127,7 @@ export function ActivityBarComponent({
   return (
     <ActivityBarContext.Provider value={contextValue}>
       <div
+        data-component="activity-bar"
         className={cn(
           activityBarVariants({ position, expanded }),
           "relative flex-col transition-all duration-200 ease-in-out",
