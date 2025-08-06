@@ -17,6 +17,9 @@ Activity Bar 是一个高度可定制的侧边栏组件，类似于 VS Code 的�
 - 🎭 支持分组和分隔
 - 🎪 支持搜索功能
 - 🎛️ 支持受控和不受控两种模式
+- 🏷️ 收起时显示标签文本（新功能）
+- ✂️ 自动处理文本超出长度
+- 🎨 自适应布局和平滑过渡动画
 
 ## 组件结构
 
@@ -99,6 +102,64 @@ export function UncontrolledActivityBar() {
   )
 }
 ```
+
+### 收起标签功能
+
+新增的 `collapsedLabel` 功能允许在收起状态下显示简短的标签文本：
+
+```tsx
+import { ActivityBar } from "@/components/activity-bar"
+import { Home, Search, FileText, Settings } from "lucide-react"
+
+export function ActivityBarWithCollapsedLabels() {
+  return (
+    <ActivityBar.Root defaultExpanded={false}>
+      <ActivityBar.Header icon={<Home />} title="应用导航" />
+      <ActivityBar.GroupList>
+        <ActivityBar.Group title="主要功能">
+          {/* 有收起标签 - 收起时显示"首页" */}
+          <ActivityBar.Item 
+            id="home" 
+            icon={<Home />} 
+            label="首页" 
+            collapsedLabel="首页" 
+          />
+          
+          {/* 有收起标签 - 收起时显示"搜索" */}
+          <ActivityBar.Item 
+            id="search" 
+            icon={<Search />} 
+            label="搜索功能" 
+            collapsedLabel="搜索" 
+          />
+          
+          {/* 有收起标签 - 收起时显示"文件" */}
+          <ActivityBar.Item 
+            id="files" 
+            icon={<FileText />} 
+            label="文件管理" 
+            collapsedLabel="文件" 
+          />
+          
+          {/* 没有收起标签 - 收起时只显示图标 */}
+          <ActivityBar.Item 
+            id="settings" 
+            icon={<Settings />} 
+            label="系统设置" 
+          />
+        </ActivityBar.Group>
+      </ActivityBar.GroupList>
+    </ActivityBar.Root>
+  )
+}
+```
+
+**特性说明：**
+- ✅ 如果不传 `collapsedLabel`，保持原有行为（只显示图标）
+- ✅ 如果传了 `collapsedLabel`，收起时在图标下方显示文本
+- ✅ 自动处理文本超出长度（使用 truncate）
+- ✅ 平滑的布局过渡动画
+- ✅ 完全向后兼容
 
 ### 复合组件模式（推荐）
 
@@ -250,6 +311,7 @@ export function BasicActivityBar() {
 | badge | React.ReactNode | - | 徽章内容 |
 | disabled | boolean | false | 是否禁用 |
 | onClick | () => void | - | 点击回调 |
+| collapsedLabel | string | - | 收起时显示的标签文本（可选） |
 
 ### 基础组件模式
 

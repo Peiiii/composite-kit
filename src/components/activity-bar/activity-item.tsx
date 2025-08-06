@@ -31,9 +31,10 @@ export interface ActivityItemProps
   badge?: React.ReactNode
   disabled?: boolean
   onClick?: () => void
+  collapsedLabel?: string // 新增：收起时显示的标签文本
 }
 
-export function ActivityItem({ className, id, icon, label, badge, active, disabled = false, onClick, ...props }: ActivityItemProps) {
+export function ActivityItem({ className, id, icon, label, badge, active, disabled = false, onClick, collapsedLabel, ...props }: ActivityItemProps) {
   const { activeId, setActiveId, expanded } = useActivityBar()
   const isActive = active !== undefined ? active : activeId === id
 
@@ -54,6 +55,9 @@ export function ActivityItem({ className, id, icon, label, badge, active, disabl
     return <Badge className={defaultBadgeClassName}>{badge}</Badge>
   }, [badge])
 
+  // 收起时是否显示标签
+  const shouldShowCollapsedLabel = !expanded && collapsedLabel
+
   return (
     <div
       data-component="activity-item"
@@ -62,6 +66,7 @@ export function ActivityItem({ className, id, icon, label, badge, active, disabl
         expanded ? "px-3 py-2 mx-2" : "p-2 mx-3",
         "group",
         disabled && "opacity-50 pointer-events-none",
+        shouldShowCollapsedLabel && "flex-col",
         className,
       )}
       onClick={handleClick}
@@ -78,7 +83,12 @@ export function ActivityItem({ className, id, icon, label, badge, active, disabl
       }}
       {...props}
     >
-      <div className={cn("flex-shrink-0 transition-all duration-200 ease-in-out", expanded ? "" : "mx-auto")}>
+      {/* 图标容器 */}
+      <div className={cn(
+        "flex-shrink-0 transition-all duration-200 ease-in-out",
+        expanded ? "" : "mx-auto",
+        shouldShowCollapsedLabel ? "mb-1" : ""
+      )}>
         {React.cloneElement(icon as React.ReactElement<React.SVGProps<SVGSVGElement>>, {
           className: cn(
             "h-5 w-5 transition-colors duration-150",
@@ -87,10 +97,21 @@ export function ActivityItem({ className, id, icon, label, badge, active, disabl
           ),
         })}
       </div>
+
+      {/* 收起时的标签 */}
+      {shouldShowCollapsedLabel && (
+        <div className="flex-shrink-0 w-full text-center">
+          <span className="text-xs font-medium leading-tight truncate block text-muted-foreground group-hover:text-foreground transition-colors duration-150">
+            {collapsedLabel}
+          </span>
+        </div>
+      )}
+
+      {/* 展开时的内容 */}
       <div
         className={cn(
-          "flex flex-1 items-center justify-between min-w-0 transition-all duration-200 ease-in-out ml-3",
-          expanded ? "opacity-100 w-auto" : "opacity-0 w-0 overflow-hidden ml-0",
+          "flex flex-1 items-center justify-between min-w-0 transition-all duration-200 ease-in-out",
+          expanded ? "opacity-100 w-auto ml-3" : "opacity-0 w-0 overflow-hidden ml-0",
         )}
       >
         <span className="text-sm font-medium truncate min-w-0">{label}</span>
@@ -106,6 +127,7 @@ export interface ActivityBarItemProps extends React.ButtonHTMLAttributes<HTMLBut
   badge?: string | number
   active?: boolean
   disabled?: boolean
+  collapsedLabel?: string
 }
 
 export const defaultBadgeClassName = "h-5 px-1.5 text-xs font-medium"

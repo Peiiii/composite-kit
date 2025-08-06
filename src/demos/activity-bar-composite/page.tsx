@@ -48,7 +48,7 @@ export default function ActivityBarComposite() {
 
         <ActivityBar.GroupList>
           <ActivityBar.Group title="导航">
-            <ActivityBar.Item id="home" icon={<Home />} label="首页" />
+            <ActivityBar.Item id="home" icon={<Home />} label="首页" collapsedLabel="首页" />
             <ActivityBar.Item id="users" icon={<Users />} label="用户" />
             <ActivityBar.Item id="messages" icon={<Mail />} label="消息" badge={3} />
             <ActivityBar.Item id="calendar" icon={<Calendar />} label="日历" />
