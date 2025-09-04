@@ -103,6 +103,92 @@ export function UncontrolledActivityBar() {
 }
 ```
 
+### 控制切换按钮显示
+
+通过 `toggleable` 属性可以控制是否显示切换按钮：
+
+```tsx
+import { ActivityBar } from "@/components/activity-bar"
+import { Home, Settings, Users } from "lucide-react"
+
+export function NonToggleableActivityBar() {
+  return (
+    <ActivityBar.Root 
+      defaultExpanded={true}
+      toggleable={false} // 禁用切换按钮
+    >
+      <ActivityBar.Header icon={<Home />} title="固定展开" />
+      <ActivityBar.GroupList>
+        <ActivityBar.Group title="导航">
+          <ActivityBar.Item id="home" icon={<Home />} label="首页" />
+          <ActivityBar.Item id="users" icon={<Users />} label="用户" />
+          <ActivityBar.Item id="settings" icon={<Settings />} label="设置" />
+        </ActivityBar.Group>
+      </ActivityBar.GroupList>
+    </ActivityBar.Root>
+  )
+}
+```
+
+### 自定义样式功能
+
+ActivityBar 支持为每个活动项自定义样式，包括普通状态和激活状态：
+
+```tsx
+import { ActivityBar } from "@/components/activity-bar"
+import { Home, Search, FileText, Settings } from "lucide-react"
+
+export function CustomStyledActivityBar() {
+  return (
+    <ActivityBar.Root defaultExpanded={true}>
+      <ActivityBar.Header icon={<Home />} title="自定义样式演示" />
+      <ActivityBar.GroupList>
+        <ActivityBar.Group title="主要功能">
+          {/* 蓝色主题的首页 */}
+          <ActivityBar.Item 
+            id="home" 
+            icon={<Home />} 
+            label="首页" 
+            className="border-l-4 border-blue-500"
+            activeClassName="bg-blue-50 border-l-4 border-blue-600 shadow-md"
+          />
+          
+          {/* 绿色主题的搜索 */}
+          <ActivityBar.Item 
+            id="search" 
+            icon={<Search />} 
+            label="搜索功能" 
+            className="border-l-4 border-green-500"
+            activeClassName="bg-green-50 border-l-4 border-green-600 shadow-md"
+          />
+          
+          {/* 紫色主题的文件 */}
+          <ActivityBar.Item 
+            id="files" 
+            icon={<FileText />} 
+            label="文件管理" 
+            className="border-l-4 border-purple-500"
+            activeClassName="bg-purple-50 border-l-4 border-purple-600 shadow-md"
+          />
+          
+          {/* 默认样式的设置 */}
+          <ActivityBar.Item 
+            id="settings" 
+            icon={<Settings />} 
+            label="系统设置" 
+          />
+        </ActivityBar.Group>
+      </ActivityBar.GroupList>
+    </ActivityBar.Root>
+  )
+}
+```
+
+**样式说明：**
+- `className`: 应用于活动项的基础样式
+- `activeClassName`: 当活动项被激活时应用的额外样式
+- 样式会与默认样式合并，不会覆盖默认功能
+
 ### 收起标签功能
 
 新增的 `collapsedLabel` 功能允许在收起状态下显示简短的标签文本：
@@ -278,7 +364,7 @@ export function BasicActivityBar() {
 | defaultExpanded | boolean | false | 默认展开状态（不受控模式） |
 | activeId | string | - | 受控的激活项 |
 | defaultActiveId | string | - | 默认激活项（不受控模式） |
-| toggleable | boolean | true | 是否可切换 |
+| toggleable | boolean | true | 是否可切换（控制是否显示切换按钮） |
 | onExpandedChange | (expanded: boolean) => void | - | 展开状态改变回调 |
 | onActiveChange | (activeId: string) => void | - | 激活项改变回调 |
 
@@ -312,10 +398,78 @@ export function BasicActivityBar() {
 | disabled | boolean | false | 是否禁用 |
 | onClick | () => void | - | 点击回调 |
 | collapsedLabel | string | - | 收起时显示的标签文本（可选） |
+| className | string | - | 自定义样式类名 |
+| activeClassName | string | - | 激活状态的自定义样式类名 |
 
 ### 基础组件模式
 
 基础组件模式的 API 与复合组件模式相同，只是使用方式不同。
+
+### ConfigurableActivityBar
+
+`ConfigurableActivityBar` 组件支持通过配置对象来快速创建活动栏，同时支持 `toggleable` 属性：
+
+```tsx
+import { ConfigurableActivityBar } from "@/components/activity-bar"
+import { Home, Settings, Users } from "lucide-react"
+
+const config = {
+  header: {
+    icon: <Home />,
+    title: "应用导航",
+    showSearch: true
+  },
+  groups: [
+    {
+      title: "导航",
+      items: [
+        { id: "home", icon: <Home />, label: "首页" },
+        { id: "users", icon: <Users />, label: "用户" },
+        { id: "settings", icon: <Settings />, label: "设置" }
+      ]
+    }
+  ]
+}
+
+export function MyConfigurableActivityBar() {
+  return (
+    <ConfigurableActivityBar
+      config={config}
+      defaultExpanded={false}
+      toggleable={false} // 禁用切换按钮
+      onExpandedChange={(expanded) => console.log('展开状态:', expanded)}
+    />
+  )
+}
+```
+
+#### ConfigurableActivityBar 属性
+
+| 属性 | 类型 | 默认值 | 描述 |
+|------|------|--------|------|
+| config | ActivityBarConfig | - | 活动栏配置对象 |
+| expanded | boolean | - | 受控的展开状态 |
+| defaultExpanded | boolean | false | 默认展开状态 |
+| defaultActiveId | string | - | 默认激活项 |
+| onExpandedChange | (expanded: boolean) => void | - | 展开状态改变回调 |
+| onActiveChange | (activeId: string) => void | - | 激活项改变回调 |
+| className | string | - | 自定义样式类名 |
+| expandedWidth | number \| string | - | 展开时的宽度 |
+| collapsedWidth | number \| string | - | 收起时的宽度 |
+| toggleable | boolean | true | 是否可切换（控制是否显示切换按钮） |
+
+#### ActivityItemConfig 属性
+
+| 属性 | 类型 | 默认值 | 描述 |
+|------|------|--------|------|
+| id | string | - | 唯一标识符 |
+| icon | React.ReactNode | - | 图标 |
+| label | string | - | 标签文本 |
+| badge | React.ReactNode \| string \| number | - | 徽章内容 |
+| onClick | (id: string) => void | - | 点击回调 |
+| disabled | boolean | false | 是否禁用 |
+| className | string | - | 自定义样式类名 |
+| activeClassName | string | - | 激活状态的自定义样式类名 |
 
 ## 受控 vs 不受控模式
 

@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import { Badge } from "@/components/ui/badge"
+import { cn } from "@/lib/utils"
 import { ActivityBar } from "./activity-bar-namespace"
 
 // 定义活动项配置类型
@@ -12,6 +13,8 @@ export interface ActivityItemConfig {
   badge?: React.ReactNode | string | number
   onClick?: (id: string) => void
   disabled?: boolean
+  className?: string // 新增：自定义样式类名
+  activeClassName?: string // 新增：激活状态的自定义样式类名
 }
 
 // 定义活动组配置类型
@@ -44,6 +47,7 @@ export interface ConfigurableActivityBarProps {
   className?: string
   expandedWidth?: number | string // 新增
   collapsedWidth?: number | string // 新增
+  toggleable?: boolean // 新增，是否可切换
 }
 
 export function ConfigurableActivityBar({
@@ -56,6 +60,7 @@ export function ConfigurableActivityBar({
   className,
   expandedWidth,
   collapsedWidth,
+  toggleable = true, // 新增，默认可切换
 }: ConfigurableActivityBarProps) {
   const [expanded, setExpanded] = React.useState(defaultExpanded)
   const [activeId, setActiveId] = React.useState<string | undefined>(defaultActiveId)
@@ -106,6 +111,7 @@ export function ConfigurableActivityBar({
       defaultActiveId={activeId}
       expandedWidth={expandedWidth}
       collapsedWidth={collapsedWidth}
+      toggleable={toggleable}
     >
       <ActivityBar.Header
         icon={config.header.icon}
@@ -125,7 +131,11 @@ export function ConfigurableActivityBar({
                 badge={item.badge ? renderBadge(item.badge) : undefined}
                 onClick={() => handleItemClick(item.id, item.onClick)}
                 aria-disabled={item.disabled}
-                className={item.disabled ? "opacity-50 pointer-events-none" : ""}
+                className={cn(
+                  item.disabled ? "opacity-50 pointer-events-none" : "",
+                  item.className
+                )}
+                activeClassName={item.activeClassName}
               />
             ))}
           </ActivityBar.Group>
@@ -145,7 +155,11 @@ export function ConfigurableActivityBar({
                 badge={item.badge ? renderBadge(item.badge) : undefined}
                 onClick={() => handleItemClick(item.id, item.onClick)}
                 aria-disabled={item.disabled}
-                className={item.disabled ? "opacity-50 pointer-events-none" : ""}
+                className={cn(
+                  item.disabled ? "opacity-50 pointer-events-none" : "",
+                  item.className
+                )}
+                activeClassName={item.activeClassName}
               />
             ))}
           </ActivityBar.Group>

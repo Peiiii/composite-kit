@@ -32,9 +32,10 @@ export interface ActivityItemProps
   disabled?: boolean
   onClick?: () => void
   collapsedLabel?: string // 新增：收起时显示的标签文本
+  activeClassName?: string // 新增：激活状态的自定义样式类名
 }
 
-export function ActivityItem({ className, id, icon, label, badge, active, disabled = false, onClick, collapsedLabel, ...props }: ActivityItemProps) {
+export function ActivityItem({ className, id, icon, label, badge, active, disabled = false, onClick, collapsedLabel, activeClassName, ...props }: ActivityItemProps) {
   const { activeId, setActiveId, expanded } = useActivityBar()
   const isActive = active !== undefined ? active : activeId === id
 
@@ -70,6 +71,7 @@ export function ActivityItem({ className, id, icon, label, badge, active, disabl
             "p-2 mx-3 mb-1",
             "group",
             disabled && "opacity-50 pointer-events-none",
+            isActive && activeClassName,
             className,
           )}
           onClick={handleClick}
@@ -118,6 +120,7 @@ export function ActivityItem({ className, id, icon, label, badge, active, disabl
         "px-3 py-2 mx-2",
         "group",
         disabled && "opacity-50 pointer-events-none",
+        isActive && activeClassName,
         className,
       )}
       onClick={handleClick}
