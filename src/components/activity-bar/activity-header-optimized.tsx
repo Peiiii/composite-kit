@@ -12,6 +12,7 @@ export interface ActivityHeaderOptimizedProps extends React.HTMLAttributes<HTMLD
   icon: React.ReactElement<React.SVGProps<SVGSVGElement>>
   title: string
   showSearch?: boolean
+  showSeparator?: boolean
 }
 
 export function ActivityHeaderOptimized({
@@ -19,10 +20,14 @@ export function ActivityHeaderOptimized({
   icon,
   title,
   showSearch = true,
+  showSeparator,
   ...props
 }: ActivityHeaderOptimizedProps) {
   const { expanded } = useActivityBar()
   const [showContent, setShowContent] = React.useState(expanded)
+  
+  // 决定是否显示分隔符：如果明确指定了showSeparator则使用该值，否则根据是否有搜索框来决定
+  const shouldShowSeparator = showSeparator !== undefined ? showSeparator : showSearch
 
   // 使用延迟显示/隐藏内容的技术
   React.useEffect(() => {
@@ -66,7 +71,9 @@ export function ActivityHeaderOptimized({
         </div>
       </div>
 
-      <Separator className="transition-all duration-300 ease-in-out" />
+      {shouldShowSeparator && (
+        <Separator className="transition-all duration-300 ease-in-out" />
+      )}
 
       {/* 搜索框区域 - 使用 CSS Grid 技术平滑过渡高度 */}
       <div

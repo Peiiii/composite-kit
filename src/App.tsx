@@ -77,7 +77,9 @@ const App = React.memo(function App() {
           <ActivityBar.Separator />
           <ActivityBar.Group>
             <ActivityBar.Item id="settings" icon={<Settings />} label="设置" />
-            <ActivityBar.Item id="help" icon={<HelpCircle />} label="帮助" />
+            <ActivityBar.Item id="help" icon={<HelpCircle />} label="帮助"  onClick={()=>{
+              console.log("help")
+            }}/>
           </ActivityBar.Group>
         </ActivityBar.Footer>
       </ActivityBar.Root>
