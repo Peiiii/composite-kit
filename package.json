@@ -1,7 +1,7 @@
 {
   "name": "composite-kit",
   "private": false,
-  "version": "0.6.3",
+  "version": "0.6.4",
   "description": "A flexible React component library focusing on composite and configurable patterns",
   "type": "module",
   "main": "dist/index.js",
